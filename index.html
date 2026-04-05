@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>BDS LOAN CR DASHBOARD</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="css/tabs.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/components.css">
+
+<body>
+
+<!-- ── COMPANY NAME EDIT MODAL (Admin only) ── -->
+<div id="company-name-modal">
+  <div id="company-name-modal-inner">
+    <div id="company-name-modal-title">✏️ RENAME COMPANY — Visible to all users</div>
+    <input id="company-name-input" maxlength="40" placeholder="COMPANY NAME" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')saveCompanyName();if(event.key==='Escape')closeCompanyNameModal();">
+    <div id="company-name-hint">This name appears at the top of the dashboard for every rep who logs in.</div>
+    <div id="company-name-btns">
+      <button id="company-name-cancel" onclick="closeCompanyNameModal()">CANCEL</button>
+      <button id="company-name-save" onclick="saveCompanyName()">💾 SAVE NAME</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── LOGIN SCREEN ── -->
+<div class="login-screen" id="login-screen">
+  <div class="login-logo">BDS LOAN CR</div>
+  <div class="login-sub">Agent Dashboard · Enter your Ytel ID to continue</div>
+  <div class="login-card">
+    <label class="login-field-lbl">Ytel ID</label>
+    <input class="login-input" id="login-id" placeholder="Enter your Ytel ID here" maxlength="6" type="tel" oninput="onIdInput(this.value)" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="pw-wrap" id="pw-wrap">
+      <label class="login-field-lbl">Admin Password</label>
+      <input class="login-input" id="login-pw" type="password" placeholder="••••••••" style="letter-spacing:4px;" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()">ENTER DASHBOARD</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+  <div class="login-hint">Agents — enter your Ytel ID only<br>Admin — enter 0000 then your password</div>
+</div>
+
+<!-- ── REP HEADER BAR ── -->
+<div class="rep-bar" id="rep-bar">
+  <div>
+    <div class="rep-greeting" id="rep-greeting">Welcome, <span id="rep-name-display">Agent</span></div>
+    <div class="rep-details" style="margin-top:5px;" id="rep-details"></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div id="admin-badge-wrap"></div>
+    <button class="logout-btn" onclick="doLogout()">LOGOUT</button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-title" id="hero-company-name">BDS LOAN CR DASHBOARD</div>
+  <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px;margin-top:-10px;">
+    <div style="flex:1;max-width:200px;height:1px;background:linear-gradient(90deg,transparent,#7b61ff);"></div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:4px;color:rgba(255,255,255,0.3);text-transform:uppercase;">Loan Credit Department</div>
+    <div style="flex:1;max-width:200px;height:1px;background:linear-gradient(90deg,#00e5ff,transparent);"></div>
+  </div>
+
+  <div class="clocks-row">
+    <!-- 2 big primary clocks like the screenshot -->
+    <div class="tz-card big">
+      <span class="tz-flag" style="font-size:1.2rem;">ET</span>
+      <div class="tz-info">
+        <span class="tz-label">EASTERN</span>
+        <span class="tz-time big-time tz-et" id="clock-et">--:--</span>
+      </div>
+    </div>
+    <div class="tz-card big">
+      <span class="tz-flag" style="font-size:1.2rem;">CT</span>
+      <div class="tz-info">
+        <span class="tz-label">CENTRAL</span>
+        <span class="tz-time big-time tz-ct" id="clock-ct">--:--</span>
+      </div>
+    </div>
+    <div class="tz-card big">
+      <span class="tz-flag" style="font-size:1.2rem;">MT</span>
+      <div class="tz-info">
+        <span class="tz-label">MOUNTAIN</span>
+        <span class="tz-time big-time tz-mt" id="clock-mt">--:--</span>
+      </div>
+    </div>
+    <div class="tz-card big">
+      <span class="tz-flag" style="font-size:1.2rem;">PT</span>
+      <div class="tz-info">
+        <span class="tz-label">PACIFIC</span>
+        <span class="tz-time big-time tz-pt" id="clock-pt">--:--</span>
+      </div>
+    </div>
+    <div class="tz-card big">
+      <span class="tz-flag" style="font-size:1.2rem;">AK</span>
+      <div class="tz-info">
+        <span class="tz-label">ALASKA</span>
+        <span class="tz-time big-time tz-ak" id="clock-ak">--:--</span>
+      </div>
+    </div>
+    <div class="tz-card big">
+      <span class="tz-flag" style="font-size:1.2rem;">HI</span>
+      <div class="tz-info">
+        <span class="tz-label">HAWAII</span>
+        <span class="tz-time big-time tz-hi" id="clock-hi">--:--</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs-wrap">
+<div class="top-tabs">
+  <button class="tab-btn t-script tab-span-2 active" id="tab-script"    onclick="switchTab('script')">&#128203; SCRIPT</button>
+  <button class="tab-btn t-obj    tab-span-2"         id="tab-objections" onclick="switchTab('objections')">&#127919; REBUTTALS</button>
+  <button class="tab-btn t-tips   tab-span-2"         id="tab-tips"       onclick="switchTab('tips')">&#128161; TIPS</button>
+  <button class="tab-btn t-dbs    tab-span-2"         id="tab-dbs"        onclick="switchTab('dbs')">&#128274; ACCESS GUIDE</button>
+  <button class="tab-btn t-spanish tab-span-2"        id="tab-spanish"    onclick="switchTab('spanish')">&#127466;&#127480; SPANISH</button>
+  <button class="tab-btn t-asep   tab-span-2"         id="tab-asep"       onclick="switchTab('asep')">&#9881;&#65039; A.S.E.P</button>
+  <button class="tab-btn t-sunday tab-span-3 sunday-glow" id="tab-sunday" onclick="switchTab('sunday')">&#128197; SUNDAY PROTOCOL</button>
+  <button class="tab-btn t-dispo  tab-span-3"         id="tab-dispo"      onclick="switchTab('dispo')">&#9989; DISPO</button>
+  <button class="tab-btn t-lenders tab-span-6"        id="tab-lenders"    onclick="switchTab('lenders')">&#129309; LENDERS &amp; BENEFITS OF A PERSONAL LOAN</button>
+  <button class="admin-tab-btn tab-span-6 admin-only" id="tab-admin"      onclick="switchAdminTab('profiles')">&#9889; ADMIN PANEL</button>
+</div>
+</div>
+
+<!-- TEAM BREAKDOWN MODAL -->
+<div id="team-breakdown-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);z-index:9000;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;">
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;width:100%;max-width:520px;margin:auto;">
+    <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div id="tbm-title" style="font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:800;letter-spacing:1px;"></div>
+        <div id="tbm-subtitle" style="font-size:0.62rem;color:var(--muted);margin-top:2px;"></div>
+      </div>
+      <button onclick="closeTeamBreakdown()" style="background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px 8px;border-radius:6px;">✕</button>
+    </div>
+    <div style="padding:14px 18px;">
+      <!-- Summary bar -->
+      <div id="tbm-summary" style="background:#0d1424;border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:0.65rem;color:var(--muted);font-weight:700;">TEAM TRANSFERS</span>
+        <span id="tbm-total" style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;"></span>
+      </div>
+      <!-- Agent list -->
+      <div style="overflow-x:auto;">
+        <table class="adm-table" id="tbm-table">
+          <thead><tr>
+            <th>#</th>
+            <th>Agent Name</th>
+            <th style="text-align:center;">Transfers</th>
+            <th style="text-align:center;">Calls</th>
+            <th style="text-align:center;">Conv%</th>
+          </tr></thead>
+          <tbody id="tbm-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REP PROFILE OVERLAY -->
+<!-- ═══════════════════════════════════════════════════════════
+     FULL-SCREEN AGENT ANALYSIS PANEL
+═══════════════════════════════════════════════════════════ -->
+<style>
+.agent-panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9000;display:none;overflow-y:auto;}
+.agent-panel-overlay.open{display:block;}
+.agent-panel{max-width:960px;margin:0 auto;padding:16px;min-height:100vh;}
+
+/* Header */
+.ap-header{background:linear-gradient(135deg,#0d1a2e 0%,#0a1020 100%);border:1px solid #1e3050;border-radius:16px;padding:20px 24px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.ap-avatar{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#1e3a6e,#2d5aa0);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#60a5fa;flex-shrink:0;}
+.ap-name{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:2px;line-height:1;}
+.ap-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+.ap-badge{padding:2px 10px;border-radius:20px;font-size:0.55rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;}
+.ap-close{background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.3);color:#f87171;border-radius:10px;padding:8px 16px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;letter-spacing:1px;transition:all 0.15s;}
+.ap-close:hover{background:rgba(248,113,113,0.3);}
+
+/* Tab nav */
+.ap-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.ap-tab{padding:8px 16px;border-radius:10px;border:1px solid #1e2d4a;background:#0d1424;color:#4a6080;font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all 0.15s;}
+.ap-tab:hover{border-color:#3a4a6a;color:#8a9ab0;}
+.ap-tab.active{background:#0b1a38;border-color:#3b6fd4;color:#60a5fa;box-shadow:0 0 12px rgba(59,111,212,0.25);}
+
+/* Section cards */
+.ap-card{background:#0d1424;border:1px solid #1e2d4a;border-radius:14px;padding:18px;margin-bottom:12px;}
+.ap-card-title{font-size:0.55rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#64748b;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.ap-card-title span{color:#e2e8f0;font-size:0.85rem;}
+
+/* Stat grid */
+.ap-stat-row{display:grid;gap:8px;margin-bottom:12px;}
+.ap-stat-row.cols-4{grid-template-columns:repeat(4,1fr);}
+.ap-stat-row.cols-3{grid-template-columns:repeat(3,1fr);}
+.ap-stat-row.cols-2{grid-template-columns:repeat(2,1fr);}
+.ap-stat-box{background:#060b18;border:1px solid #1a2540;border-radius:10px;padding:12px;text-align:center;}
+.ap-stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;line-height:1;}
+.ap-stat-lbl{font-size:0.48rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#64748b;margin-top:3px;}
+
+/* Mini calendar for attendance — compact design */
+.ap-mini-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-top:8px;}
+.ap-cal-hdr{font-size:0.5rem;font-weight:800;text-align:center;color:#64748b;padding:3px 0;letter-spacing:0.5px;}
+.ap-cal-cell{
+  height:28px;border-radius:4px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-size:0.52rem;
+  font-weight:700;cursor:default;position:relative;
+}
+.ap-cal-daynum{font-size:0.48rem;font-weight:600;opacity:0.5;line-height:1;margin-bottom:1px;}
+.ap-cal-lbl{font-size:0.55rem;font-weight:800;line-height:1;}
+.ap-cal-p{background:rgba(52,211,153,0.18);color:#34d399;}
+.ap-cal-l{background:rgba(251,191,36,0.18);color:#fbbf24;}
+.ap-cal-a{background:rgba(248,113,113,0.18);color:#f87171;}
+.ap-cal-s{background:rgba(96,165,250,0.13);color:#60a5fa;}
+.ap-cal-off{background:#0a1020;color:#2a3a55;}
+.ap-cal-empty{background:transparent;}
+.ap-cal-future{background:transparent;color:#1e2d45;}
+.ap-cal-today{outline:1.5px solid #60a5fa;outline-offset:1px;}
+
+/* Week bar chart */
+.ap-week-bars{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.ap-week-row{display:flex;align-items:center;gap:8px;}
+.ap-week-lbl{font-size:0.6rem;font-weight:700;color:#64748b;width:90px;flex-shrink:0;white-space:nowrap;}
+.ap-week-bar-wrap{flex:1;background:#060b18;border-radius:4px;height:18px;overflow:hidden;display:flex;}
+.ap-week-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:0.42rem;font-weight:800;transition:width 0.4s;}
+.ap-week-seg.p{background:rgba(52,211,153,0.35);}
+.ap-week-seg.l{background:rgba(251,191,36,0.35);}
+.ap-week-seg.a{background:rgba(248,113,113,0.35);}
+.ap-week-counts{font-size:0.55rem;color:#64748b;width:60px;flex-shrink:0;text-align:right;}
+
+/* Chart canvas wrapper */
+.ap-chart-wrap{position:relative;height:160px;margin-top:8px;}
+
+/* Coaching/monitoring notes */
+.ap-note{background:#060b18;border-left:3px solid #3b6fd4;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:8px;}
+.ap-note.monitor{border-left-color:#a78bfa;}
+.ap-note-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:4px;}
+.ap-note-type{font-size:0.55rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;}
+.ap-note-date{font-size:0.6rem;color:#64748b;}
+.ap-note-field{margin-top:5px;font-size:0.75rem;color:#cbd5e1;line-height:1.5;}
+.ap-note-field-lbl{font-size:0.5rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#64748b;}
+
+/* Schedule inputs */
+.ap-input-row{display:flex;gap:8px;align-items:center;}
+.ap-input{flex:1;padding:9px 13px;background:#060b18;border:1.5px solid #2a3a5a;border-radius:8px;color:#e2e8f0;font-size:0.85rem;font-family:'Nunito',sans-serif;outline:none;transition:border-color 0.15s;}
+.ap-input:focus{border-color:#60a5fa;}
+.ap-save-btn{padding:8px 14px;border-radius:8px;border:none;background:#1e3a6e;color:#60a5fa;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.8rem;cursor:pointer;white-space:nowrap;transition:background 0.15s;}
+.ap-save-btn:hover{background:#2a4a8a;}
+.ap-field-status{font-size:0.62rem;margin-top:3px;min-height:14px;}
+
+/* Login history */
+.ap-login-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #0f1e35;font-size:0.72rem;}
+.ap-login-row:last-child{border-bottom:none;}
+
+@media(max-width:600px){
+  .ap-stat-row.cols-4{grid-template-columns:repeat(2,1fr);}
+  .ap-stat-row.cols-3{grid-template-columns:repeat(3,1fr);}
+  .ap-name{font-size:1.3rem;}
+}
+</style>
+
+<div class="agent-panel-overlay" id="rep-profile-overlay" onclick="if(event.target===this)closeRepProfile()">
+  <div class="agent-panel">
+
+    <!-- Header -->
+    <div class="ap-header">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="ap-avatar" id="ap-avatar">A</div>
+        <div>
+          <div class="ap-name" id="rp-name">Agent Name</div>
+          <div class="ap-badges">
+            <span class="ap-badge" id="ap-team-badge" style="background:rgba(96,165,250,0.15);color:#60a5fa;">BB</span>
+            <span class="ap-badge" id="ap-status-badge" style="background:rgba(52,211,153,0.15);color:#34d399;">Agent</span>
+            <span class="ap-badge" id="ap-shift-badge" style="background:rgba(251,191,36,0.1);color:#fbbf24;">—</span>
+          </div>
+          <div style="font-size:0.6rem;color:#64748b;margin-top:4px;" id="rp-meta"></div>
+        </div>
+      </div>
+      <button class="ap-close" onclick="closeRepProfile()">✕ CLOSE</button>
+    </div>
+
+    <!-- Nav tabs -->
+    <div class="ap-tabs">
+      <button class="ap-tab active" id="apt-overview"    onclick="apTab('overview',this)">📊 Overview</button>
+      <button class="ap-tab"        id="apt-attendance"  onclick="apTab('attendance',this)">📅 Attendance</button>
+      <button class="ap-tab"        id="apt-coaching"    onclick="apTab('coaching',this)">📝 Coaching</button>
+      <button class="ap-tab"        id="apt-monitoring"  onclick="apTab('monitoring',this)">🎧 Monitoring</button>
+      <button class="ap-tab"        id="apt-schedule"    onclick="apTab('schedule',this)">⏰ Schedule</button>
+      <button class="ap-tab"        id="apt-audit"       onclick="apTab('audit',this)">🔍 Login History</button>
+      <button class="ap-tab"        id="apt-rebuttal"    onclick="apTab('rebuttal',this)">🧠 Rebuttal Usage</button>
+      <button class="ap-tab"        id="apt-stats"       onclick="apTab('stats',this)">📈 Stats History</button>
+    </div>
+
+    <!-- ── OVERVIEW TAB ── -->
+    <div id="ap-overview">
+      <!-- Today snapshot -->
+      <div class="ap-card">
+        <div class="ap-card-title">⚡ TODAY'S SNAPSHOT</div>
+        <div class="ap-stat-row cols-4">
+          <div class="ap-stat-box">
+            <div class="ap-stat-val" id="rp-live-calls" style="color:#60a5fa;">—</div>
+            <div class="ap-stat-lbl">Calls</div>
+          </div>
+          <div class="ap-stat-box">
+            <div class="ap-stat-val" id="rp-live-xfer" style="color:#34d399;">—</div>
+            <div class="ap-stat-lbl">Transfers</div>
+          </div>
+          <div class="ap-stat-box">
+            <div class="ap-stat-val" id="rp-live-conv" style="color:#22d3ee;">—</div>
+            <div class="ap-stat-lbl">Conv %</div>
+          </div>
+          <div class="ap-stat-box">
+            <div id="rp-att-status" style="padding-top:6px;font-size:0.75rem;">—</div>
+            <div class="ap-stat-lbl">Status</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly attendance summary -->
+      <div class="ap-card">
+        <div class="ap-card-title">📅 THIS MONTH — ATTENDANCE SUMMARY</div>
+        <div class="ap-stat-row cols-4">
+          <div class="ap-stat-box">
+            <div class="ap-stat-val" id="rp-att-p" style="color:#34d399;">—</div>
+            <div class="ap-stat-lbl">Present</div>
+          </div>
+          <div class="ap-stat-box">
+            <div class="ap-stat-val" id="rp-att-l" style="color:#fbbf24;">—</div>
+            <div class="ap-stat-lbl">Late</div>
+          </div>
+          <div class="ap-stat-box">
+            <div class="ap-stat-val" id="rp-att-a" style="color:#f87171;">—</div>
+            <div class="ap-stat-lbl">Absent/Sick</div>
+          </div>
+          <div class="ap-stat-box">
+            <div class="ap-stat-val" id="rp-att-rate" style="color:#60a5fa;">—</div>
+            <div class="ap-stat-lbl">Att Rate</div>
+          </div>
+        </div>
+        <!-- Mini attendance bar chart -->
+        <div style="background:#060b18;border-radius:8px;height:12px;overflow:hidden;display:flex;margin-top:4px;">
+          <div id="ap-bar-p" style="background:#34d399;height:100%;transition:width 0.5s;"></div>
+          <div id="ap-bar-l" style="background:#fbbf24;height:100%;transition:width 0.5s;"></div>
+          <div id="ap-bar-a" style="background:#f87171;height:100%;transition:width 0.5s;"></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:5px;font-size:0.5rem;font-weight:800;letter-spacing:1px;color:#64748b;">
+          <span style="color:#34d399;">● Present</span>
+          <span style="color:#fbbf24;">● Late</span>
+          <span style="color:#f87171;">● Absent/Sick</span>
+        </div>
+      </div>
+
+      <!-- Coaching & monitoring summary -->
+      <div class="ap-card">
+        <div class="ap-card-title">📋 COACHING &amp; MONITORING COUNT</div>
+        <div class="ap-stat-row cols-2">
+          <div class="ap-stat-box">
+            <div class="ap-stat-val" id="rp-coach-count" style="color:#60a5fa;">—</div>
+            <div class="ap-stat-lbl">Coaching Sessions</div>
+          </div>
+          <div class="ap-stat-box">
+            <div class="ap-stat-val" id="rp-monitor-count" style="color:#a78bfa;">—</div>
+            <div class="ap-stat-lbl">Monitoring Sessions</div>
+          </div>
+        </div>
+        <div id="rp-last-coach" style="font-size:0.68rem;color:#64748b;margin-top:8px;"></div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid #0f1e35;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:0.5rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#64748b;">🔥 PUNCTUALITY STREAK</span>
+          <span id="rp-streak-display" style="font-size:0.78rem;color:#64748b;">Loading...</span>
+        </div>
+      </div>
+
+      <!-- Rebuttal mini-summary -->
+      <div class="ap-card" id="rp-rebuttal-mini-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div class="ap-card-title" style="margin-bottom:0;">🧠 TODAY'S REBUTTAL USAGE</div>
+          <button onclick="apTab('rebuttal',document.getElementById('apt-rebuttal'))" style="background:none;border:1px solid var(--border);color:var(--muted);font-size:0.62rem;padding:3px 9px;border-radius:6px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;">VIEW ALL →</button>
+        </div>
+        <div id="rp-rb-mini-content" style="font-size:0.78rem;color:var(--muted);">Loading...</div>
+      </div>
+
+      <!-- Mark today -->
+      <div class="ap-card">
+        <div class="ap-card-title">✏️ MARK TODAY'S ATTENDANCE</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="mark-absent-btn" onclick="markAgentAbsent('P')" style="border-color:rgba(52,211,153,0.4);color:#34d399;">✅ Present</button>
+          <button class="mark-absent-btn" onclick="markAgentAbsent('L')" style="border-color:rgba(251,191,36,0.4);color:#fbbf24;">🕐 Late</button>
+          <button class="mark-absent-btn" onclick="markAgentAbsent('A')" style="border-color:rgba(248,113,113,0.4);color:#f87171;">❌ Absent</button>
+          <button class="mark-absent-btn" onclick="markAgentAbsent('S')" style="border-color:rgba(96,165,250,0.3);color:var(--accent);">🤒 Sick</button>
+          <button class="mark-absent-btn" onclick="markAgentAbsent('PO')" style="border-color:rgba(167,139,250,0.3);color:var(--purple);">🏠 Personal Out</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ATTENDANCE TAB ── -->
+    <div id="ap-attendance" style="display:none;">
+
+      <!-- Current month calendar -->
+      <div class="ap-card">
+        <div class="ap-card-title">📅 <span id="ap-cal-month-lbl">THIS MONTH</span> — DAILY VIEW</div>
+        <div class="ap-mini-cal" id="ap-cal-current"></div>
+        <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;font-size:0.5rem;font-weight:800;letter-spacing:1px;">
+          <span style="color:#34d399;">■ Present</span>
+          <span style="color:#fbbf24;">■ Late</span>
+          <span style="color:#f87171;">■ Absent/Sick</span>
+          <span style="color:#60a5fa;">■ Other</span>
+          <span style="color:#2a3a55;">■ No Data / OFF</span>
+        </div>
+      </div>
+
+      <!-- Previous month calendar -->
+      <div class="ap-card">
+        <div class="ap-card-title">📅 <span id="ap-prev-month-lbl">PREVIOUS MONTH</span> — DAILY VIEW</div>
+        <div class="ap-mini-cal" id="ap-cal-prev"></div>
+      </div>
+
+      <!-- Weekly breakdown bars -->
+      <div class="ap-card">
+        <div class="ap-card-title">📊 WEEKLY BREAKDOWN — THIS MONTH</div>
+        <div class="ap-week-bars" id="ap-week-bars"></div>
+      </div>
+
+      <!-- Mark today -->
+      <div class="ap-card">
+        <div class="ap-card-title">✏️ MARK TODAY</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="mark-absent-btn" onclick="markAgentAbsent('P')" style="border-color:rgba(52,211,153,0.4);color:#34d399;">✅ Present</button>
+          <button class="mark-absent-btn" onclick="markAgentAbsent('L')" style="border-color:rgba(251,191,36,0.4);color:#fbbf24;">🕐 Late</button>
+          <button class="mark-absent-btn" onclick="markAgentAbsent('A')" style="border-color:rgba(248,113,113,0.4);color:#f87171;">❌ Absent</button>
+          <button class="mark-absent-btn" onclick="markAgentAbsent('S')" style="border-color:rgba(96,165,250,0.3);color:var(--accent);">🤒 Sick</button>
+          <button class="mark-absent-btn" onclick="markAgentAbsent('PO')" style="border-color:rgba(167,139,250,0.3);color:var(--purple);">🏠 Personal Out</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── COACHING TAB ── -->
+    <div id="ap-coaching" style="display:none;">
+      <div class="ap-card">
+        <div class="ap-card-title">📝 ALL COACHING SESSIONS</div>
+        <div id="ap-coaching-list"><div style="color:#64748b;font-size:0.78rem;">Loading...</div></div>
+      </div>
+    </div>
+
+    <!-- ── MONITORING TAB ── -->
+    <div id="ap-monitoring" style="display:none;">
+      <div class="ap-card">
+        <div class="ap-card-title">🎧 ALL LIVE MONITORING SESSIONS</div>
+        <div id="ap-monitoring-list"><div style="color:#64748b;font-size:0.78rem;">Loading...</div></div>
+      </div>
+    </div>
+
+    <!-- ── SCHEDULE TAB ── -->
+    <div id="ap-schedule" style="display:none;">
+      <div class="ap-card">
+        <div class="ap-card-title">⏰ SHIFT &amp; SCHEDULE — saves directly to Google Sheet</div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="background:#060b18;border:1px solid #1a2540;border-radius:10px;padding:14px;">
+            <div style="font-size:0.55rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#60a5fa;margin-bottom:8px;">Shift Time</div>
+            <div class="ap-input-row">
+              <select id="rp-shift-input" class="ap-input"
+                onfocus="this.style.borderColor='#60a5fa'" onblur="this.style.borderColor='#2a3a5a'">
+                <option value="">— Select shift —</option>
+                <option value="10:00AM - 7:00PM">10:00AM - 7:00PM</option>
+                <option value="11:00am-8:00pm">11:00am-8:00pm</option>
+                <option value="11:45am-9:00pm">11:45am-9:00pm</option>
+                <option value="13:00pm - 22:00pm">13:00pm - 22:00pm</option>
+              </select>
+              <button class="ap-save-btn" onclick="saveRosterField('shift')">💾 Save</button>
+            </div>
+            <div id="rp-shift-status" class="ap-field-status"></div>
+          </div>
+
+          <div style="background:#060b18;border:1px solid #1a2540;border-radius:10px;padding:14px;">
+            <div style="font-size:0.55rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#34d399;margin-bottom:8px;">Lunch Time</div>
+            <div class="ap-input-row">
+              <input id="rp-lunch-input" type="text" placeholder="e.g. 3:30-4:00 pm" class="ap-input"
+                onfocus="this.style.borderColor='#34d399'" onblur="this.style.borderColor='#2a3a5a'">
+              <button class="ap-save-btn" onclick="saveRosterField('lunch')" style="background:#064020;color:#34d399;">💾 Save</button>
+            </div>
+            <div id="rp-lunch-status" class="ap-field-status"></div>
+          </div>
+
+          <div style="background:#060b18;border:1px solid #1a2540;border-radius:10px;padding:14px;">
+            <div style="font-size:0.55rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fbbf24;margin-bottom:8px;">Break Time <span style="opacity:0.5;">(Firebase only)</span></div>
+            <div class="ap-input-row">
+              <input id="rp-break-input" type="text" placeholder="e.g. 2:00-2:15 pm" class="ap-input"
+                onfocus="this.style.borderColor='#fbbf24'" onblur="this.style.borderColor='#2a3a5a'">
+              <button class="ap-save-btn" onclick="saveRosterField('break')" style="background:#1a1000;color:#fbbf24;">💾 Save</button>
+            </div>
+            <div id="rp-break-status" class="ap-field-status"></div>
+          </div>
+
+          <div style="background:#060b18;border:1px solid #1a2540;border-radius:10px;padding:14px;">
+            <div style="font-size:0.55rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#a78bfa;margin-bottom:8px;">Team Assignment</div>
+            <div class="ap-input-row">
+              <select id="rp-team-input" class="ap-input"
+                onfocus="this.style.borderColor='#a78bfa'" onblur="this.style.borderColor='#2a3a5a'">
+                <option value="">— Select team —</option>
+                <option value="BB">🏠 Berbice (BB)</option>
+                <option value="PR">🌴 Providence (PR)</option>
+              </select>
+              <button class="ap-save-btn" onclick="saveRosterField('team')" style="background:#160e2c;color:#a78bfa;">💾 Save</button>
+            </div>
+            <div id="rp-team-status" class="ap-field-status"></div>
+          </div>
+        </div>
+        <div style="font-size:0.6rem;color:#64748b;margin-top:12px;text-align:center;">
+          Shift &amp; Lunch &amp; Team → Google Sheet · Break → Firebase · Agent sees changes on next login
+        </div>
+      </div>
+    </div>
+
+    <!-- ── AUDIT TAB ── -->
+    <div id="ap-audit" style="display:none;">
+      <div class="ap-card">
+        <div class="ap-card-title">🔍 LOGIN HISTORY — LAST 20 SESSIONS</div>
+        <div id="audit-list"><div style="color:#64748b;font-size:0.78rem;">Loading...</div></div>
+      </div>
+    </div>
+
+    <!-- ── STATS HISTORY TAB ── -->
+    <div id="ap-stats" style="display:none;">
+      <div class="ap-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+          <div class="ap-card-title" style="margin-bottom:0;">📈 PERFORMANCE HISTORY</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button id="sh-view-daily" onclick="shSetView('daily')" style="padding:6px 12px;border-radius:7px;border:1px solid var(--accent);background:#0b1a38;color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:800;letter-spacing:1px;cursor:pointer;">📅 DAILY</button>
+            <button id="sh-view-weekly" onclick="shSetView('weekly')" style="padding:6px 12px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:800;letter-spacing:1px;cursor:pointer;">📆 WEEKLY</button>
+            <button id="sh-view-monthly" onclick="shSetView('monthly')" style="padding:6px 12px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:800;letter-spacing:1px;cursor:pointer;">🗓 MONTHLY</button>
+          </div>
+        </div>
+        <div id="ap-stats-content">
+          <div style="color:var(--muted);text-align:center;padding:30px;font-size:0.82rem;">Loading stats history...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REBUTTAL USAGE TAB ── -->
+    <div id="ap-rebuttal" style="display:none;">
+      <div class="ap-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+          <div class="ap-card-title" style="margin-bottom:0;">🧠 REBUTTAL USAGE HISTORY</div>
+          <select id="ap-rebuttal-range" onchange="apLoadRebuttalUsage(currentRepProfile.id,currentRepProfile.name)"
+            style="padding:6px 12px;background:#0a1020;border:1px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.75rem;outline:none;">
+            <option value="today">Today</option>
+            <option value="7">Last 7 Days</option>
+            <option value="30">Last 30 Days</option>
+            <option value="all">All Time</option>
+          </select>
+        </div>
+        <!-- Summary stats row -->
+        <div id="ap-rb-summary" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;"></div>
+        <!-- Coaching signals for this rep -->
+        <div id="ap-rb-signals" style="margin-bottom:14px;"></div>
+        <!-- Bar chart of usage -->
+        <div style="font-size:0.55rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">USAGE BY REBUTTAL</div>
+        <div id="ap-rb-bars" style="display:flex;flex-direction:column;gap:5px;"></div>
+        <!-- Never touched -->
+        <div id="ap-rb-never" style="margin-top:14px;"></div>
+      </div>
+    </div>
+
+  </div><!-- end .agent-panel -->
+</div><!-- end overlay -->
+
+<!-- Keep legacy hidden elements so old code references don't break -->
+<div style="display:none;">
+  <div id="rp-att"></div>
+  <div id="rp-coach"><div id="coach-notes-list"></div></div>
+  <div id="rp-perf"></div>
+  <div id="rp-schedule"></div>
+</div>
+
+<div class="main">
+
+  <!-- ADMIN PANEL -->
+  <div id="tabs-container"></div>
+  
+
+  <!-- REBUTTALS -->
+  
+
+  <!-- DISPOSITION -->
+  
+
+  <!-- TIPS -->
+  
+
+  <!-- ASEP -->
+  
+
+  <!-- SPANISH -->
+  
+
+  <!-- SUNDAY -->
+  
+
+
+  <!-- ACCESS GUIDE -->
+  
+
+  <!-- LENDERS WE WORK WITH -->
+  
+
+
+</div>
+
+
+<script src="js/firebase-init.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/tabs.js"></script>
+<script src="js/admin-tabs.js"></script>
+
+<input type="file" id="stats-csv-upload" accept=".csv" style="display:none;" onchange="handleStatsCSV(this)">
+</body>
+</html>

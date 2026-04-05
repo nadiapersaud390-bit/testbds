@@ -1,0 +1,152 @@
+<div id="admin-profiles" class="admin-section">
+      <div class="admin-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+          <div class="admin-card-title" style="margin-bottom:0;font-size:0.9rem;">👤 AGENT PROFILES</div>
+          <button onclick="toggleAddRepForm()" id="add-rep-toggle-btn" style="padding:9px 18px;border-radius:9px;border:none;background:linear-gradient(90deg,var(--green),var(--cyan));color:#000;font-family:'Barlow Condensed',sans-serif;font-size:0.88rem;font-weight:800;letter-spacing:1.5px;cursor:pointer;">＋ ADD NEW REP</button>
+        </div>
+
+        <!-- ── ADD NEW REP FORM ── -->
+        <div id="add-rep-form" style="display:none;background:#06120a;border:1.5px solid rgba(52,211,153,0.35);border-radius:14px;padding:18px;margin-bottom:16px;">
+          <div style="font-size:0.62rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:14px;">✨ NEW REP — FILL IN DETAILS</div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+            <div>
+              <div style="font-size:0.58rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Full Name *</div>
+              <input id="nr-name" type="text" placeholder="e.g. Priya Ramkhelawan"
+                style="width:100%;padding:9px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;"
+                oninput="autoFillYtel()" onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='#2a3a5a'">
+            </div>
+            <div>
+              <div style="font-size:0.58rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">User ID *</div>
+              <input id="nr-id" type="text" placeholder="e.g. 1042 (unique number)"
+                style="width:100%;padding:9px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;"
+                onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='#2a3a5a'">
+            </div>
+            <div>
+              <div style="font-size:0.58rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Team *</div>
+              <select id="nr-team" onchange="autoFillYtel()"
+                style="width:100%;padding:9px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;outline:none;box-sizing:border-box;"
+                onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='#2a3a5a'">
+                <option value="BB">🏠 Berbice (BB)</option>
+                <option value="PR">🌴 Providence (PR)</option>
+              </select>
+            </div>
+            <div>
+              <div style="font-size:0.58rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Ytel Name *</div>
+              <input id="nr-ytel" type="text" placeholder="e.g. GUYB Kleon Williams or GUYP Priya Sookram"
+                style="width:100%;padding:9px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;"
+                onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='#2a3a5a'">
+            </div>
+            <div>
+              <div style="font-size:0.58rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Shift</div>
+              <select id="nr-shift"
+                style="width:100%;padding:9px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;outline:none;box-sizing:border-box;">
+                <option value="">— Select shift —</option>
+                <option value="10:00AM - 7:00PM">10:00AM - 7:00PM</option>
+                <option value="11:00am-8:00pm">11:00am-8:00pm</option>
+                <option value="11:45am-9:00pm">11:45am-9:00pm</option>
+                <option value="13:00pm - 22:00pm">13:00pm - 22:00pm</option>
+              </select>
+            </div>
+            <div>
+              <div style="font-size:0.58rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Lunch Time</div>
+              <input id="nr-lunch" type="text" placeholder="e.g. 3:30-4:00 pm"
+                style="width:100%;padding:9px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;"
+                onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#2a3a5a'">
+            </div>
+          </div>
+
+          <div style="margin-bottom:10px;">
+            <div style="font-size:0.58rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Status</div>
+            <select id="nr-status"
+              style="width:100%;padding:9px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;outline:none;box-sizing:border-box;">
+              <option value="Agent">Agent</option>
+              <option value="Trainee">Trainee</option>
+            </select>
+          </div>
+
+          <div id="nr-status-msg" style="font-size:0.72rem;min-height:20px;margin-bottom:10px;text-align:center;"></div>
+
+          <div style="display:flex;gap:8px;">
+            <button onclick="saveNewRep()" style="flex:1;padding:12px;border-radius:9px;border:none;background:linear-gradient(90deg,var(--green),var(--cyan));color:#000;font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;letter-spacing:1.5px;cursor:pointer;">💾 ADD REP TO SYSTEM</button>
+            <button onclick="toggleAddRepForm()" style="padding:12px 18px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:0.9rem;font-weight:800;cursor:pointer;">Cancel</button>
+          </div>
+        </div>
+
+        <!-- Search + team filter -->
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+          <input type="text" id="profile-search" placeholder="🔍 Search agent name..." oninput="filterProfileList()"
+            style="flex:1;min-width:160px;padding:9px 14px;background:#0d1424;border:1.5px solid #2a3a5a;border-radius:8px;color:#e2e8f0;font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;">
+          <select id="profile-team-filter" onchange="filterProfileList()"
+            style="padding:9px 12px;background:#0d1424;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;outline:none;">
+            <option value="all">All Teams</option>
+            <option value="BB">🏠 Berbice (BB)</option>
+            <option value="PR">🌴 Providence (PR)</option>
+          </select>
+        </div>
+
+        <!-- Agent list -->
+        <div id="profile-list" style="display:flex;flex-direction:column;gap:0;"></div>
+
+        <!-- Edit panel — shown when agent selected -->
+        <div id="profile-edit-panel" style="display:none;margin-top:14px;background:#060d1a;border:1px solid #1a2a45;border-radius:12px;padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <div>
+              <div id="pe-name" style="font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:800;color:var(--text);"></div>
+              <div id="pe-meta" style="font-size:0.62rem;color:var(--muted);margin-top:2px;"></div>
+            </div>
+            <button onclick="closeProfileEdit()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:4px 8px;">✕</button>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <!-- Shift -->
+            <div>
+              <div style="font-size:0.6rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:5px;">⏰ Shift</div>
+              <select id="pe-shift"
+                style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;"
+                onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#2a3a5a'">
+                <option value="">— Select shift —</option>
+                <option value="10:00AM - 7:00PM">10:00AM - 7:00PM</option>
+                <option value="11:00am-8:00pm">11:00am-8:00pm</option>
+                <option value="11:45am-9:00pm">11:45am-9:00pm</option>
+                <option value="13:00pm - 22:00pm">13:00pm - 22:00pm</option>
+              </select>
+            </div>
+            <!-- Lunch -->
+            <div>
+              <div style="font-size:0.6rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:5px;">🍽 Lunch</div>
+              <input id="pe-lunch" type="text" placeholder="e.g. 3:30-4:00 pm"
+                style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;"
+                onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='#2a3a5a'">
+            </div>
+            <!-- Break -->
+            <div>
+              <div style="font-size:0.6rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:5px;">☕ Break</div>
+              <input id="pe-break" type="text" placeholder="e.g. 2:00-2:15 pm"
+                style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;"
+                onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='#2a3a5a'">
+            </div>
+            <!-- Status -->
+            <div>
+              <div style="font-size:0.6rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);margin-bottom:5px;">📋 Status</div>
+              <select id="pe-status"
+                style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;outline:none;box-sizing:border-box;">
+                <option value="Agent">Agent</option>
+                <option value="Trainee">Trainee</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="pe-save-status" style="font-size:0.7rem;text-align:center;margin-bottom:10px;min-height:18px;"></div>
+
+          <button onclick="saveProfileEdits()" style="width:100%;padding:12px;border-radius:9px;border:none;background:linear-gradient(90deg,var(--accent),var(--cyan));color:#000;font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;letter-spacing:1.5px;cursor:pointer;">
+            💾 SAVE ALL CHANGES TO GOOGLE SHEET
+          </button>
+
+          <div style="font-size:0.6rem;color:var(--muted);text-align:center;margin-top:8px;">
+            Shift, Lunch &amp; Status → Google Sheet · Break → Firebase · Agent sees changes on next login
+          </div>
+        </div>
+      </div>
+    </div>
