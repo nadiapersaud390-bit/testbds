@@ -1726,9 +1726,14 @@ function switchTab(tab){
 
 function loadScript(key){
   const s=S[key];if(!s)return;
-  document.querySelectorAll('#page-script .sub-tab').forEach(el=>el.classList.toggle('active',el.id==='stab-'+key));
   const d=document.getElementById('sdisplay');
   const nb=document.getElementById('nav-btns');
+  if(!d || !nb) {
+    // Wait for the lazy-fetch to finish injecting the tab HTML into the DOM
+    setTimeout(() => loadScript(key), 100);
+    return;
+  }
+  document.querySelectorAll('#page-script .sub-tab').forEach(el=>el.classList.toggle('active',el.id==='stab-'+key));
   d.innerHTML=`<div style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:${s.color};margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--border);">${s.phase}</div>${s.content}`;
   d.scrollTop=0;nb.innerHTML='';
   if(s.next){const b=document.createElement('button');b.className='btn btn-p btn-f';b.innerText='\u2192 NEXT STEP';b.onclick=()=>loadScript(s.next);nb.appendChild(b);}
