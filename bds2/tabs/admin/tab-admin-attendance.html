@@ -1,0 +1,30 @@
+    <div id="admin-attendance" class="admin-section" style="display:none;">
+      <div class="admin-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+          <div class="admin-card-title" style="margin-bottom:0;font-size:0.9rem;">📅 DAILY ATTENDANCE</div>
+          <span id="att-date" style="color:var(--accent2);font-size:0.72rem;font-weight:700;"></span>
+        </div>
+        <!-- Team toggle -->
+        <div style="display:flex;justify-content:center;gap:10px;margin-bottom:12px;">
+          <button class="adm-team-btn active" id="att-bb-btn" onclick="switchAttTeam('all',this)" style="font-size:0.82rem;padding:8px 18px;">🌐 All</button>
+          <button class="adm-team-btn" id="att-bb-only" onclick="switchAttTeam('BB',this)" style="font-size:0.82rem;padding:8px 18px;">🏠 Berbice (BB)</button>
+          <button class="adm-team-btn" id="att-pr-only" onclick="switchAttTeam('PR',this)" style="font-size:0.82rem;padding:8px 18px;">🌴 Providence (PR)</button>
+        </div>
+        <!-- Status filters -->
+        <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
+          <button class="adm-filter active" id="att-filter-all"  onclick="filterAtt('all',this)">All</button>
+          <button class="adm-filter green"  id="att-filter-P"    onclick="filterAtt('P',this)">✅ Present</button>
+          <button class="adm-filter amber"  id="att-filter-L"    onclick="filterAtt('L',this)">🟡 Late</button>
+          <button class="adm-filter red"    id="att-filter-A"    onclick="filterAtt('A',this)">🔴 Absent</button>
+          <button class="adm-filter gray"   id="att-filter-none" onclick="filterAtt('none',this)">⬜ Not In</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="adm-table">
+            <thead><tr><th>#</th><th>Agent Name</th><th>Team</th><th>Shift</th><th>Status</th><th>Logged In</th><th>Edit</th></tr></thead>
+            <tbody id="att-tbody"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px;">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── WEEKLY ATTENDANCE ── -->
