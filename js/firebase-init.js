@@ -1,13 +1,7 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyBBnvva_YrF3_Cw442dajqvQcracwW5eyE",
-  authDomain: "bds-dashboard-b6cd9.firebaseapp.com",
-  projectId: "bds-dashboard-b6cd9",
-  storageBucket: "bds-dashboard-b6cd9.firebasestorage.app",
-  messagingSenderId: "30054871783",
-  appId: "1:30054871783:web:645e1dbc2883ed8b2da842"
-};
-firebase.initializeApp(firebaseConfig);
-const db   = firebase.firestore();
-const auth = firebase.auth();
-window.db = db;
-window.auth = auth;
+// FILE: js/firebase-init.js
+// Firebase is already initialized via CDN scripts in index.html.
+// This file exposes db and auth as global window variables
+// so all other JS files can access them without imports.
+
+window.db   = firebase.firestore();
+window.auth = firebase.auth();

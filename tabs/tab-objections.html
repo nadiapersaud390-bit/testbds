@@ -1,38 +1,39 @@
+<!-- FILE: tabs/tab-objections.html -->
 <div class="tab-page" id="page-objections">
-    <div class="sub-tab-row">
-      <div class="sub-tab-label">SEARCH REBUTTALS</div>
-      <div style="width:100%;padding:4px 0 8px;">
-        <input type="text" id="rebuttal-search" placeholder="&#128269; Type what the customer is saying..." oninput="searchRebuttals(this.value)" style="width:100%;padding:9px 14px;background:#0d1424;border:1.5px solid #2a3a5a;border-radius:8px;color:#e2e8f0;font-size:0.85rem;font-family:'Nunito',sans-serif;outline:none;transition:border-color 0.15s;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='#2a3a5a'">
-        <div id="search-results" style="display:none;margin-top:6px;background:#0d1424;border:1px solid #2a3a5a;border-radius:8px;overflow:hidden;"></div>
-      </div>
-      <div class="sub-tab-label" style="margin-top:4px;">SELECT REBUTTAL</div>
-      <button class="sub-tab st-warn active" id="stab-not_interested" onclick="loadObjection('not_interested')">Not Interested</button>
-      <button class="sub-tab st-warn" id="stab-no_info" onclick="loadObjection('no_info')">Why No Info?</button>
-      <button class="sub-tab st-warn" id="stab-bad_credit" onclick="loadObjection('bad_credit')">Bad Credit</button>
-      <button class="sub-tab st-warn" id="stab-rate_question" onclick="loadObjection('rate_question')">Interest Rate?</button>
-      <button class="sub-tab st-warn" id="stab-how_info" onclick="loadObjection('how_info')">How'd You Get My Info?</button>
-      <button class="sub-tab st-warn" id="stab-no_loan" onclick="loadObjection('no_loan')">Don't Need a Loan</button>
-      <button class="sub-tab st-warn" id="stab-website" onclick="loadObjection('website')">Give Me the Website</button>
-      <button class="sub-tab st-warn" id="stab-spouse" onclick="loadObjection('spouse')">Need to Ask Spouse</button>
-      <button class="sub-tab st-warn" id="stab-no_ssn" onclick="loadObjection('no_ssn')">Won't Give SSN</button>
-      <button class="sub-tab st-warn" id="stab-company_name" onclick="loadObjection('company_name')">What Company Is This?</button>
-      <button class="sub-tab st-warn" id="stab-who_are_we" onclick="loadObjection('who_are_we')">Who Are You / Where Located?</button>
-      <button class="sub-tab st-warn" id="stab-diff_numbers" onclick="loadObjection('diff_numbers')">Different Numbers / Address</button>
-      <button class="sub-tab st-warn" id="stab-lower_rate" onclick="loadObjection('lower_rate')">My Bank Has Lower Rate</button>
-      <button class="sub-tab st-warn" id="stab-voicemail_approved" onclick="loadObjection('voicemail_approved')">Voicemail Said Approved</button>
-      <button class="sub-tab st-bad" id="stab-dnc_file" onclick="loadObjection('dnc_file')">DNC / Enrolled / Bad Lead</button>
-      <button class="sub-tab st-warn" id="stab-llc_question" onclick="loadObjection('llc_question')">Is Your Company LLC?</button>
-      <button class="sub-tab st-warn" id="stab-debt_consolidation" onclick="loadObjection('debt_consolidation')">Is This Debt Consolidation?</button>
-      <button class="sub-tab st-warn" id="stab-soft_pull" onclick="loadObjection('soft_pull')">Soft Credit Pull</button>
-      <button class="sub-tab st-warn" id="stab-private_lender" onclick="loadObjection('private_lender')">What Bank / Private Lender?</button>
-      <div class="sub-tab-label" style="margin-top:6px;">BELIEVE IN YOUR WORK</div>
-      <button class="sub-tab st-ok" id="stab-confidence_mindset" onclick="loadObjection('confidence_mindset')">Confidence Technique</button>
-      <button class="sub-tab st-warn" id="stab-wants_to_hangup" onclick="loadObjection('wants_to_hangup')">Taking over technique</button>
-      <button class="sub-tab st-warn" id="stab-follow_up_pivot" onclick="loadObjection('follow_up_pivot')">Follow up ( Pivot Positively )</button>
-      <button class="sub-tab st-warn" id="stab-ssn_concerns" onclick="loadObjection('ssn_concerns')">Concerns about providing SSN</button>
-      <button class="sub-tab st-ok" id="stab-pitch_benefit" onclick="loadObjection('pitch_benefit')">Sales Pitch Boosting &mdash; Benefit-Oriented</button>
-      <button class="sub-tab st-ok" id="stab-pitch_urgency" onclick="loadObjection('pitch_urgency')">Sales Pitch Boosting &mdash; Urgency / No Commitment</button>
-      <button class="sub-tab st-warn" id="stab-pitch_softpull" onclick="loadObjection('pitch_softpull')">Sales Pitch Boosting &mdash; Soft Pull / Privacy / No Website</button>
+  <div class="sub-tab-row">
+    <div class="sub-tab-label">SEARCH REBUTTALS</div>
+    <div style="width:100%;padding:4px 0 8px;">
+      <input type="text" id="rebuttal-search" placeholder="&#128269; Type what the customer is saying..." oninput="searchRebuttals(this.value)" style="width:100%;padding:9px 14px;background:#0d1424;border:1.5px solid #2a3a5a;border-radius:8px;color:#e2e8f0;font-size:0.85rem;font-family:'Nunito',sans-serif;outline:none;transition:border-color 0.15s;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='#2a3a5a'">
+      <div id="search-results" style="display:none;margin-top:6px;background:#0d1424;border:1px solid #2a3a5a;border-radius:8px;overflow:hidden;"></div>
     </div>
-    <div class="script-view" id="obj-display"></div>
+    <div class="sub-tab-label" style="margin-top:4px;">SELECT REBUTTAL</div>
+    <button class="sub-tab st-warn active" id="stab-not_interested"    onclick="loadObjection('not_interested')">Not Interested</button>
+    <button class="sub-tab st-warn"        id="stab-no_info"           onclick="loadObjection('no_info')">Why No Info?</button>
+    <button class="sub-tab st-warn"        id="stab-bad_credit"        onclick="loadObjection('bad_credit')">Bad Credit</button>
+    <button class="sub-tab st-warn"        id="stab-rate_question"     onclick="loadObjection('rate_question')">Interest Rate?</button>
+    <button class="sub-tab st-warn"        id="stab-how_info"          onclick="loadObjection('how_info')">How'd You Get My Info?</button>
+    <button class="sub-tab st-warn"        id="stab-no_loan"           onclick="loadObjection('no_loan')">Don't Need a Loan</button>
+    <button class="sub-tab st-warn"        id="stab-website"           onclick="loadObjection('website')">Give Me the Website</button>
+    <button class="sub-tab st-warn"        id="stab-spouse"            onclick="loadObjection('spouse')">Need to Ask Spouse</button>
+    <button class="sub-tab st-warn"        id="stab-no_ssn"            onclick="loadObjection('no_ssn')">Won't Give SSN</button>
+    <button class="sub-tab st-warn"        id="stab-company_name"      onclick="loadObjection('company_name')">What Company Is This?</button>
+    <button class="sub-tab st-warn"        id="stab-who_are_we"        onclick="loadObjection('who_are_we')">Who Are You / Where Located?</button>
+    <button class="sub-tab st-warn"        id="stab-diff_numbers"      onclick="loadObjection('diff_numbers')">Different Numbers / Address</button>
+    <button class="sub-tab st-warn"        id="stab-lower_rate"        onclick="loadObjection('lower_rate')">My Bank Has Lower Rate</button>
+    <button class="sub-tab st-warn"        id="stab-voicemail_approved" onclick="loadObjection('voicemail_approved')">Voicemail Said Approved</button>
+    <button class="sub-tab st-bad"         id="stab-dnc_file"          onclick="loadObjection('dnc_file')">DNC / Enrolled / Bad Lead</button>
+    <button class="sub-tab st-warn"        id="stab-llc_question"      onclick="loadObjection('llc_question')">Is Your Company LLC?</button>
+    <button class="sub-tab st-warn"        id="stab-debt_consolidation" onclick="loadObjection('debt_consolidation')">Is This Debt Consolidation?</button>
+    <button class="sub-tab st-warn"        id="stab-soft_pull"         onclick="loadObjection('soft_pull')">Soft Credit Pull</button>
+    <button class="sub-tab st-warn"        id="stab-private_lender"    onclick="loadObjection('private_lender')">What Bank / Private Lender?</button>
+    <div class="sub-tab-label" style="margin-top:6px;">BELIEVE IN YOUR WORK</div>
+    <button class="sub-tab st-ok"   id="stab-confidence_mindset" onclick="loadObjection('confidence_mindset')">Confidence Technique</button>
+    <button class="sub-tab st-warn" id="stab-wants_to_hangup"    onclick="loadObjection('wants_to_hangup')">Taking over technique</button>
+    <button class="sub-tab st-warn" id="stab-follow_up_pivot"    onclick="loadObjection('follow_up_pivot')">Follow up ( Pivot Positively )</button>
+    <button class="sub-tab st-warn" id="stab-ssn_concerns"       onclick="loadObjection('ssn_concerns')">Concerns about providing SSN</button>
+    <button class="sub-tab st-ok"   id="stab-pitch_benefit"      onclick="loadObjection('pitch_benefit')">Sales Pitch Boosting &mdash; Benefit-Oriented</button>
+    <button class="sub-tab st-ok"   id="stab-pitch_urgency"      onclick="loadObjection('pitch_urgency')">Sales Pitch Boosting &mdash; Urgency / No Commitment</button>
+    <button class="sub-tab st-warn" id="stab-pitch_softpull"     onclick="loadObjection('pitch_softpull')">Sales Pitch Boosting &mdash; Soft Pull / Privacy / No Website</button>
   </div>
+  <div class="script-view" id="obj-display"></div>
+</div>
