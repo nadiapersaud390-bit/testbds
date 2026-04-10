@@ -1,0 +1,93 @@
+<!-- ── ADMIN: 📝 Coaching Notes ──
+     admin/coaching.html
+     Loaded by tab-admin.html when this sub-tab is first clicked.
+-->
+
+    <!-- ── COACHING ── -->
+    <div id="admin-coaching" class="admin-section" style="display:none;">
+      <div class="admin-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <div class="admin-card-title" style="margin-bottom:0;font-size:0.9rem;">📝 COACHING NOTES</div>
+          <button onclick="openCoachingForm()" style="padding:8px 16px;border-radius:8px;border:none;background:var(--accent);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:0.85rem;font-weight:800;letter-spacing:1px;cursor:pointer;">＋ Add Note</button>
+        </div>
+
+        <!-- Search / filter -->
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+          <input type="text" id="coach-search" placeholder="🔍 Search by rep name..." oninput="filterCoachingNotes()"
+            style="flex:1;min-width:140px;padding:8px 14px;background:#0d1424;border:1.5px solid #2a3a5a;border-radius:8px;color:#e2e8f0;font-size:0.8rem;font-family:'Nunito',sans-serif;outline:none;">
+          <select id="coach-team-filter" onchange="filterCoachingNotes()"
+            style="padding:8px 12px;background:#0d1424;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.8rem;outline:none;">
+            <option value="all">All Teams</option>
+            <option value="BB">🏠 Berbice</option>
+            <option value="PR">🌴 Providence</option>
+          </select>
+        </div>
+
+        <!-- Add form -->
+        <div id="coaching-form" style="display:none;background:#060d1a;border:1px solid #1a2a45;border-radius:12px;padding:16px;margin-bottom:14px;">
+          <div style="font-size:0.65rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">NEW COACHING NOTE</div>
+
+          <!-- Rep + Admin -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+            <div>
+              <div style="font-size:0.6rem;color:var(--muted);font-weight:700;margin-bottom:4px;">REP NAME</div>
+              <input id="cn-rep" type="text" placeholder="Start typing name..." list="cn-rep-list"
+                style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;">
+              <datalist id="cn-rep-list"></datalist>
+            </div>
+            <div>
+              <div style="font-size:0.6rem;color:var(--muted);font-weight:700;margin-bottom:4px;">ADMIN (Coached by)</div>
+              <input id="cn-admin" type="text" placeholder="Your name..."
+                style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;">
+            </div>
+          </div>
+
+          <!-- Discussion -->
+          <div style="margin-bottom:10px;">
+            <div style="font-size:0.6rem;color:var(--muted);font-weight:700;margin-bottom:4px;">💬 DISCUSSION</div>
+            <input id="cn-discussion" type="text" placeholder="e.g. Consistency and Efficiency"
+              style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;">
+          </div>
+
+          <!-- Goal -->
+          <div style="margin-bottom:10px;">
+            <div style="font-size:0.6rem;color:var(--muted);font-weight:700;margin-bottom:4px;">🎯 GOAL</div>
+            <input id="cn-goal" type="text" placeholder="e.g. Break the cycle of 8 leads to reach the 12-lead target"
+              style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;">
+          </div>
+
+          <!-- Key Discussion Points -->
+          <div style="margin-bottom:10px;">
+            <div style="font-size:0.6rem;color:var(--muted);font-weight:700;margin-bottom:4px;">🔑 KEY DISCUSSION POINTS <span style="opacity:0.6;">(one per line)</span></div>
+            <textarea id="cn-keypoints" placeholder="• Proven Potential: Reminded her that she has hit 12 leads before&#10;• Energy Check: Reviewed her script delivery&#10;• Speed to Lead: Focused on dispositioning calls faster"
+              style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.8rem;font-family:'Nunito',sans-serif;outline:none;resize:none;min-height:100px;box-sizing:border-box;"></textarea>
+          </div>
+
+          <!-- Advice + Outcome side by side -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+            <div>
+              <div style="font-size:0.6rem;color:var(--muted);font-weight:700;margin-bottom:4px;">💡 MY ADVICE</div>
+              <textarea id="cn-advice" placeholder="Your personal advice to the rep..."
+                style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.8rem;font-family:'Nunito',sans-serif;outline:none;resize:none;min-height:80px;box-sizing:border-box;"></textarea>
+            </div>
+            <div>
+              <div style="font-size:0.6rem;color:var(--muted);font-weight:700;margin-bottom:4px;">✅ OUTCOME <span style="opacity:0.6;">(one per line)</span></div>
+              <textarea id="cn-outcome" placeholder="• Process Shift: Focused on faster call handling&#10;• Commitment: Agreed to push past the 8-lead wall"
+                style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.8rem;font-family:'Nunito',sans-serif;outline:none;resize:none;min-height:80px;box-sizing:border-box;"></textarea>
+            </div>
+          </div>
+
+          <div id="cn-save-status" style="font-size:0.68rem;min-height:18px;margin-bottom:8px;"></div>
+          <div style="display:flex;gap:8px;">
+            <button onclick="saveCoachingNote()" style="flex:1;padding:11px;border-radius:8px;border:none;background:var(--accent);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:0.95rem;font-weight:800;letter-spacing:1px;cursor:pointer;">💾 SAVE NOTE</button>
+            <button onclick="closeCoachingForm()" style="padding:11px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:0.85rem;font-weight:800;cursor:pointer;">Cancel</button>
+          </div>
+        </div>
+
+        <!-- Notes list -->
+        <div id="coaching-notes-feed">
+          <div style="text-align:center;color:var(--muted);padding:24px;font-size:0.82rem;">Loading coaching notes...</div>
+        </div>
+      </div>
+    </div>
+

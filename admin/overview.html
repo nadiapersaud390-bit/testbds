@@ -1,0 +1,63 @@
+<!-- ── ADMIN: ⚡ Daily Overview ──
+     admin/overview.html
+     Loaded by tab-admin.html when this sub-tab is first clicked.
+-->
+
+    <!-- ── DAILY OVERVIEW ── -->
+    <div id="admin-overview" class="admin-section" style="display:none;">
+      <div class="admin-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div class="admin-card-title" style="margin-bottom:0;">🎯 DAILY TRANSFER GOAL</div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span style="font-size:0.6rem;color:var(--muted);">Target:</span>
+            <span id="goal-val-display" style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);">300</span>
+            <button onclick="editGoal()" style="background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:0.65rem;padding:2px 8px;border-radius:4px;">✏️ Edit</button>
+          </div>
+        </div>
+        <!-- Combined bar -->
+        <div style="margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <span style="font-size:0.65rem;color:var(--muted);font-weight:700;letter-spacing:1px;">TEAM TOTAL</span>
+            <span id="combined-xfer" style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--green);">0 / 300</span>
+          </div>
+          <div class="goal-bar" style="height:12px;">
+            <div class="goal-fill" id="combined-bar" style="width:0%;background:linear-gradient(90deg,#60a5fa,#a78bfa,#34d399);transition:width 0.6s ease;"></div>
+          </div>
+          <div id="combined-pct" style="font-size:0.62rem;color:var(--green);font-weight:800;margin-top:4px;text-align:right;">0%</div>
+        </div>
+        <!-- Clickable team split -->
+        <div class="goal-split">
+          <div class="goal-side" onclick="openTeamBreakdown('BB')" style="cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor=''">
+            <div class="goal-side-title" style="color:var(--accent);">🏠 BERBICE (BB) <span style="font-size:0.55rem;opacity:0.6;">— tap to view</span></div>
+            <div class="goal-val" id="bb-xfer-val" style="color:var(--accent);">0</div>
+            <div class="goal-bar"><div class="goal-fill" id="bb-xfer-bar" style="width:0%;background:linear-gradient(90deg,#60a5fa,#22d3ee);"></div></div>
+            <div class="goal-pct" id="bb-xfer-pct" style="color:var(--accent);">0 transfers</div>
+          </div>
+          <div class="goal-side" onclick="openTeamBreakdown('PR')" style="cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor=''">
+            <div class="goal-side-title" style="color:var(--purple);">🌴 PROVIDENCE (PR) <span style="font-size:0.55rem;opacity:0.6;">— tap to view</span></div>
+            <div class="goal-val" id="pr-xfer-val" style="color:var(--purple);">0</div>
+            <div class="goal-bar"><div class="goal-fill" id="pr-xfer-bar" style="width:0%;background:linear-gradient(90deg,#a78bfa,#c084fc);"></div></div>
+            <div class="goal-pct" id="pr-xfer-pct" style="color:var(--purple);">0 transfers</div>
+          </div>
+        </div>
+        <div style="font-size:0.6rem;color:var(--muted);text-align:center;margin-top:8px;">Upload CSV in Agent Stats · tap 5 times · click a team to see individual reps</div>
+      </div>
+
+      <div class="admin-card">
+        <div class="admin-card-title">📈 TODAY AT A GLANCE</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;">
+          <div class="rp-stat"><div class="rp-stat-val" id="glance-total" style="color:var(--accent);">—</div><div class="rp-stat-lbl">Total</div></div>
+          <div class="rp-stat"><div class="rp-stat-val" id="glance-online" style="color:var(--green);">—</div><div class="rp-stat-lbl">Online</div></div>
+          <div class="rp-stat"><div class="rp-stat-val" id="glance-late" style="color:var(--gold);">—</div><div class="rp-stat-lbl">Late</div></div>
+          <div class="rp-stat"><div class="rp-stat-val" id="glance-absent" style="color:var(--red);">—</div><div class="rp-stat-lbl">Not In</div></div>
+        </div>
+        <div class="ov-section-title green">🟢 ONLINE NOW</div>
+        <div class="online-grid" id="online-grid" style="margin-bottom:12px;"><div style="font-size:0.72rem;color:var(--muted);">Loading...</div></div>
+        <div class="ov-section-title amber">🟡 LATE — SHIFT STARTED, NOT LOGGED IN</div>
+        <div class="online-grid" id="late-grid" style="margin-bottom:12px;"><div style="font-size:0.72rem;color:var(--muted);">—</div></div>
+        <div class="ov-section-title red">🔴 NOT LOGGED IN YET</div>
+        <div class="online-grid" id="absent-grid"><div style="font-size:0.72rem;color:var(--muted);">—</div></div>
+        <div style="font-size:0.6rem;color:var(--muted);text-align:center;margin-top:10px;">Tap any name to open their full profile</div>
+      </div>
+    </div>
+

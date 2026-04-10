@@ -1,0 +1,35 @@
+<!-- ── ADMIN: 📋 Weekly Attendance ──
+     admin/weekly.html
+     Loaded by tab-admin.html when this sub-tab is first clicked.
+-->
+
+    <!-- ── WEEKLY ATTENDANCE ── -->
+    <div id="admin-weekly" class="admin-section" style="display:none;">
+      <div class="admin-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+          <div class="admin-card-title" style="margin-bottom:0;font-size:0.9rem;">📋 WEEKLY ATTENDANCE</div>
+          <span id="weekly-range-lbl" style="font-size:0.72rem;color:var(--accent2);font-weight:700;"></span>
+        </div>
+        <!-- BB / PR toggle -->
+        <div style="display:flex;justify-content:center;gap:10px;margin-bottom:14px;">
+          <button class="adm-team-btn active" id="wk-bb-btn" onclick="switchWeeklyTeam('BB',this)">🏠 Berbice (BB)</button>
+          <button class="adm-team-btn"        id="wk-pr-btn" onclick="switchWeeklyTeam('PR',this)">🌴 Providence (PR)</button>
+        </div>
+        <!-- Week chips -->
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;justify-content:center;" id="week-chips"></div>
+        <!-- Table -->
+        <div style="overflow-x:auto;" id="weekly-table-wrap">
+          <div style="text-align:center;color:var(--muted);padding:24px;">Select a team to load weekly attendance</div>
+        </div>
+        <!-- Legend -->
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;justify-content:center;">
+          <span class="wk-leg p">P — Present</span>
+          <span class="wk-leg l">L — Late</span>
+          <span class="wk-leg a">A — Absent</span>
+          <span class="wk-leg s">S — Sick</span>
+          <span class="wk-leg po">PO — Personal Out</span>
+          <span class="wk-leg off">OFF — Day Off</span>
+        </div>
+      </div>
+    </div>
+

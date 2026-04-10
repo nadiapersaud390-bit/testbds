@@ -1,0 +1,42 @@
+<!-- ── ADMIN TAB CONTENT ──
+     Each sub-tab's content is in admin/{name}.html
+     Loaded on first click via the adminLoader in index.html
+-->
+
+<!-- ── ADMIN TAB CONTENT ──
+     Loaded dynamically by index.html via fetch().
+     Do NOT include <html>/<head>/<body> tags here.
+-->
+
+  <div class="tab-page" id="page-admin">
+
+    <!-- ── CENTERED ADMIN SUB TABS ── -->
+    <div style="background:#060d1a;border-bottom:2px solid #1a2a45;padding:14px 16px;">
+      <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;">
+        <button class="adm-tab active" id="atab-profiles"    onclick="switchAdminTab('profiles',this)">👤 Agent Profiles</button>
+        <button class="adm-tab"        id="atab-overview"    onclick="switchAdminTab('overview',this)">⚡ Daily Overview</button>
+        <button class="adm-tab"        id="atab-attendance"  onclick="switchAdminTab('attendance',this)">📅 Daily Attendance</button>
+        <button class="adm-tab"        id="atab-weekly"      onclick="switchAdminTab('weekly',this)">📋 Weekly Attendance</button>
+        <button class="adm-tab"        id="atab-monthly"     onclick="switchAdminTab('monthly',this)">📆 Monthly Attendance</button>
+        <button class="adm-tab"        id="atab-stats"       onclick="switchAdminTab('stats',this)">📊 Agent Stats</button>
+        <button class="adm-tab"        id="atab-coaching"    onclick="switchAdminTab('coaching',this)">📝 Coaching</button>
+        <button class="adm-tab"        id="atab-monitoring"  onclick="switchAdminTab('monitoring',this)">🎧 Live Monitoring</button>
+        <button class="adm-tab"        id="atab-rebuttal"    onclick="switchAdminTab('rebuttal',this)">🧠 Rebuttal Intel</button>
+        <button class="adm-tab"        id="atab-weekperf"    onclick="switchAdminTab('weekperf',this)">🏆 Weekly Performance</button>
+      </div>
+    </div>
+
+
+  <!-- Admin sub-tab containers (content loaded from admin/*.html) -->
+  <div id="admin-overview" class="admin-section" style="display:none;"></div>
+  <div id="admin-attendance" class="admin-section" style="display:none;"></div>
+  <div id="admin-weekly" class="admin-section" style="display:none;"></div>
+  <div id="admin-monthly" class="admin-section" style="display:none;"></div>
+  <div id="admin-stats" class="admin-section" style="display:none;"></div>
+  <div id="admin-profiles" class="admin-section"></div>
+  <div id="admin-coaching" class="admin-section" style="display:none;"></div>
+  <div id="admin-monitoring" class="admin-section" style="display:none;"></div>
+  <div id="admin-rebuttal" class="admin-section" style="display:none;"></div>
+  <div id="admin-weekperf" class="admin-section" style="display:none;"></div>
+
+</div>
