@@ -5,32 +5,20 @@ on:
 permissions:
   contents: read
 jobs:
-  build:
+  model:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build whisper.cpp
-        run: |
-          git clone --depth 1 https://github.com/ggerganov/whisper.cpp.git /tmp/whisper.cpp
-          cmake -S /tmp/whisper.cpp -B /tmp/whisper.cpp/build \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DBUILD_SHARED_LIBS=OFF \
-            -DGGML_NATIVE=OFF \
-            -DWHISPER_BUILD_TESTS=OFF \
-            -DWHISPER_BUILD_SERVER=OFF
-          cmake --build /tmp/whisper.cpp/build --config Release -j 2
-      - name: Download English model
+      - name: Download medium English model
         run: |
           mkdir -p /tmp/package
           curl -L --fail --retry 4 --retry-delay 5 \
-            -o /tmp/package/ggml-small.en-q5_1.bin \
-            https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.en-q5_1.bin
-          cp /tmp/whisper.cpp/build/bin/whisper-cli /tmp/package/
-          chmod +x /tmp/package/whisper-cli
-          tar -C /tmp/package -czf /tmp/whisper-tools.tar.gz .
-      - name: Upload tools
+            -o /tmp/package/ggml-medium.en-q5_0.bin \
+            https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-medium.en-q5_0.bin
+          tar -C /tmp/package -czf /tmp/whisper-medium-model.tar.gz .
+      - name: Upload model
         uses: actions/upload-artifact@v4
         with:
-          name: whisper-tools-linux-x64
-          path: /tmp/whisper-tools.tar.gz
+          name: whisper-medium-en-q5
+          path: /tmp/whisper-medium-model.tar.gz
           retention-days: 1
