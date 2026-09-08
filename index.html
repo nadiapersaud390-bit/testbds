@@ -601,38 +601,105 @@ body.lead-alert-open{overflow:hidden;}
   color:var(--muted);
 }
 
-/* ── LEADERBOARD STYLES ── */
-.lb-card{
-  background:var(--card);border:1px solid var(--border);border-radius:12px;
-  padding:12px 16px;display:flex;align-items:center;gap:14px;
-  transition:all 0.15s;cursor:default;
+/* ── LEADERBOARD — PROFESSIONAL PERFORMANCE BOARD ── */
+#page-leaderboard{background:radial-gradient(circle at 12% 0%,rgba(251,191,36,.055),transparent 28%),var(--bg);}
+.lb-shell{padding:18px;overflow-y:auto;flex:1;max-width:1220px;width:100%;margin:0 auto;}
+.lb-hero{position:relative;overflow:hidden;border:1px solid rgba(251,191,36,.22);border-radius:18px;background:linear-gradient(135deg,rgba(17,28,48,.96),rgba(7,14,28,.98));box-shadow:0 18px 48px rgba(0,0,0,.24);padding:20px 22px;margin-bottom:14px;}
+.lb-hero::before{content:'';position:absolute;width:280px;height:280px;border-radius:50%;right:-100px;top:-150px;background:rgba(251,191,36,.08);filter:blur(4px);pointer-events:none;}
+.lb-hero-top{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;}
+.lb-title-wrap{display:flex;align-items:center;gap:14px;min-width:260px;}
+.lb-title-mark{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(251,191,36,.20),rgba(251,146,60,.09));border:1px solid rgba(251,191,36,.34);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 10px 28px rgba(0,0,0,.22);font-size:1.45rem;}
+.lb-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:4.2px;line-height:1;background:linear-gradient(90deg,#fff4c5,#fbbf24,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.lb-subtitle{margin-top:5px;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:1.7px;text-transform:uppercase;color:#71839d;}
+.lb-live-pill{display:inline-flex;align-items:center;gap:7px;margin-top:8px;padding:5px 9px;border-radius:999px;border:1px solid rgba(52,211,153,.24);background:rgba(52,211,153,.06);color:var(--green);font-size:.58rem;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;}
+.lb-live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px rgba(52,211,153,.7);}
+.lb-toolbar{position:relative;z-index:1;display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap;}
+.lb-control-group{display:flex;gap:4px;padding:4px;border:1px solid var(--border);border-radius:11px;background:rgba(4,10,22,.62);}
+.lb-control-label{width:100%;font-family:'Barlow Condensed',sans-serif;font-size:.52rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#60718a;margin:0 0 4px 3px;}
+.lb-seg-btn{appearance:none;border:1px solid transparent;background:transparent;color:#71839d;padding:7px 12px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:.75rem;font-weight:900;letter-spacing:1.2px;cursor:pointer;transition:all .18s ease;white-space:nowrap;}
+.lb-seg-btn:hover{color:var(--text);background:rgba(148,163,184,.06);}
+.lb-seg-btn.active{color:#07111e;background:linear-gradient(135deg,#fbbf24,#fb923c);box-shadow:0 7px 18px rgba(251,191,36,.14);}
+.lb-filter-btn.active{color:#dbeafe;background:rgba(59,130,246,.13);border-color:rgba(96,165,250,.38);box-shadow:none;}
+.lb-filter-btn[data-filter="BB"].active{color:#bfdbfe;background:rgba(96,165,250,.11);border-color:rgba(96,165,250,.35);}
+.lb-filter-btn[data-filter="PR"].active{color:#ddd6fe;background:rgba(167,139,250,.11);border-color:rgba(167,139,250,.34);}
+.lb-week-subtabs{display:none;margin:0 0 14px;}
+.lb-week-subtabs.show{display:flex;}
+.lb-week-toggle{display:flex;gap:4px;padding:4px;border:1px solid var(--border);border-radius:11px;background:#07101f;}
+.lb-week-btn{border:1px solid transparent;background:transparent;color:#71839d;padding:7px 15px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:900;letter-spacing:1.2px;cursor:pointer;}
+.lb-week-btn.active{color:#fff;background:rgba(167,139,250,.18);border-color:rgba(167,139,250,.36);}
+.lb-week-btn[data-week="prev"].active{color:#fde68a;background:rgba(251,191,36,.10);border-color:rgba(251,191,36,.30);}
+.lb-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px;}
+.lb-summary-card{position:relative;overflow:hidden;min-height:106px;padding:14px 15px;border-radius:14px;border:1px solid var(--border);background:linear-gradient(145deg,rgba(17,28,48,.92),rgba(9,17,31,.92));box-shadow:0 8px 24px rgba(0,0,0,.14);}
+.lb-summary-card::after{content:'';position:absolute;right:-25px;bottom:-35px;width:90px;height:90px;border-radius:50%;background:rgba(96,165,250,.035);}
+.lb-summary-kicker{font-family:'Barlow Condensed',sans-serif;font-size:.55rem;font-weight:900;letter-spacing:1.7px;text-transform:uppercase;color:#60718a;}
+.lb-summary-value{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:1px;line-height:1;margin-top:9px;color:#f8fafc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-summary-card.primary .lb-summary-value{color:var(--gold);}
+.lb-summary-card.leader .lb-summary-value{font-family:'Barlow Condensed',sans-serif;font-size:1.18rem;font-weight:900;letter-spacing:.5px;color:#fff;margin-top:11px;}
+.lb-summary-note{margin-top:6px;font-size:.63rem;color:#71839d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-section{border:1px solid var(--border);border-radius:16px;background:rgba(8,16,31,.76);box-shadow:0 10px 30px rgba(0,0,0,.14);overflow:hidden;margin-bottom:14px;}
+.lb-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;border-bottom:1px solid rgba(30,45,74,.78);background:rgba(13,20,36,.56);}
+.lb-section-title{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:900;letter-spacing:1.7px;text-transform:uppercase;color:#cbd5e1;}
+.lb-section-meta{font-size:.6rem;color:#60718a;font-weight:800;letter-spacing:.8px;}
+.lb-podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:16px;align-items:stretch;}
+.lb-podium-card{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;padding:18px 12px 15px;border-radius:14px;border:1px solid var(--border);background:linear-gradient(160deg,rgba(17,28,48,.95),rgba(7,15,29,.96));min-height:205px;}
+.lb-podium-card.rank-1{transform:translateY(-5px);border-color:rgba(251,191,36,.42);box-shadow:0 16px 34px rgba(251,191,36,.10);}
+.lb-podium-card.rank-2{border-color:rgba(148,163,184,.26);}
+.lb-podium-card.rank-3{border-color:rgba(251,146,60,.28);}
+.lb-podium-rank{position:absolute;top:10px;left:10px;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:rgba(6,11,24,.72);border:1px solid var(--border);font-family:'Bebas Neue',sans-serif;font-size:1.15rem;color:#94a3b8;}
+.lb-podium-card.rank-1 .lb-podium-rank{color:#fbbf24;border-color:rgba(251,191,36,.35);}
+.lb-podium-card.rank-3 .lb-podium-rank{color:#fb923c;border-color:rgba(251,146,60,.30);}
+.lb-podium-medal{font-size:1.5rem;line-height:1;margin-bottom:9px;}
+.lb-podium-avatar{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#12213a,#0a1324);border:1px solid #243653;font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;letter-spacing:1px;color:#dbeafe;box-shadow:inset 0 1px 0 rgba(255,255,255,.04);}
+.lb-podium-name{margin-top:10px;font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;letter-spacing:.6px;color:#f8fafc;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-podium-team{margin-top:5px;}
+.lb-podium-score{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;line-height:1;color:#f8fafc;margin-top:12px;}
+.lb-podium-card.rank-1 .lb-podium-score{color:#fbbf24;}
+.lb-podium-score span{display:block;margin-top:4px;font-family:'Barlow Condensed',sans-serif;font-size:.52rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#60718a;}
+.lb-podium-meta{display:flex;gap:10px;margin-top:10px;font-size:.6rem;color:#71839d;}
+.lb-ranking-head,.lb-ranking-row{display:grid;grid-template-columns:64px minmax(180px,1.5fr) 105px 90px 95px 90px minmax(100px,.8fr);gap:10px;align-items:center;}
+.lb-ranking-head{padding:9px 14px;background:#07101f;border-bottom:1px solid rgba(30,45,74,.72);font-family:'Barlow Condensed',sans-serif;font-size:.52rem;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:#52657f;}
+.lb-ranking-list{display:flex;flex-direction:column;}
+.lb-ranking-row{position:relative;padding:12px 14px;border-bottom:1px solid rgba(30,45,74,.58);transition:background .15s ease,border-color .15s ease;}
+.lb-ranking-row:last-child{border-bottom:none;}
+.lb-ranking-row:hover{background:rgba(96,165,250,.035);}
+.lb-ranking-row.lb-me{background:linear-gradient(90deg,rgba(251,191,36,.07),transparent 72%);box-shadow:inset 3px 0 0 rgba(251,191,36,.65);}
+.lb-rank-cell{display:flex;align-items:center;gap:8px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:#71839d;}
+.lb-rank-cell.top-1{color:#fbbf24}.lb-rank-cell.top-2{color:#cbd5e1}.lb-rank-cell.top-3{color:#fb923c}
+.lb-agent-cell{min-width:0;display:flex;align-items:center;gap:10px;}
+.lb-mini-avatar{width:34px;height:34px;border-radius:10px;flex:0 0 auto;display:grid;place-items:center;background:#0d1b31;border:1px solid #223451;color:#b9c9df;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:900;letter-spacing:.5px;}
+.lb-agent-info{min-width:0;}
+.lb-agent-name{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:900;letter-spacing:.4px;color:#eef2ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-agent-sub{margin-top:2px;font-size:.56rem;color:#60718a;font-weight:800;letter-spacing:.8px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-team-badge{display:inline-flex;align-items:center;justify-content:center;width:max-content;padding:4px 8px;border-radius:999px;font-size:.52rem;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;}
+.lb-team-bb{background:rgba(96,165,250,.10);color:#93c5fd;border:1px solid rgba(96,165,250,.24);}
+.lb-team-pr{background:rgba(167,139,250,.10);color:#c4b5fd;border:1px solid rgba(167,139,250,.24);}
+.lb-metric{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:900;color:#cbd5e1;}
+.lb-metric.muted{color:#8091aa;font-weight:800;}
+.lb-transfer-value{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;line-height:1;color:#f8fafc;}
+.lb-ranking-row:nth-child(1) .lb-transfer-value{color:#fbbf24;}
+.lb-conv{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:900;color:#cbd5e1;}
+.lb-progress-wrap{width:100%;height:7px;border-radius:999px;background:#07101d;overflow:hidden;border:1px solid rgba(30,45,74,.55);}
+.lb-progress-bar{height:100%;border-radius:inherit;background:linear-gradient(90deg,#3b82f6,#38bdf8);transition:width .55s cubic-bezier(.16,1,.3,1);}
+.lb-ranking-row:nth-child(1) .lb-progress-bar{background:linear-gradient(90deg,#fbbf24,#fb923c);}
+.lb-ranking-row:nth-child(2) .lb-progress-bar{background:linear-gradient(90deg,#94a3b8,#dbeafe);}
+.lb-ranking-row:nth-child(3) .lb-progress-bar{background:linear-gradient(90deg,#fb923c,#fdba74);}
+.lb-empty{display:none;text-align:center;padding:54px 20px;border:1px dashed var(--border);border-radius:16px;background:rgba(13,20,36,.48);color:#71839d;}
+.lb-empty.show{display:block;}
+.lb-empty-icon{font-size:2.2rem;margin-bottom:10px;}
+.lb-empty-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:#94a3b8;}
+.lb-empty-note{font-size:.72rem;margin-top:6px;}
+@media(max-width:980px){
+  .lb-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .lb-ranking-head,.lb-ranking-row{grid-template-columns:54px minmax(180px,1.6fr) 92px 80px 85px 85px;}
+  .lb-ranking-head .lb-col-progress,.lb-ranking-row .lb-col-progress{display:none;}
 }
-.lb-card.lb-me{
-  border-color:rgba(251,191,36,0.5);
-  background:rgba(251,191,36,0.05);
-  box-shadow:0 0 14px rgba(251,191,36,0.1);
+@media(max-width:720px){
+  .lb-shell{padding:12px;}.lb-hero{padding:16px}.lb-hero-top{flex-direction:column}.lb-toolbar{width:100%;justify-content:flex-start}.lb-control-group{max-width:100%;overflow-x:auto}
+  .lb-summary-grid{grid-template-columns:1fr 1fr;gap:8px}.lb-summary-card{min-height:94px}.lb-summary-value{font-size:1.7rem}
+  .lb-podium{grid-template-columns:1fr;}.lb-podium-card.rank-1{order:-1;transform:none}.lb-podium-card{min-height:0;display:grid;grid-template-columns:42px 46px minmax(0,1fr) auto;column-gap:10px;align-items:center;text-align:left;padding:12px}.lb-podium-rank{position:static;width:32px;height:32px}.lb-podium-medal{display:none}.lb-podium-avatar{width:42px;height:42px;border-radius:12px}.lb-podium-name{margin:0}.lb-podium-team{margin-top:4px}.lb-podium-score{margin:0;text-align:right;font-size:1.8rem}.lb-podium-meta{display:none}
+  .lb-ranking-head{display:none}.lb-ranking-row{grid-template-columns:42px minmax(0,1fr) auto;gap:9px;padding:12px}.lb-ranking-row .lb-col-team{grid-column:2}.lb-ranking-row .lb-col-transfer{grid-column:3;grid-row:1/3;text-align:right;align-self:center}.lb-ranking-row .lb-col-calls,.lb-ranking-row .lb-col-conv,.lb-ranking-row .lb-col-progress{display:none}
 }
-.lb-rank{
-  font-family:'Bebas Neue',sans-serif;font-size:1.6rem;
-  color:var(--muted);min-width:36px;text-align:center;line-height:1;
-}
-.lb-rank.gold{color:#fbbf24;filter:drop-shadow(0 0 6px rgba(251,191,36,0.5));}
-.lb-rank.silver{color:#94a3b8;}
-.lb-rank.bronze{color:#fb923c;}
-.lb-name{flex:1;font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:1px;color:var(--text);}
-.lb-name .lb-status{font-size:0.52rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);display:block;margin-top:1px;}
-.lb-team-badge{padding:2px 8px;border-radius:5px;font-size:0.55rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;}
-.lb-team-bb{background:rgba(96,165,250,0.15);color:var(--accent);border:1px solid rgba(96,165,250,0.3);}
-.lb-team-pr{background:rgba(167,139,250,0.15);color:var(--purple);border:1px solid rgba(167,139,250,0.3);}
-.lb-xfer{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;line-height:1;text-align:right;}
-.lb-xfer .lb-xfer-lbl{font-family:'Barlow Condensed',sans-serif;font-size:0.52rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);display:block;}
-.lb-bar-wrap{width:80px;height:6px;background:#0d1424;border-radius:20px;overflow:hidden;}
-.lb-bar-fill{height:100%;border-radius:20px;transition:width 0.6s ease;}
-/* Podium */
-.lb-podium-slot{display:flex;flex-direction:column;align-items:center;gap:6px;}
-.lb-podium-block{border-radius:8px 8px 0 0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#fff;min-width:90px;}
-.lb-podium-name{font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:800;letter-spacing:1px;text-align:center;color:var(--text);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.lb-podium-val{font-family:'Bebas Neue',sans-serif;font-size:1rem;}
+@media(max-width:430px){.lb-summary-grid{grid-template-columns:1fr}.lb-title{font-size:1.6rem;letter-spacing:3px}.lb-title-mark{width:42px;height:42px}.lb-seg-btn{padding:6px 9px;font-size:.68rem}}
 
 
 .sub-tab-row{display:flex;flex-wrap:wrap;gap:5px;padding:9px 14px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0;}
@@ -850,70 +917,112 @@ body.is-admin #page-admin.admin-page-active{display:flex !important;flex-directi
 .adm-table tbody tr:nth-child(even){background:#060b18;}
 .adm-table tbody tr:hover td{background:#0d1a30;cursor:pointer;}
 
-/* ── PROFESSIONAL AGENT PROFILE MANAGER ── */
-.profile-admin-shell{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(340px,.85fr);gap:14px;align-items:start;}
-.profile-admin-panel{background:linear-gradient(180deg,rgba(13,20,36,.96),rgba(7,13,26,.96));border:1px solid #1d2d49;border-radius:16px;box-shadow:0 14px 34px rgba(0,0,0,.22);overflow:hidden;}
-.profile-admin-head{padding:18px 18px 14px;border-bottom:1px solid #16253f;background:linear-gradient(135deg,rgba(96,165,250,.07),rgba(167,139,250,.035));}
-.profile-admin-title{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:#f1f5f9;}
-.profile-admin-sub{font-size:.68rem;color:#7385a0;line-height:1.55;margin-top:4px;}
-.profile-summary-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:13px;}
-.profile-summary-chip{padding:9px 11px;border:1px solid #1b2b46;border-radius:10px;background:rgba(4,10,22,.58);}
-.profile-summary-val{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;line-height:1;color:#e2e8f0;}
-.profile-summary-lbl{margin-top:3px;font-size:.5rem;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:#60708b;}
-.profile-toolbar{display:flex;gap:8px;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid #12213a;background:rgba(5,10,21,.5);}
-.profile-control{min-height:38px;padding:9px 12px;border:1px solid #253755;border-radius:9px;background:#080f1e;color:#e2e8f0;outline:none;font-family:'Nunito',sans-serif;font-size:.78rem;transition:border-color .15s,box-shadow .15s;}
-.profile-control:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(96,165,250,.08);}
-.profile-control.search{flex:1;min-width:180px;}
-.profile-list{max-height:610px;overflow:auto;padding:6px;}
-.profile-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:11px;align-items:center;padding:11px 12px;border:1px solid transparent;border-radius:11px;cursor:pointer;transition:background .15s,border-color .15s,transform .15s;margin-bottom:4px;}
-.profile-row:hover{background:#0c1729;border-color:#1d304f;transform:translateY(-1px);}
-.profile-row.selected{background:linear-gradient(90deg,rgba(96,165,250,.11),rgba(167,139,250,.06));border-color:#31547f;box-shadow:inset 3px 0 0 #60a5fa;}
-.profile-avatar-sm{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,#0f2e50,#0a1e36);border:1px solid #234b72;color:#67c6ff;font-family:'Barlow Condensed',sans-serif;font-size:.92rem;font-weight:900;letter-spacing:.6px;}
-.profile-row-name{font-size:.83rem;font-weight:800;color:#eef4ff;line-height:1.2;}
-.profile-row-meta{font-size:.61rem;color:#6f819b;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.profile-row-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px;}
-.profile-tag{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;border-radius:999px;font-size:.52rem;font-weight:900;letter-spacing:.8px;text-transform:uppercase;border:1px solid #233451;background:#0a1323;color:#7e91ad;}
-.profile-tag.bb{border-color:rgba(96,165,250,.34);background:rgba(96,165,250,.08);color:#60a5fa;}
-.profile-tag.pr{border-color:rgba(167,139,250,.35);background:rgba(167,139,250,.08);color:#a78bfa;}
-.profile-tag.agent{border-color:rgba(52,211,153,.28);background:rgba(52,211,153,.07);color:#34d399;}
-.profile-tag.trainee{border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.07);color:#fbbf24;}
-.profile-row-actions{display:flex;gap:6px;align-items:center;}
-.profile-mini-btn{padding:6px 9px;border-radius:8px;border:1px solid #263957;background:#0b1425;color:#8ca0bc;font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:900;letter-spacing:.8px;cursor:pointer;white-space:nowrap;}
-.profile-mini-btn:hover{border-color:#60a5fa;color:#8bd2ff;background:#0d1c31;}
-.profile-mini-btn.primary{border-color:rgba(96,165,250,.38);color:#60a5fa;background:rgba(96,165,250,.07);}
-.profile-edit-card{position:sticky;top:10px;min-height:350px;}
-.profile-edit-empty{display:grid;place-items:center;min-height:360px;padding:28px;text-align:center;color:#60708b;}
-.profile-edit-empty-icon{font-size:2rem;margin-bottom:10px;filter:grayscale(.25);}
-.profile-edit-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px;border-bottom:1px solid #182841;background:linear-gradient(135deg,rgba(96,165,250,.08),rgba(34,211,238,.025));}
-.profile-edit-name{font-family:'Barlow Condensed',sans-serif;font-size:1.25rem;font-weight:900;letter-spacing:.7px;color:#f8fafc;}
-.profile-edit-meta{font-size:.62rem;color:#70819a;margin-top:3px;}
-.profile-close-btn{width:32px;height:32px;border-radius:9px;border:1px solid #273854;background:#0b1424;color:#6f819b;cursor:pointer;font-weight:900;}
-.profile-close-btn:hover{border-color:#f87171;color:#f87171;}
+/* ── ADMIN AGENT PROFILE CENTER — PROFESSIONAL REDESIGN ── */
+.profile-hub{border:1px solid #1a2b46;border-radius:22px;overflow:hidden;background:linear-gradient(180deg,#09111f 0%,#070d19 100%);box-shadow:0 26px 70px rgba(0,0,0,.34);}
+.profile-hub-header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 24px;border-bottom:1px solid #182943;background:radial-gradient(circle at 8% 0%,rgba(96,165,250,.16),transparent 34%),linear-gradient(135deg,#0d1a2d 0%,#09111f 58%,#0b1220 100%);}
+.profile-hub-brand{display:flex;align-items:center;gap:15px;min-width:0;}
+.profile-hub-icon{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;flex:0 0 auto;font-size:1.55rem;background:linear-gradient(145deg,rgba(96,165,250,.18),rgba(34,211,238,.08));border:1px solid rgba(96,165,250,.32);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 12px 30px rgba(0,0,0,.2);}
+.profile-hub-kicker{font-family:'Barlow Condensed',sans-serif;font-size:.56rem;font-weight:900;letter-spacing:2.4px;text-transform:uppercase;color:#6c83a2;margin-bottom:3px;}
+.profile-hub-title{font-family:'Bebas Neue',sans-serif;font-size:1.85rem;letter-spacing:2.4px;line-height:1;color:#f3f7fc;}
+.profile-hub-sub{margin-top:6px;max-width:720px;font-size:.7rem;line-height:1.55;color:#71839d;}
+.profile-hub-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;}
+.profile-live-pill{display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:0 12px;border:1px solid rgba(52,211,153,.24);border-radius:10px;background:rgba(52,211,153,.055);color:#7ce7bf;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;white-space:nowrap;}
+.profile-live-dot{width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 0 4px rgba(52,211,153,.08),0 0 12px rgba(52,211,153,.55);}
+.profile-top-btn{min-height:38px;padding:0 13px;border-radius:10px;border:1px solid #2a3e60;background:#0b1628;color:#9db0c9;font-family:'Barlow Condensed',sans-serif;font-size:.67rem;font-weight:900;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:.16s ease;}
+.profile-top-btn:hover{transform:translateY(-1px);border-color:#4b6489;color:#d9e5f4;background:#0e1b30;}
+.profile-top-btn.primary{border-color:rgba(96,165,250,.42);background:linear-gradient(135deg,rgba(37,99,235,.26),rgba(34,211,238,.12));color:#8ed6ff;box-shadow:0 9px 24px rgba(37,99,235,.10);}
+.profile-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:14px 18px;border-bottom:1px solid #15243c;background:#08101d;}
+.profile-kpi-card{position:relative;overflow:hidden;padding:13px 14px;border:1px solid #1d304d;border-radius:14px;background:linear-gradient(145deg,#0c1728,#09111e);min-height:76px;}
+.profile-kpi-card::after{content:'';position:absolute;inset:auto -18px -28px auto;width:72px;height:72px;border-radius:50%;background:var(--kpi-glow,rgba(96,165,250,.10));filter:blur(3px);}
+.profile-kpi-top{display:flex;align-items:center;justify-content:space-between;gap:8px;position:relative;z-index:1;}
+.profile-kpi-icon{font-size:.9rem;opacity:.9;}
+.profile-kpi-label{font-family:'Barlow Condensed',sans-serif;font-size:.54rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#657994;}
+.profile-kpi-value{position:relative;z-index:1;margin-top:7px;font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;line-height:.9;color:#f4f8ff;}
+.profile-kpi-card.bb{--kpi-glow:rgba(96,165,250,.15)}.profile-kpi-card.bb .profile-kpi-value{color:#6fb6ff}.profile-kpi-card.pr{--kpi-glow:rgba(167,139,250,.15)}.profile-kpi-card.pr .profile-kpi-value{color:#b6a2ff}.profile-kpi-card.trainee{--kpi-glow:rgba(251,191,36,.13)}.profile-kpi-card.trainee .profile-kpi-value{color:#f7c852}
+.profile-workspace{display:grid;grid-template-columns:minmax(440px,.92fr) minmax(520px,1.08fr);min-height:650px;}
+.profile-directory-card{min-width:0;border-right:1px solid #172844;background:#070e1b;}
+.profile-directory-head{padding:16px 17px 13px;border-bottom:1px solid #15253e;background:linear-gradient(180deg,#0a1424,#08101e);}
+.profile-directory-title-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px;}
+.profile-directory-title{font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;color:#dbe8f8;}
+.profile-result-count{padding:4px 8px;border:1px solid #263b5c;border-radius:999px;background:#0b1728;color:#7f94b1;font-size:.56rem;font-weight:900;letter-spacing:.9px;text-transform:uppercase;white-space:nowrap;}
+.profile-toolbar{display:grid;grid-template-columns:minmax(0,1fr) 142px;gap:8px;}
+.profile-control{width:100%;min-height:40px;padding:9px 12px;border:1px solid #263a59;border-radius:10px;background:#060d18;color:#e2e8f0;outline:none;font-family:'Nunito',sans-serif;font-size:.75rem;transition:border-color .15s,box-shadow .15s,background .15s;}
+.profile-control:focus{border-color:#4f8ad0;background:#08111f;box-shadow:0 0 0 3px rgba(96,165,250,.07);}
+.profile-directory-columns{display:grid;grid-template-columns:minmax(190px,1.35fr) 90px 106px 82px 34px;gap:8px;align-items:center;padding:8px 12px;border-bottom:1px solid #132138;background:#060c17;color:#526780;font-family:'Barlow Condensed',sans-serif;font-size:.5rem;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;}
+.profile-directory-columns span:not(:first-child){text-align:center;}
+.profile-list{max-height:560px;overflow:auto;padding:6px;scrollbar-gutter:stable;}
+.profile-row{display:grid;grid-template-columns:minmax(190px,1.35fr) 90px 106px 82px 34px;gap:8px;align-items:center;min-height:64px;padding:8px 9px;border:1px solid transparent;border-radius:12px;cursor:pointer;transition:background .15s,border-color .15s,transform .15s;margin-bottom:4px;}
+.profile-row:hover{background:#0a1728;border-color:#1b304f;transform:translateX(2px);}
+.profile-row.selected{background:linear-gradient(90deg,rgba(59,130,246,.14),rgba(34,211,238,.035));border-color:#315985;box-shadow:inset 3px 0 0 #60a5fa,0 7px 20px rgba(0,0,0,.12);}
+.profile-agent-cell{display:grid;grid-template-columns:42px minmax(0,1fr);gap:10px;align-items:center;min-width:0;}
+.profile-avatar-sm{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#12385e,#0a2038);border:1px solid #285781;color:#7bd2ff;font-family:'Barlow Condensed',sans-serif;font-size:.92rem;font-weight:900;letter-spacing:.5px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05);}
+.profile-row-name{font-size:.79rem;font-weight:900;color:#edf5ff;line-height:1.22;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.profile-row-meta{font-size:.58rem;color:#667c99;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.profile-dir-center{text-align:center;min-width:0;}
+.profile-dir-shift{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:800;color:#8aa0bd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.profile-tag{display:inline-flex;align-items:center;justify-content:center;min-height:22px;padding:2px 8px;border-radius:999px;font-size:.49rem;font-weight:900;letter-spacing:.8px;text-transform:uppercase;border:1px solid #233451;background:#0a1323;color:#7e91ad;white-space:nowrap;}
+.profile-tag.bb{border-color:rgba(96,165,250,.35);background:rgba(96,165,250,.08);color:#6eb6ff}.profile-tag.pr{border-color:rgba(167,139,250,.36);background:rgba(167,139,250,.08);color:#b19cff}.profile-tag.agent{border-color:rgba(52,211,153,.28);background:rgba(52,211,153,.07);color:#52d9aa}.profile-tag.trainee{border-color:rgba(251,191,36,.32);background:rgba(251,191,36,.07);color:#f4c755}.profile-tag.inactive{border-color:rgba(248,113,113,.28);background:rgba(248,113,113,.07);color:#f88b8b}
+.profile-dir-open{width:30px;height:30px;border-radius:9px;border:1px solid #263b5b;background:#0a1526;color:#7d95b4;display:grid;place-items:center;font-weight:900;cursor:pointer;transition:.15s;}
+.profile-dir-open:hover{border-color:#60a5fa;color:#a7dcff;background:#0d1c30;transform:translateX(1px);}
+.profile-empty-list{text-align:center;color:#637792;padding:38px 18px;font-size:.75rem;}
+.profile-editor-card{min-width:0;background:radial-gradient(circle at 100% 0%,rgba(167,139,250,.07),transparent 26%),#0a111e;}
+.profile-edit-card{position:relative;min-height:650px;}
+.profile-edit-empty{display:grid;place-items:center;min-height:650px;padding:34px;text-align:center;color:#60708b;}
+.profile-edit-empty-wrap{max-width:330px;}
+.profile-edit-empty-icon{width:72px;height:72px;margin:0 auto 15px;border-radius:22px;display:grid;place-items:center;font-size:2rem;background:linear-gradient(145deg,#0d1d31,#0a1422);border:1px solid #1f3654;box-shadow:0 14px 34px rgba(0,0,0,.22);}
+.profile-edit-empty-title{font-family:'Bebas Neue',sans-serif;font-size:1.45rem;letter-spacing:2px;color:#9fb0c6;}
+.profile-edit-empty-copy{font-size:.67rem;line-height:1.6;margin-top:6px;color:#657993;}
+.profile-edit-head{position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:20px 21px 18px;border-bottom:1px solid #1a2a45;background:linear-gradient(135deg,#10223a 0%,#0b1728 58%,#0c1423 100%);}
+.profile-edit-head::after{content:'';position:absolute;right:-70px;top:-95px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.17),transparent 68%);pointer-events:none;}
+.profile-hero-main{position:relative;z-index:1;display:flex;gap:13px;align-items:center;min-width:0;}
+.profile-avatar-lg{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;flex:0 0 auto;background:linear-gradient(145deg,#14436f,#0a2744);border:1px solid #316995;color:#9fe0ff;font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;letter-spacing:1px;box-shadow:0 8px 24px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.07);}
+.profile-hero-text{min-width:0;}
+.profile-edit-name{font-family:'Barlow Condensed',sans-serif;font-size:1.28rem;font-weight:900;letter-spacing:.5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.profile-edit-meta{font-size:.61rem;color:#7790ae;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.profile-hero-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.profile-hero-badge{display:inline-flex;align-items:center;gap:5px;min-height:24px;padding:2px 8px;border:1px solid #29405f;border-radius:999px;background:rgba(5,12,23,.5);font-family:'Barlow Condensed',sans-serif;font-size:.54rem;font-weight:900;letter-spacing:.9px;text-transform:uppercase;color:#8ea4c0;}
+.profile-hero-badge.team-bb{border-color:rgba(96,165,250,.35);color:#75c0ff;background:rgba(96,165,250,.08)}.profile-hero-badge.team-pr{border-color:rgba(167,139,250,.35);color:#b7a4ff;background:rgba(167,139,250,.08)}.profile-hero-badge.status-agent{border-color:rgba(52,211,153,.28);color:#58ddb0;background:rgba(52,211,153,.07)}.profile-hero-badge.status-trainee{border-color:rgba(251,191,36,.3);color:#f8c95e;background:rgba(251,191,36,.07)}.profile-hero-badge.status-inactive{border-color:rgba(248,113,113,.3);color:#fa9090;background:rgba(248,113,113,.07)}
+.profile-head-actions{position:relative;z-index:1;display:flex;gap:7px;align-items:center;}
+.profile-close-btn{width:34px;height:34px;border-radius:10px;border:1px solid #2b405f;background:#0a1526;color:#7890ad;cursor:pointer;font-weight:900;transition:.15s;}
+.profile-close-btn:hover{border-color:#f87171;color:#f87171;background:rgba(248,113,113,.06);}
 .profile-edit-body{padding:16px 18px 18px;}
-.profile-info-strip{display:flex;align-items:center;gap:8px;padding:9px 11px;margin-bottom:14px;border-radius:10px;border:1px solid rgba(52,211,153,.22);background:rgba(52,211,153,.045);color:#7d93aa;font-size:.62rem;line-height:1.45;}
-.profile-info-strip .dot{width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 10px rgba(52,211,153,.55);flex:0 0 auto;}
-.profile-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.profile-sync-strip{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 11px;margin-bottom:13px;border:1px solid #1c3552;border-radius:11px;background:linear-gradient(90deg,rgba(34,211,238,.045),rgba(96,165,250,.025));}
+.profile-sync-left{display:flex;align-items:center;gap:8px;color:#7890ab;font-size:.59rem;line-height:1.45;}
+.profile-sync-dot{width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 10px rgba(52,211,153,.6);flex:0 0 auto;}
+.profile-sync-label{font-family:'Barlow Condensed',sans-serif;font-size:.54rem;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;color:#58d9ad;white-space:nowrap;}
+.profile-section-stack{display:grid;gap:10px;}
+.profile-section-card{border:1px solid #1b2d49;border-radius:14px;background:linear-gradient(145deg,#0b1525,#09111f);overflow:hidden;}
+.profile-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;border-bottom:1px solid #15263f;background:rgba(5,11,20,.38);}
+.profile-section-title{display:flex;align-items:center;gap:8px;font-family:'Barlow Condensed',sans-serif;font-size:.63rem;font-weight:900;letter-spacing:1.35px;text-transform:uppercase;color:#a9bad0;}
+.profile-section-caption{font-size:.52rem;color:#5f728e;}
+.profile-section-body{padding:12px 13px 13px;}
+.profile-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.profile-edit-grid.three{grid-template-columns:1.1fr 1fr 1fr;}
 .profile-field.full{grid-column:1/-1;}
-.profile-label{display:block;margin-bottom:5px;font-size:.54rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#6d7f99;}
-.profile-label.blue{color:#60a5fa}.profile-label.green{color:#34d399}.profile-label.gold{color:#fbbf24}.profile-label.purple{color:#a78bfa}.profile-label.cyan{color:#22d3ee}
-.profile-input{width:100%;min-height:39px;padding:9px 11px;border:1px solid #283a58;border-radius:9px;background:#070e1c;color:#e6edf7;font-family:'Nunito',sans-serif;font-size:.78rem;outline:none;transition:border-color .15s,box-shadow .15s;}
-.profile-input:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(96,165,250,.08);}
-.profile-input[readonly]{color:#71839e;background:#09101d;cursor:not-allowed;}
-.profile-save-status{min-height:22px;margin:12px 0 8px;padding:0 2px;font-size:.67rem;text-align:center;font-weight:700;}
-.profile-actions{display:grid;grid-template-columns:1fr auto;gap:8px;}
-.profile-save-btn{min-height:43px;border:0;border-radius:10px;background:linear-gradient(90deg,#2563eb,#22d3ee);color:#03121b;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 22px rgba(37,99,235,.17);}
-.profile-save-btn:hover{filter:brightness(1.08);transform:translateY(-1px);}
-.profile-save-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
-.profile-open-btn{min-height:43px;padding:0 14px;border:1px solid #2a3d5d;border-radius:10px;background:#0a1323;color:#93a7c3;font-family:'Barlow Condensed',sans-serif;font-size:.74rem;font-weight:900;letter-spacing:1px;cursor:pointer;}
-.profile-open-btn:hover{border-color:#a78bfa;color:#c4b5fd;}
-.profile-new-form{display:none;margin:0 14px 14px;padding:16px;border:1px solid rgba(52,211,153,.25);border-radius:13px;background:linear-gradient(145deg,rgba(4,25,20,.78),rgba(5,14,25,.92));}
-.profile-new-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.profile-empty-list{text-align:center;color:#64748b;padding:30px 18px;font-size:.78rem;}
-.ap-header-actions{display:flex;align-items:center;gap:8px;}
-.ap-edit-profile-btn{display:none;padding:9px 13px;border-radius:9px;border:1px solid rgba(96,165,250,.35);background:rgba(96,165,250,.08);color:#7cc9ff;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:900;letter-spacing:1px;cursor:pointer;}
-.ap-edit-profile-btn:hover{border-color:#60a5fa;background:rgba(96,165,250,.13);}
-@media(max-width:900px){.profile-admin-shell{grid-template-columns:1fr}.profile-edit-card{position:static}.profile-list{max-height:430px;}}
-@media(max-width:620px){.profile-summary-row{grid-template-columns:repeat(3,1fr)}.profile-edit-grid,.profile-new-grid{grid-template-columns:1fr}.profile-field.full{grid-column:auto}.profile-actions{grid-template-columns:1fr}.profile-row{grid-template-columns:auto minmax(0,1fr)}.profile-row-actions{grid-column:1/-1;padding-left:49px}.profile-toolbar{flex-direction:column}.profile-control.search{width:100%}.profile-control{width:100%}}
+.profile-label{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:5px;font-size:.5rem;font-weight:900;letter-spacing:1.35px;text-transform:uppercase;color:#657b97;}
+.profile-label-note{font-size:.47rem;font-weight:700;letter-spacing:.4px;text-transform:none;color:#4f627b;}
+.profile-label.blue{color:#67aff8}.profile-label.green{color:#48d5a5}.profile-label.gold{color:#efbd4e}.profile-label.purple{color:#a88cf4}.profile-label.cyan{color:#43cce2}
+.profile-input{width:100%;min-height:40px;padding:9px 11px;border:1px solid #273b59;border-radius:9px;background:#060d19;color:#e7eef8;font-family:'Nunito',sans-serif;font-size:.76rem;outline:none;transition:border-color .15s,box-shadow .15s,background .15s;}
+.profile-input:hover{border-color:#324a6d}.profile-input:focus{border-color:#4e8bcf;background:#07101e;box-shadow:0 0 0 3px rgba(96,165,250,.07)}.profile-input[readonly]{color:#71839e;background:#08101d;cursor:not-allowed;border-style:dashed;}
+.profile-editor-footer{position:sticky;bottom:0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin-top:12px;padding:12px;border:1px solid #1c304d;border-radius:13px;background:rgba(7,14,26,.94);backdrop-filter:blur(12px);box-shadow:0 -12px 28px rgba(0,0,0,.16);}
+.profile-save-status{min-height:18px;font-size:.63rem;font-weight:700;color:#687c97;line-height:1.4;}
+.profile-footer-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
+.profile-save-btn{min-height:40px;padding:0 16px;border:0;border-radius:10px;background:linear-gradient(90deg,#2563eb,#22d3ee);color:#03121b;font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 22px rgba(37,99,235,.15);transition:.15s;}.profile-save-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.profile-save-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+.profile-open-btn{min-height:40px;padding:0 13px;border:1px solid #2b405f;border-radius:10px;background:#0a1424;color:#8fa5c1;font-family:'Barlow Condensed',sans-serif;font-size:.67rem;font-weight:900;letter-spacing:.9px;text-transform:uppercase;cursor:pointer;transition:.15s;}.profile-open-btn:hover{border-color:#a78bfa;color:#c3b5ff;background:rgba(167,139,250,.05)}
+.profile-reset-btn{min-height:40px;padding:0 12px;border:1px solid #283a56;border-radius:10px;background:transparent;color:#71859f;font-family:'Barlow Condensed',sans-serif;font-size:.64rem;font-weight:900;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;}.profile-reset-btn:hover{color:#d6e0ec;border-color:#516885;}
+.profile-new-form{display:none;margin:14px 18px 0;padding:17px;border:1px solid rgba(52,211,153,.22);border-radius:15px;background:linear-gradient(145deg,rgba(5,29,24,.76),rgba(7,16,29,.96));box-shadow:inset 0 1px 0 rgba(255,255,255,.025);}
+.profile-new-form-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:13px;}
+.profile-new-form-title{font-family:'Barlow Condensed',sans-serif;font-size:.75rem;font-weight:900;letter-spacing:1.45px;text-transform:uppercase;color:#4ed8a8;}
+.profile-new-form-sub{font-size:.58rem;color:#647b96;margin-top:3px;line-height:1.45;}
+.profile-new-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;}
+.profile-new-grid .profile-field.span2{grid-column:span 2;}
+.profile-new-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(52,211,153,.12);}
+.profile-new-actions .profile-save-status{flex:1;margin:0;}
+.profile-new-action-buttons{display:flex;gap:7px;}
+.ap-header-actions{display:flex;align-items:center;gap:8px;}.ap-edit-profile-btn{display:none;padding:9px 13px;border-radius:9px;border:1px solid rgba(96,165,250,.35);background:rgba(96,165,250,.08);color:#7cc9ff;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:900;letter-spacing:1px;cursor:pointer;}.ap-edit-profile-btn:hover{border-color:#60a5fa;background:rgba(96,165,250,.13);}
+@media(max-width:1160px){.profile-workspace{grid-template-columns:1fr}.profile-directory-card{border-right:0;border-bottom:1px solid #172844}.profile-list{max-height:430px}.profile-edit-card,.profile-edit-empty{min-height:520px}}
+@media(max-width:820px){.profile-hub-header{align-items:flex-start}.profile-kpi-grid{grid-template-columns:repeat(2,1fr)}.profile-new-grid{grid-template-columns:1fr 1fr}.profile-directory-columns{grid-template-columns:minmax(180px,1fr) 86px 92px 34px}.profile-directory-columns span:nth-child(4){display:none}.profile-row{grid-template-columns:minmax(180px,1fr) 86px 92px 34px}.profile-row>.profile-dir-center:nth-of-type(4){display:none}.profile-edit-grid.three{grid-template-columns:1fr 1fr}.profile-editor-footer{grid-template-columns:1fr}.profile-footer-actions{justify-content:flex-start}}
+@media(max-width:620px){.profile-hub-header{padding:18px;flex-direction:column}.profile-hub-actions{width:100%;justify-content:flex-start}.profile-kpi-grid{padding:12px;gap:7px}.profile-workspace{display:block}.profile-directory-columns{display:none}.profile-toolbar{grid-template-columns:1fr}.profile-row{grid-template-columns:minmax(0,1fr) 34px;gap:7px}.profile-row>.profile-dir-center{display:none!important}.profile-edit-head{padding:17px}.profile-edit-grid,.profile-edit-grid.three,.profile-new-grid{grid-template-columns:1fr}.profile-new-grid .profile-field.span2{grid-column:auto}.profile-new-actions{align-items:stretch;flex-direction:column}.profile-new-action-buttons{width:100%}.profile-new-action-buttons>*{flex:1}.profile-footer-actions{display:grid;grid-template-columns:1fr 1fr}.profile-footer-actions .profile-save-btn{grid-column:1/-1}.profile-avatar-lg{width:52px;height:52px}.profile-edit-body{padding:13px}.profile-live-pill{display:none}}
 
 /* ── TEAM TOGGLE BUTTONS ── */
 .adm-team-btn{padding:10px 24px;border-radius:10px;border:2px solid var(--border);background:transparent;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;letter-spacing:1.5px;cursor:pointer;transition:all 0.15s;}
@@ -2100,95 +2209,156 @@ input, textarea, select { color-scheme: dark; }
     </div>
     <!-- ── AGENT PROFILES ── -->
     <div id="admin-profiles" class="admin-section">
-      <div class="profile-admin-shell">
-
-        <!-- LEFT: roster list + add agent -->
-        <div class="profile-admin-panel">
-          <div class="profile-admin-head">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
-              <div>
-                <div class="profile-admin-title">👤 Agent Profile Management</div>
-                <div class="profile-admin-sub">Search the live Firebase roster, open an agent's full profile, or edit saved roster details from one place.</div>
-              </div>
-              <button id="add-rep-toggle-btn" type="button" onclick="toggleAddRepForm()" class="profile-mini-btn primary" style="padding:9px 13px;font-size:.7rem;">＋ ADD AGENT</button>
-            </div>
-            <div class="profile-summary-row">
-              <div class="profile-summary-chip"><div class="profile-summary-val" id="profile-total-count">—</div><div class="profile-summary-lbl">Active Profiles</div></div>
-              <div class="profile-summary-chip"><div class="profile-summary-val" id="profile-bb-count" style="color:#60a5fa;">—</div><div class="profile-summary-lbl">Berbice</div></div>
-              <div class="profile-summary-chip"><div class="profile-summary-val" id="profile-pr-count" style="color:#a78bfa;">—</div><div class="profile-summary-lbl">Providence</div></div>
+      <div class="profile-hub">
+        <div class="profile-hub-header">
+          <div class="profile-hub-brand">
+            <div class="profile-hub-icon">👥</div>
+            <div style="min-width:0;">
+              <div class="profile-hub-kicker">ADMIN · FIREBASE ROSTER</div>
+              <div class="profile-hub-title">Agent Directory &amp; Profile Center</div>
+              <div class="profile-hub-sub">Manage identity, branch assignment, Ytel information, schedules and agent status from one controlled workspace. Changes are saved directly to Firebase and synchronized to live dashboard views.</div>
             </div>
           </div>
-
-          <!-- ADD NEW REP -->
-          <div id="add-rep-form" class="profile-new-form">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px;">
-              <div>
-                <div style="font-family:'Barlow Condensed',sans-serif;font-size:.83rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#34d399;">✨ Create New Agent Profile</div>
-                <div style="font-size:.61rem;color:#6f819b;margin-top:2px;">Creates one Firebase roster record using the Agent ID as the document ID.</div>
-              </div>
-            </div>
-            <div class="profile-new-grid">
-              <div class="profile-field"><label class="profile-label green">Full Name *</label><input id="nr-name" class="profile-input" type="text" placeholder="e.g. Priya Ramkhelawan" oninput="autoFillYtel()"></div>
-              <div class="profile-field"><label class="profile-label green">Agent / User ID *</label><input id="nr-id" class="profile-input" type="text" inputmode="numeric" placeholder="e.g. 1042"></div>
-              <div class="profile-field"><label class="profile-label purple">Team *</label><select id="nr-team" class="profile-input" onchange="autoFillYtel()"><option value="BB">🏠 Berbice (BB)</option><option value="PR">🌴 Providence (PR)</option></select></div>
-              <div class="profile-field"><label class="profile-label cyan">Ytel Name *</label><input id="nr-ytel" class="profile-input" type="text" placeholder="GUYB / GUYP name"></div>
-              <div class="profile-field"><label class="profile-label blue">Shift</label><select id="nr-shift" class="profile-input"><option value="">— Select shift —</option><option value="10:00AM - 7:00PM">10:00AM - 7:00PM</option><option value="11:00am-8:00pm">11:00am-8:00pm</option><option value="11:45am-9:00pm">11:45am-9:00pm</option><option value="13:00pm - 22:00pm">13:00pm - 22:00pm</option></select></div>
-              <div class="profile-field"><label class="profile-label green">Lunch</label><input id="nr-lunch" class="profile-input" type="text" placeholder="e.g. 3:30PM-4:00PM"></div>
-              <div class="profile-field"><label class="profile-label gold">Break</label><input id="nr-break" class="profile-input" type="text" placeholder="e.g. 2:00PM-2:15PM"></div>
-              <div class="profile-field"><label class="profile-label purple">Status</label><select id="nr-status" class="profile-input"><option value="Agent">Agent</option><option value="Trainee">Trainee</option></select></div>
-            </div>
-            <div id="nr-status-msg" class="profile-save-status"></div>
-            <div class="profile-actions">
-              <button id="nr-save-btn" type="button" onclick="saveNewRep()" class="profile-save-btn">💾 Create Agent Profile</button>
-              <button type="button" onclick="toggleAddRepForm(false)" class="profile-open-btn">Cancel</button>
-            </div>
+          <div class="profile-hub-actions">
+            <span class="profile-live-pill"><span class="profile-live-dot"></span>Firebase Live</span>
+            <button type="button" class="profile-top-btn" onclick="refreshAgentProfiles()">↻ Refresh Roster</button>
+            <button id="add-rep-toggle-btn" type="button" class="profile-top-btn primary" onclick="toggleAddRepForm()">＋ New Agent</button>
           </div>
-
-          <div class="profile-toolbar">
-            <input id="profile-search" class="profile-control search" type="text" placeholder="🔍 Search name, ID or Ytel name..." oninput="filterProfileList()">
-            <select id="profile-team-filter" class="profile-control" onchange="filterProfileList()"><option value="all">All Teams</option><option value="BB">🏠 Berbice</option><option value="PR">🌴 Providence</option></select>
-            <button type="button" class="profile-mini-btn" onclick="refreshAgentProfiles()">↻ REFRESH</button>
-          </div>
-
-          <div id="profile-list" class="profile-list"><div class="profile-empty-list">Loading Firebase roster...</div></div>
         </div>
 
-        <!-- RIGHT: editor -->
-        <div id="profile-editor-card" class="profile-admin-panel profile-edit-card">
-          <div id="profile-edit-empty" class="profile-edit-empty">
-            <div><div class="profile-edit-empty-icon">👤</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;letter-spacing:1px;color:#94a3b8;">SELECT AN AGENT</div><div style="font-size:.66rem;line-height:1.55;margin-top:5px;max-width:270px;">Choose Edit beside an agent to load the latest saved Firebase profile.</div></div>
-          </div>
+        <div class="profile-kpi-grid">
+          <div class="profile-kpi-card"><div class="profile-kpi-top"><span class="profile-kpi-label">Active Profiles</span><span class="profile-kpi-icon">👤</span></div><div class="profile-kpi-value" id="profile-total-count">—</div></div>
+          <div class="profile-kpi-card bb"><div class="profile-kpi-top"><span class="profile-kpi-label">Berbice Team</span><span class="profile-kpi-icon">🏠</span></div><div class="profile-kpi-value" id="profile-bb-count">—</div></div>
+          <div class="profile-kpi-card pr"><div class="profile-kpi-top"><span class="profile-kpi-label">Providence Team</span><span class="profile-kpi-icon">🌴</span></div><div class="profile-kpi-value" id="profile-pr-count">—</div></div>
+          <div class="profile-kpi-card trainee"><div class="profile-kpi-top"><span class="profile-kpi-label">Trainees</span><span class="profile-kpi-icon">🎓</span></div><div class="profile-kpi-value" id="profile-trainee-count">—</div></div>
+        </div>
 
-          <div id="profile-edit-panel" style="display:none;">
-            <div class="profile-edit-head">
-              <div><div id="pe-name" class="profile-edit-name">Agent Name</div><div id="pe-meta" class="profile-edit-meta">Firebase roster profile</div></div>
-              <button type="button" class="profile-close-btn" onclick="closeProfileEdit()">✕</button>
-            </div>
-            <div class="profile-edit-body">
-              <div class="profile-info-strip"><span class="dot"></span><span>Edits below save directly to Firebase. Team changes also update today's live team views and report assignment.</span></div>
-
-              <div class="profile-edit-grid">
-                <div class="profile-field full"><label class="profile-label blue">Full Name</label><input id="pe-full-name" class="profile-input" type="text" autocomplete="off"></div>
-                <div class="profile-field"><label class="profile-label">Agent / User ID</label><input id="pe-id" class="profile-input" type="text" readonly></div>
-                <div class="profile-field"><label class="profile-label purple">Team Assignment</label><select id="pe-team" class="profile-input" onchange="profileTeamChanged()"><option value="BB">🏠 Berbice (BB)</option><option value="PR">🌴 Providence (PR)</option></select></div>
-                <div class="profile-field full"><label class="profile-label cyan">Ytel Name</label><input id="pe-ytel" class="profile-input" type="text" placeholder="GUYB / GUYP Agent Name"></div>
-                <div class="profile-field"><label class="profile-label blue">Shift</label><select id="pe-shift" class="profile-input"><option value="">— Select shift —</option><option value="10:00AM - 7:00PM">10:00AM - 7:00PM</option><option value="11:00am-8:00pm">11:00am-8:00pm</option><option value="11:45am-9:00pm">11:45am-9:00pm</option><option value="13:00pm - 22:00pm">13:00pm - 22:00pm</option></select></div>
-                <div class="profile-field"><label class="profile-label green">Lunch Time</label><input id="pe-lunch" class="profile-input" type="text" placeholder="e.g. 3:30PM-4:00PM"></div>
-                <div class="profile-field"><label class="profile-label gold">Break Time</label><input id="pe-break" class="profile-input" type="text" placeholder="e.g. 2:00PM-2:15PM"></div>
-                <div class="profile-field"><label class="profile-label purple">Status</label><select id="pe-status" class="profile-input"><option value="Agent">Agent</option><option value="Trainee">Trainee</option><option value="Inactive">Inactive</option></select></div>
-              </div>
-
-              <div id="pe-save-status" class="profile-save-status"></div>
-              <div class="profile-actions">
-                <button id="pe-save-btn" type="button" onclick="saveProfileEdits()" class="profile-save-btn">💾 Save Profile Changes</button>
-                <button type="button" onclick="openSelectedProfile()" class="profile-open-btn">OPEN FULL PROFILE</button>
-              </div>
-              <div style="font-size:.56rem;color:#5e708a;text-align:center;margin-top:9px;line-height:1.5;">Agent ID is locked because it is the Firebase document key. To change an ID, create a new profile instead of renaming the existing document.</div>
+        <!-- CREATE NEW AGENT -->
+        <div id="add-rep-form" class="profile-new-form">
+          <div class="profile-new-form-head">
+            <div>
+              <div class="profile-new-form-title">✨ Create New Agent Profile</div>
+              <div class="profile-new-form-sub">Creates one new Firebase roster record. Agent ID becomes the permanent document key.</div>
             </div>
           </div>
+          <div class="profile-new-grid">
+            <div class="profile-field span2"><label class="profile-label green">Full Name *</label><input id="nr-name" class="profile-input" type="text" placeholder="e.g. Priya Ramkhelawan" oninput="autoFillYtel()"></div>
+            <div class="profile-field"><label class="profile-label green">Agent / User ID *</label><input id="nr-id" class="profile-input" type="text" inputmode="numeric" placeholder="e.g. 1042"></div>
+            <div class="profile-field"><label class="profile-label purple">Team *</label><select id="nr-team" class="profile-input" onchange="autoFillYtel()"><option value="BB">🏠 Berbice (BB)</option><option value="PR">🌴 Providence (PR)</option></select></div>
+            <div class="profile-field span2"><label class="profile-label cyan">Ytel Name *</label><input id="nr-ytel" class="profile-input" type="text" placeholder="GUYB / GUYP Agent Name"></div>
+            <div class="profile-field"><label class="profile-label blue">Shift</label><select id="nr-shift" class="profile-input"><option value="">— Select shift —</option><option value="10:00AM - 7:00PM">10:00AM - 7:00PM</option><option value="11:00am-8:00pm">11:00am-8:00pm</option><option value="11:45am-9:00pm">11:45am-9:00pm</option><option value="13:00pm - 22:00pm">13:00pm - 22:00pm</option></select></div>
+            <div class="profile-field"><label class="profile-label green">Lunch</label><input id="nr-lunch" class="profile-input" type="text" placeholder="e.g. 3:30PM-4:00PM"></div>
+            <div class="profile-field"><label class="profile-label gold">Break</label><input id="nr-break" class="profile-input" type="text" placeholder="e.g. 2:00PM-2:15PM"></div>
+            <div class="profile-field"><label class="profile-label purple">Status</label><select id="nr-status" class="profile-input"><option value="Agent">Agent</option><option value="Trainee">Trainee</option></select></div>
+          </div>
+          <div class="profile-new-actions">
+            <div id="nr-status-msg" class="profile-save-status"></div>
+            <div class="profile-new-action-buttons">
+              <button type="button" class="profile-open-btn" onclick="toggleAddRepForm(false)">Cancel</button>
+              <button id="nr-save-btn" type="button" class="profile-save-btn" onclick="saveNewRep()">💾 Create Agent</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-workspace">
+          <!-- DIRECTORY -->
+          <section class="profile-directory-card">
+            <div class="profile-directory-head">
+              <div class="profile-directory-title-row">
+                <div class="profile-directory-title">Agent Directory</div>
+                <div id="profile-result-count" class="profile-result-count">Loading…</div>
+              </div>
+              <div class="profile-toolbar">
+                <input id="profile-search" class="profile-control" type="text" placeholder="🔍 Search by name, ID or Ytel name…" oninput="filterProfileList()">
+                <select id="profile-team-filter" class="profile-control" onchange="filterProfileList()"><option value="all">All Teams</option><option value="BB">🏠 Berbice</option><option value="PR">🌴 Providence</option></select>
+              </div>
+            </div>
+            <div class="profile-directory-columns"><span>Agent</span><span>Team</span><span>Shift</span><span>Status</span><span></span></div>
+            <div id="profile-list" class="profile-list"><div class="profile-empty-list">Loading Firebase roster…</div></div>
+          </section>
+
+          <!-- PROFILE EDITOR -->
+          <section id="profile-editor-card" class="profile-editor-card profile-edit-card">
+            <div id="profile-edit-empty" class="profile-edit-empty">
+              <div class="profile-edit-empty-wrap">
+                <div class="profile-edit-empty-icon">🪪</div>
+                <div class="profile-edit-empty-title">Select an Agent</div>
+                <div class="profile-edit-empty-copy">Choose an agent from the directory to open a complete editable profile. Saved changes go directly to Firebase and refresh the live dashboard.</div>
+              </div>
+            </div>
+
+            <div id="profile-edit-panel" style="display:none;">
+              <div class="profile-edit-head">
+                <div class="profile-hero-main">
+                  <div id="pe-avatar" class="profile-avatar-lg">AG</div>
+                  <div class="profile-hero-text">
+                    <div id="pe-name" class="profile-edit-name">Agent Name</div>
+                    <div id="pe-meta" class="profile-edit-meta">Firebase roster profile</div>
+                    <div class="profile-hero-badges">
+                      <span id="pe-team-badge" class="profile-hero-badge">Team</span>
+                      <span id="pe-status-badge" class="profile-hero-badge">Status</span>
+                      <span id="pe-ytel-display" class="profile-hero-badge">Ytel</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="profile-head-actions"><button type="button" class="profile-close-btn" onclick="closeProfileEdit()" title="Close profile">✕</button></div>
+              </div>
+
+              <div class="profile-edit-body">
+                <div class="profile-sync-strip">
+                  <div class="profile-sync-left"><span class="profile-sync-dot"></span><span>Live Firebase record. Team changes also update today’s attendance, report assignment and team views.</span></div>
+                  <div class="profile-sync-label">Synchronized</div>
+                </div>
+
+                <div class="profile-section-stack">
+                  <div class="profile-section-card">
+                    <div class="profile-section-head"><div class="profile-section-title">🪪 Identity</div><div class="profile-section-caption">Core agent record</div></div>
+                    <div class="profile-section-body">
+                      <div class="profile-edit-grid">
+                        <div class="profile-field full"><label class="profile-label blue">Full Name <span class="profile-label-note">Required</span></label><input id="pe-full-name" class="profile-input" type="text" autocomplete="off"></div>
+                        <div class="profile-field"><label class="profile-label">Agent / User ID <span class="profile-label-note">Locked</span></label><input id="pe-id" class="profile-input" type="text" readonly></div>
+                        <div class="profile-field"><label class="profile-label cyan">Ytel Name</label><input id="pe-ytel" class="profile-input" type="text" placeholder="GUYB / GUYP Agent Name"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="profile-section-card">
+                    <div class="profile-section-head"><div class="profile-section-title">🏢 Assignment &amp; Status</div><div class="profile-section-caption">Controls team placement</div></div>
+                    <div class="profile-section-body">
+                      <div class="profile-edit-grid">
+                        <div class="profile-field"><label class="profile-label purple">Team Assignment</label><select id="pe-team" class="profile-input" onchange="profileTeamChanged();profileMarkDirty()"><option value="BB">🏠 Berbice (BB)</option><option value="PR">🌴 Providence (PR)</option></select></div>
+                        <div class="profile-field"><label class="profile-label purple">Employment Status</label><select id="pe-status" class="profile-input" onchange="profileMarkDirty()"><option value="Agent">Agent</option><option value="Trainee">Trainee</option><option value="Inactive">Inactive</option></select></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="profile-section-card">
+                    <div class="profile-section-head"><div class="profile-section-title">🕒 Work Schedule</div><div class="profile-section-caption">Shift, lunch and break times</div></div>
+                    <div class="profile-section-body">
+                      <div class="profile-edit-grid three">
+                        <div class="profile-field"><label class="profile-label blue">Shift</label><select id="pe-shift" class="profile-input" onchange="profileMarkDirty()"><option value="">— Select shift —</option><option value="10:00AM - 7:00PM">10:00AM - 7:00PM</option><option value="11:00am-8:00pm">11:00am-8:00pm</option><option value="11:45am-9:00pm">11:45am-9:00pm</option><option value="13:00pm - 22:00pm">13:00pm - 22:00pm</option></select></div>
+                        <div class="profile-field"><label class="profile-label green">Lunch Time</label><input id="pe-lunch" class="profile-input" type="text" placeholder="e.g. 3:30PM-4:00PM" oninput="profileMarkDirty()"></div>
+                        <div class="profile-field"><label class="profile-label gold">Break Time</label><input id="pe-break" class="profile-input" type="text" placeholder="e.g. 2:00PM-2:15PM" oninput="profileMarkDirty()"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="profile-editor-footer">
+                  <div id="pe-save-status" class="profile-save-status">Select a field to make changes.</div>
+                  <div class="profile-footer-actions">
+                    <button type="button" class="profile-reset-btn" onclick="resetProfileEditor()">↶ Reset</button>
+                    <button type="button" class="profile-open-btn" onclick="openSelectedProfile()">Open Full Profile</button>
+                    <button id="pe-save-btn" type="button" class="profile-save-btn" onclick="saveProfileEdits()">💾 Save Changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </div>
+
     <!-- ── ROSE-ONLY MISSING-STATS + ARCHIVE MANAGER ── -->
     <div id="admin-unused" class="admin-section" style="display:none;">
       <div class="admin-card">
@@ -3297,55 +3467,68 @@ input, textarea, select { color-scheme: dark; }
 
   <!-- ══ LEADERBOARD TAB ══ -->
   <div class="tab-page" id="page-leaderboard">
-    <div style="padding:14px 18px;overflow-y:auto;flex:1;">
-      <!-- Header -->
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
-        <div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:4px;background:linear-gradient(90deg,#fbbf24,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">🏆 TRANSFER LEADERBOARD</div>
-          <div id="lb-date-lbl" style="font-size:0.58rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:2px;"></div>
-        </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
-          <!-- Daily / Weekly mode toggle -->
-          <div style="display:flex;gap:4px;background:#080f1e;border:1px solid var(--border);border-radius:9px;padding:3px;">
-            <button onclick="lbSetMode('daily',this)" id="lb-m-daily" style="padding:5px 13px;border-radius:7px;border:none;background:var(--gold);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:900;letter-spacing:1.5px;cursor:pointer;">📅 DAILY</button>
-            <button onclick="lbSetMode('weekly',this)" id="lb-m-weekly" style="padding:5px 13px;border-radius:7px;border:none;background:transparent;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:900;letter-spacing:1.5px;cursor:pointer;">📆 WEEKLY</button>
+    <div class="lb-shell">
+      <section class="lb-hero">
+        <div class="lb-hero-top">
+          <div>
+            <div class="lb-title-wrap">
+              <div class="lb-title-mark">🏆</div>
+              <div>
+                <div class="lb-title">TRANSFER LEADERBOARD</div>
+                <div id="lb-date-lbl" class="lb-subtitle">Performance rankings</div>
+              </div>
+            </div>
+            <div class="lb-live-pill"><span class="lb-live-dot"></span><span id="lb-live-lbl">LIVE PERFORMANCE BOARD</span></div>
           </div>
-          <button onclick="lbSetFilter('all',this)" id="lb-f-all" style="padding:6px 14px;border-radius:8px;border:2px solid var(--accent);background:#0b1a38;color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:800;letter-spacing:1px;cursor:pointer;">ALL</button>
-          <button onclick="lbSetFilter('BB',this)" id="lb-f-bb" style="padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:800;letter-spacing:1px;cursor:pointer;">🏠 BERB</button>
-          <button onclick="lbSetFilter('PR',this)" id="lb-f-pr" style="padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:800;letter-spacing:1px;cursor:pointer;">🌴 PROV</button>
+          <div class="lb-toolbar">
+            <div>
+              <div class="lb-control-label">Period</div>
+              <div class="lb-control-group">
+                <button onclick="lbSetMode('daily',this)" id="lb-m-daily" class="lb-seg-btn active" data-mode="daily">📅 DAILY</button>
+                <button onclick="lbSetMode('weekly',this)" id="lb-m-weekly" class="lb-seg-btn" data-mode="weekly">📆 WEEKLY</button>
+              </div>
+            </div>
+            <div>
+              <div class="lb-control-label">Team</div>
+              <div class="lb-control-group">
+                <button onclick="lbSetFilter('all',this)" id="lb-f-all" class="lb-seg-btn lb-filter-btn active" data-filter="all">ALL</button>
+                <button onclick="lbSetFilter('BB',this)" id="lb-f-bb" class="lb-seg-btn lb-filter-btn" data-filter="BB">🏠 BERBICE</button>
+                <button onclick="lbSetFilter('PR',this)" id="lb-f-pr" class="lb-seg-btn lb-filter-btn" data-filter="PR">🌴 PROVIDENCE</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div id="lb-week-subtabs" class="lb-week-subtabs">
+        <div class="lb-week-toggle">
+          <button onclick="lbSetWeekView('current')" id="lb-wv-current" class="lb-week-btn active" data-week="current">⚡ THIS WEEK</button>
+          <button onclick="lbSetWeekView('prev')" id="lb-wv-prev" class="lb-week-btn" data-week="prev">📅 PREVIOUS WEEK</button>
         </div>
       </div>
 
-      <!-- Weekly sub-tabs (This Week / Prev Week) — only shown in weekly mode -->
-      <div id="lb-week-subtabs" style="display:none;margin-bottom:14px;">
-        <div style="display:flex;gap:5px;background:#060d1a;border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content;">
-          <button onclick="lbSetWeekView('current')" id="lb-wv-current"
-            style="padding:5px 16px;border-radius:7px;border:none;background:var(--purple);color:#fff;
-                   font-family:'Barlow Condensed',sans-serif;font-size:0.76rem;font-weight:900;letter-spacing:1.5px;cursor:pointer;">
-            ⚡ THIS WEEK
-          </button>
-          <button onclick="lbSetWeekView('prev')" id="lb-wv-prev"
-            style="padding:5px 16px;border-radius:7px;border:none;background:transparent;color:var(--muted);
-                   font-family:'Barlow Condensed',sans-serif;font-size:0.76rem;font-weight:900;letter-spacing:1.5px;cursor:pointer;">
-            📅 PREV WEEK
-          </button>
-        </div>
+      <div id="lb-summary" class="lb-summary-grid">
+        <div class="lb-summary-card primary"><div class="lb-summary-kicker">Total Transfers</div><div class="lb-summary-value" id="lb-total-transfers">0</div><div class="lb-summary-note" id="lb-total-note">Current view</div></div>
+        <div class="lb-summary-card"><div class="lb-summary-kicker">Agents Ranked</div><div class="lb-summary-value" id="lb-agent-count">0</div><div class="lb-summary-note" id="lb-agent-note">Active performance rows</div></div>
+        <div class="lb-summary-card leader"><div class="lb-summary-kicker">Top Performer</div><div class="lb-summary-value" id="lb-top-name">—</div><div class="lb-summary-note" id="lb-top-note">Waiting for report data</div></div>
+        <div class="lb-summary-card"><div class="lb-summary-kicker">Average / Agent</div><div class="lb-summary-value" id="lb-average-xfer">0.0</div><div class="lb-summary-note" id="lb-average-note">Transfers per ranked agent</div></div>
       </div>
 
-      <!-- No data notice -->
-      <div id="lb-no-data" style="display:none;text-align:center;padding:40px 20px;color:var(--muted);">
-        <div style="font-size:2rem;margin-bottom:10px;">📊</div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;letter-spacing:2px;color:var(--muted);">NO DATA YET</div>
-        <div style="font-size:0.72rem;margin-top:6px;">Admin uploads the daily CSV and it will appear here automatically.</div>
-      </div>
+      <div id="lb-no-data" class="lb-empty"><div class="lb-empty-icon">📊</div><div class="lb-empty-title">No leaderboard data yet</div><div class="lb-empty-note">Admin uploads the daily CSV and the performance board will update automatically.</div></div>
 
-      <!-- Podium top 3 -->
-      <div id="lb-podium" style="display:none;justify-content:center;align-items:flex-end;gap:10px;margin-bottom:20px;"></div>
+      <section id="lb-podium-section" class="lb-section">
+        <div class="lb-section-head"><div class="lb-section-title">Top Performers</div><div class="lb-section-meta" id="lb-podium-meta">Top 3 by transfers</div></div>
+        <div id="lb-podium" class="lb-podium"></div>
+      </section>
 
-      <!-- Rankings list -->
-      <div id="lb-list" style="display:flex;flex-direction:column;gap:7px;"></div>
+      <section id="lb-ranking-panel" class="lb-section">
+        <div class="lb-section-head"><div class="lb-section-title">Complete Rankings</div><div class="lb-section-meta" id="lb-ranking-count">0 agents</div></div>
+        <div class="lb-ranking-head"><div>Rank</div><div>Agent</div><div>Team</div><div>Transfers</div><div>Calls</div><div>Conv.</div><div class="lb-col-progress">Performance</div></div>
+        <div id="lb-list" class="lb-ranking-list"></div>
+      </section>
     </div>
   </div>
+
 
   <!-- ══ MY LEAD TRACKER TAB ══ -->
   <div class="tab-page" id="page-leads">
@@ -5755,9 +5938,11 @@ function updateProfileSummary(){
   const total=document.getElementById('profile-total-count');
   const bb=document.getElementById('profile-bb-count');
   const pr=document.getElementById('profile-pr-count');
+  const trainee=document.getElementById('profile-trainee-count');
   if(total) total.textContent=vals.length;
   if(bb) bb.textContent=vals.filter(a=>a.team==='BB').length;
   if(pr) pr.textContent=vals.filter(a=>a.team==='PR').length;
+  if(trainee) trainee.textContent=vals.filter(a=>String(a.status||'').toLowerCase()==='trainee').length;
 }
 function renderProfileList(){
   const search=(document.getElementById('profile-search')?.value||'').toLowerCase().trim();
@@ -5766,31 +5951,77 @@ function renderProfileList(){
   if(!container) return;
 
   const agents=Object.values(ROSTER||{}).filter(a=>{
-    const blob=[a.name,a.userId,a.ytelName,a.shift,a.lunch].join(' ').toLowerCase();
+    const blob=[a.name,a.userId,a.ytelName,a.shift,a.lunch,a.brk,a.status].join(' ').toLowerCase();
     return (teamFilter==='all'||a.team===teamFilter) && (!search||blob.includes(search));
   }).sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));
 
   updateProfileSummary();
-  if(!agents.length){container.innerHTML='<div class="profile-empty-list">No matching agent profiles found.</div>';return;}
+  const countEl=document.getElementById('profile-result-count');
+  if(countEl) countEl.textContent=agents.length+' profile'+(agents.length===1?'':'s');
+  if(!agents.length){container.innerHTML='<div class="profile-empty-list">No agent profiles match your current search or team filter.</div>';return;}
 
   container.innerHTML=agents.map(a=>{
     const uid=String(a.userId||'');
     const selected=uid===String(selectedProfileId||'');
     const status=String(a.status||'Agent');
-    const statusCls=status.toLowerCase()==='trainee'?'trainee':'agent';
+    const statusLow=status.toLowerCase();
+    const statusCls=statusLow==='trainee'?'trainee':statusLow==='inactive'?'inactive':'agent';
+    const teamLabel=a.team==='PR'?'Providence':'Berbice';
+    const teamClass=a.team==='PR'?'pr':'bb';
     return `<div class="profile-row ${selected?'selected':''}" data-profile-id="${profileSafe(uid)}" onclick="selectProfile(this.dataset.profileId)">
-      <div class="profile-avatar-sm">${profileSafe(profileInitials(a.name))}</div>
-      <div style="min-width:0;">
-        <div class="profile-row-name">${profileSafe(a.name)}</div>
-        <div class="profile-row-meta">ID ${profileSafe(uid)} · ${profileSafe(a.shift||'No shift')} ${a.lunch?'· Lunch '+profileSafe(a.lunch):''}</div>
-        <div class="profile-row-tags"><span class="profile-tag ${a.team==='PR'?'pr':'bb'}">${a.team==='PR'?'Providence':'Berbice'}</span><span class="profile-tag ${statusCls}">${profileSafe(status)}</span>${a.ytelName?`<span class="profile-tag">${profileSafe(a.ytelName)}</span>`:''}</div>
+      <div class="profile-agent-cell">
+        <div class="profile-avatar-sm">${profileSafe(profileInitials(a.name))}</div>
+        <div style="min-width:0;">
+          <div class="profile-row-name">${profileSafe(a.name)}</div>
+          <div class="profile-row-meta">ID ${profileSafe(uid)}${a.ytelName?' · '+profileSafe(a.ytelName):''}</div>
+        </div>
       </div>
-      <div class="profile-row-actions">
-        <button type="button" class="profile-mini-btn primary" data-id="${profileSafe(uid)}" onclick="event.stopPropagation();selectProfile(this.dataset.id)">✏ EDIT</button>
-        <button type="button" class="profile-mini-btn" data-id="${profileSafe(uid)}" onclick="event.stopPropagation();openRepProfileById(this.dataset.id)">VIEW</button>
-      </div>
+      <div class="profile-dir-center"><span class="profile-tag ${teamClass}">${profileSafe(teamLabel)}</span></div>
+      <div class="profile-dir-center"><div class="profile-dir-shift">${profileSafe(a.shift||'Not set')}</div></div>
+      <div class="profile-dir-center"><span class="profile-tag ${statusCls}">${profileSafe(status)}</span></div>
+      <button type="button" class="profile-dir-open" data-id="${profileSafe(uid)}" onclick="event.stopPropagation();selectProfile(this.dataset.id)" title="Edit profile">›</button>
     </div>`;
   }).join('');
+}
+
+function profileRenderHero(agent){
+  if(!agent) return;
+  const avatar=document.getElementById('pe-avatar');
+  const teamBadge=document.getElementById('pe-team-badge');
+  const statusBadge=document.getElementById('pe-status-badge');
+  const ytelBadge=document.getElementById('pe-ytel-display');
+  if(avatar) avatar.textContent=profileInitials(agent.name||'Agent');
+  if(teamBadge){
+    teamBadge.textContent=agent.team==='PR'?'🌴 Providence (PR)':'🏠 Berbice (BB)';
+    teamBadge.className='profile-hero-badge '+(agent.team==='PR'?'team-pr':'team-bb');
+  }
+  if(statusBadge){
+    const st=String(agent.status||'Agent');
+    const sl=st.toLowerCase();
+    statusBadge.textContent=(sl==='trainee'?'🎓 ':sl==='inactive'?'⛔ ':'● ')+st;
+    statusBadge.className='profile-hero-badge '+(sl==='trainee'?'status-trainee':sl==='inactive'?'status-inactive':'status-agent');
+  }
+  if(ytelBadge){
+    ytelBadge.textContent=agent.ytelName?('☎ '+agent.ytelName):'☎ Ytel not set';
+    ytelBadge.title=agent.ytelName||'Ytel name not set';
+  }
+}
+
+function profileMarkDirty(){
+  if(!selectedProfileId || !selectedProfileSnapshot) return;
+  const el=document.getElementById('pe-save-status');
+  if(el){el.style.color='var(--gold)';el.textContent='● Unsaved changes — click Save Changes to update Firebase.';}
+}
+
+function resetProfileEditor(){
+  if(!selectedProfileId || !selectedProfileSnapshot) return;
+  const a=selectedProfileSnapshot;
+  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val||'';};
+  set('pe-full-name',a.name);set('pe-id',a.userId);set('pe-team',a.team);set('pe-ytel',a.ytelName);set('pe-shift',a.shift);set('pe-lunch',a.lunch);set('pe-break',a.brk);set('pe-status',a.status||'Agent');
+  const n=document.getElementById('pe-name');if(n)n.textContent=a.name||'Unnamed Agent';
+  const m=document.getElementById('pe-meta');if(m)m.textContent=(a.team==='PR'?'Providence (PR)':'Berbice (BB)')+' · ID '+a.userId+' · Firebase roster record';
+  profileRenderHero(a);
+  const el=document.getElementById('pe-save-status');if(el){el.style.color='var(--muted)';el.textContent='Changes reset to the last saved Firebase profile.';}
 }
 
 async function selectProfile(userId, options={}){
@@ -5825,11 +6056,13 @@ async function selectProfile(userId, options={}){
     if(agent.status.toLowerCase()!=='inactive') ROSTER[uid]={...agent};
 
     document.getElementById('pe-name').textContent=agent.name||'Unnamed Agent';
-    document.getElementById('pe-meta').textContent=(agent.team==='PR'?'Providence (PR)':'Berbice (BB)')+' · ID '+uid+' · Live Firebase record';
+    document.getElementById('pe-meta').textContent=(agent.team==='PR'?'Providence (PR)':'Berbice (BB)')+' · ID '+uid+' · Firebase roster record';
     document.getElementById('pe-full-name').value=agent.name;
     document.getElementById('pe-id').value=uid;
     document.getElementById('pe-team').value=agent.team==='PR'?'PR':'BB';
     document.getElementById('pe-ytel').value=agent.ytelName;
+    profileRenderHero(agent);
+    ['pe-full-name','pe-ytel'].forEach(id=>{const el=document.getElementById(id);if(el&&!el.dataset.profileDirtyBound){el.addEventListener('input',profileMarkDirty);el.dataset.profileDirtyBound='1';}});
 
     const shiftSel=document.getElementById('pe-shift');
     const exact=Array.from(shiftSel.options).find(opt=>opt.value.toLowerCase().replace(/\s+/g,'')===agent.shift.toLowerCase().replace(/\s+/g,''));
@@ -5844,7 +6077,7 @@ async function selectProfile(userId, options={}){
       const opt=document.createElement('option');opt.value=agent.status;opt.textContent=agent.status;statusSel.appendChild(opt);
     }
     statusSel.value=agent.status;
-    if(statusEl) statusEl.textContent='';
+    if(statusEl){statusEl.style.color='var(--muted)';statusEl.textContent='Profile loaded from Firebase — ready to edit.';}
     renderProfileList();
     if(!options.keepScroll) document.getElementById('profile-editor-card')?.scrollIntoView({behavior:'smooth',block:'nearest'});
   }catch(e){
@@ -5977,12 +6210,13 @@ async function saveProfileEdits(){
     renderProfileList();updateProfileSummary();
     document.getElementById('pe-name').textContent=updated.name;
     document.getElementById('pe-meta').textContent=(updated.team==='PR'?'Providence (PR)':'Berbice (BB)')+' · ID '+uid+' · Saved to Firebase';
+    profileRenderHero(updated);
     if(updated.status.toLowerCase()==='inactive') setTimeout(()=>closeProfileEdit(),900);
   }catch(e){
     console.error('Profile save failed:',e);
     statusEl.style.color='var(--red)';statusEl.textContent='❌ Firebase save failed: '+(e.message||e);
   }finally{
-    if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='💾 Save Profile Changes';}
+    if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='💾 Save Changes';}
   }
 }
 
@@ -11168,235 +11402,168 @@ if(_origRenderStatsTable){
 }
 
 // ════════════════════════════════════════════
-//  LEADERBOARD
+//  LEADERBOARD — PROFESSIONAL PERFORMANCE BOARD
 // ════════════════════════════════════════════
-let lbFilter = 'all';
+let lbFilter   = 'all';
 let lbMode     = 'daily';   // 'daily' | 'weekly'
 let lbWeekView = 'current'; // 'current' | 'prev'
 
-function lbSetMode(mode, btn){
-  lbMode = mode;
-  const daily    = document.getElementById('lb-m-daily');
-  const weekly   = document.getElementById('lb-m-weekly');
-  const subtabs  = document.getElementById('lb-week-subtabs');
-  if(daily && weekly){
-    if(mode === 'daily'){
-      daily.style.background  = 'var(--gold)';
-      daily.style.color       = '#000';
-      weekly.style.background = 'transparent';
-      weekly.style.color      = 'var(--muted)';
-      if(subtabs) subtabs.style.display = 'none';
-    } else {
-      weekly.style.background = 'var(--purple)';
-      weekly.style.color      = '#fff';
-      daily.style.background  = 'transparent';
-      daily.style.color       = 'var(--muted)';
-      // Reset to current week view whenever switching to weekly
-      lbWeekView = 'current';
-      _lbSyncWeekSubtabs();
-      if(subtabs) subtabs.style.display = '';
-    }
-  }
-  renderLeaderboard();
+function lbEscape(value){
+  return String(value ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
 }
-
-function lbSetWeekView(view){
-  lbWeekView = view;
-  _lbSyncWeekSubtabs();
-  renderLeaderboard();
+function lbInitials(name){
+  const parts=String(name||'').trim().split(/\s+/).filter(Boolean);
+  if(!parts.length) return '—';
+  return ((parts[0][0]||'')+(parts.length>1?(parts[parts.length-1][0]||''):'')).toUpperCase();
 }
-
-function _lbSyncWeekSubtabs(){
-  const cur  = document.getElementById('lb-wv-current');
-  const prev = document.getElementById('lb-wv-prev');
-  if(!cur || !prev) return;
-  if(lbWeekView === 'current'){
-    cur.style.background  = 'var(--purple)';
-    cur.style.color       = '#fff';
-    prev.style.background = 'transparent';
-    prev.style.color      = 'var(--muted)';
-  } else {
-    prev.style.background = 'var(--gold)';
-    prev.style.color      = '#000';
-    cur.style.background  = 'transparent';
-    cur.style.color       = 'var(--muted)';
-  }
+function lbFormatConv(value){
+  const n=Number(value)||0;
+  return (Math.round(n*10)/10).toFixed(1).replace(/\.0$/,'')+'%';
 }
-
-function lbSetFilter(f, btn){
-  lbFilter = f;
-  ['lb-f-all','lb-f-bb','lb-f-pr'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.style.border = '1px solid var(--border)';
-    el.style.background = 'transparent';
-    el.style.color = 'var(--muted)';
-  });
-  if(btn){
-    btn.style.border = '2px solid var(--accent)';
-    btn.style.background = '#0b1a38';
-    btn.style.color = 'var(--accent)';
-  }
-  renderLeaderboard();
+function lbCurrentTeam(row){
+  try{ if(typeof resolveAgentTeam==='function') return resolveAgentTeam(row); }catch(e){}
+  const t=typeof normalizeTeam==='function'?normalizeTeam(row?.team||''):String(row?.team||'').toUpperCase();
+  return t==='PR'?'PR':'BB';
 }
+function lbRosterInfo(agent){
+  if(typeof ROSTER==='undefined') return null;
+  const id=String(agent?.ytelId||agent?.userId||agent?.id||'').trim();
+  if(id&&ROSTER[id]) return ROSTER[id];
+  const nl=String(agent?.name||'').toLowerCase().trim();
+  return Object.values(ROSTER).find(r=>String(r.name||'').toLowerCase().trim()===nl)||null;
+}
+function lbSyncControls(){
+  document.querySelectorAll('#page-leaderboard [data-mode]').forEach(el=>el.classList.toggle('active',el.dataset.mode===lbMode));
+  document.querySelectorAll('#page-leaderboard [data-filter]').forEach(el=>el.classList.toggle('active',el.dataset.filter===lbFilter));
+  document.querySelectorAll('#page-leaderboard [data-week]').forEach(el=>el.classList.toggle('active',el.dataset.week===lbWeekView));
+  const subtabs=document.getElementById('lb-week-subtabs');
+  if(subtabs) subtabs.classList.toggle('show',lbMode==='weekly');
+}
+function lbSetMode(mode){
+  lbMode=mode==='weekly'?'weekly':'daily';
+  if(lbMode==='weekly') lbWeekView='current';
+  lbSyncControls(); renderLeaderboard();
+}
+function lbSetWeekView(view){ lbWeekView=view==='prev'?'prev':'current'; lbSyncControls(); renderLeaderboard(); }
+function _lbSyncWeekSubtabs(){ lbSyncControls(); }
+function lbSetFilter(filter){ lbFilter=['BB','PR'].includes(filter)?filter:'all'; lbSyncControls(); renderLeaderboard(); }
 
 function renderLeaderboard(){
-  // Update date label
-  const dateLbl = document.getElementById('lb-date-lbl');
-  const isWeekly = lbMode === 'weekly';
-  const isPrevWeek = isWeekly && lbWeekView === 'prev';
+  lbSyncControls();
+  const dateLbl=document.getElementById('lb-date-lbl');
+  const liveLbl=document.getElementById('lb-live-lbl');
+  const noData=document.getElementById('lb-no-data');
+  const summary=document.getElementById('lb-summary');
+  const podiumSec=document.getElementById('lb-podium-section');
+  const podium=document.getElementById('lb-podium');
+  const listPanel=document.getElementById('lb-ranking-panel');
+  const list=document.getElementById('lb-list');
+  const isWeekly=lbMode==='weekly';
+  const isPrevWeek=isWeekly&&lbWeekView==='prev';
 
-  // Calculate week boundaries
-  const nowGY     = new Date(new Date().toLocaleString('en-US',{timeZone:'America/Guyana'}));
-  const curWkStart = getWeekStartGY(nowGY);
+  const nowGY=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Guyana'}));
+  const curWkStart=getWeekStartGY(nowGY);
+  const prevWkStartDate=new Date(curWkStart+'T12:00:00');
+  prevWkStartDate.setDate(prevWkStartDate.getDate()-7);
+  const prevWkStart=prevWkStartDate.toISOString().slice(0,10);
+  const prevWkEnd=new Date(prevWkStartDate.getTime()+6*86400000).toISOString().slice(0,10);
 
-  // Previous week: subtract 7 days from current week start
-  const prevWkStartDate = new Date(curWkStart + 'T12:00:00');
-  prevWkStartDate.setDate(prevWkStartDate.getDate() - 7);
-  const prevWkStart = prevWkStartDate.toISOString().slice(0,10);
-  const prevWkEnd   = new Date(prevWkStartDate.getTime() + 6*86400000).toISOString().slice(0,10);
-
-  if(dateLbl){
-    if(isPrevWeek){
-      dateLbl.textContent = '📅 PREV WEEK — Week of ' +
-        new Date(prevWkStart + 'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) +
-        ' · Previous Week Rankings';
-    } else if(isWeekly){
-      dateLbl.textContent = 'Week of ' +
-        new Date(curWkStart + 'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) +
-        ' · Weekly Transfer Rankings';
-    } else {
-      dateLbl.textContent = new Date().toLocaleDateString('en-US',{
-        weekday:'long',month:'long',day:'numeric',year:'numeric',timeZone:'America/Guyana'
-      }) + ' · Transfer Rankings';
-    }
+  let periodText='';
+  if(isPrevWeek){
+    const from=new Date(prevWkStart+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const to=new Date(prevWkEnd+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    periodText=`Previous week · ${from} – ${to}`;
+  }else if(isWeekly){
+    const from=new Date(curWkStart+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    periodText=`Current week · Since ${from}`;
+  }else{
+    periodText=nowGY.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
   }
+  if(dateLbl) dateLbl.textContent=periodText+' · Ranked by transfers';
+  if(liveLbl) liveLbl.textContent=isWeekly?'FIREBASE REPORT HISTORY':'LIVE DAILY PERFORMANCE';
 
-  const noData  = document.getElementById('lb-no-data');
-  const podium  = document.getElementById('lb-podium');
-  const list    = document.getElementById('lb-list');
-
-  let data = [];
-
+  let data=[];
+  let reportCount=0;
   if(isWeekly){
-    // Aggregate xfer per agent across reports in the selected week
-    const history = typeof reportHistory !== 'undefined' ? reportHistory : [];
-    const weekReports = isPrevWeek
-      ? history.filter(r => r.date && r.date >= prevWkStart && r.date <= prevWkEnd && r.statsJSON)
-      : history.filter(r => r.date && r.date >= curWkStart && r.statsJSON);
-    const agentMap = {};
-    weekReports.forEach(report => {
-      let rows = [];
-      try { rows = JSON.parse(report.statsJSON); } catch(e){}
-      rows.forEach(r => {
-        if(!r.name) return;
-        const key = r.name.toLowerCase().trim();
-        if(!agentMap[key]){
-          agentMap[key] = { name: r.name, team: r.team, xfer: 0 };
-        }
-        agentMap[key].xfer += (r.xfer || 0);
+    const history=typeof reportHistory!=='undefined'?reportHistory:[];
+    const weekReports=isPrevWeek
+      ?history.filter(r=>r.date&&r.date>=prevWkStart&&r.date<=prevWkEnd&&r.statsJSON)
+      :history.filter(r=>r.date&&r.date>=curWkStart&&r.statsJSON);
+    reportCount=weekReports.length;
+    const agentMap={};
+    weekReports.forEach(report=>{
+      let rows=[]; try{ rows=JSON.parse(report.statsJSON)||[]; }catch(e){ rows=[]; }
+      rows.forEach(r=>{
+        if(!r||!r.name) return;
+        const team=lbCurrentTeam(r);
+        const key=String(r.ytelId||'').trim()||String(r.name).toLowerCase().trim();
+        if(!agentMap[key]) agentMap[key]={name:r.name,ytelId:r.ytelId||'',team,xfer:0,calls:0,days:0,_days:new Set()};
+        const a=agentMap[key]; a.name=r.name||a.name; a.team=team; a.xfer+=Number(r.xfer)||0; a.calls+=Number(r.calls)||0;
+        if(report.date&&!a._days.has(report.date)){ a._days.add(report.date); a.days++; }
       });
     });
-    data = Object.values(agentMap);
-  } else {
-    // Daily — pull from today's statsData
-    data = typeof statsData !== 'undefined' ? [...statsData] : [];
+    data=Object.values(agentMap).map(a=>{ const conv=a.calls>0?(a.xfer/a.calls*100):0; delete a._days; return {...a,conv}; });
+  }else{
+    data=typeof statsData!=='undefined'?statsData.map(r=>({
+      ...r,team:lbCurrentTeam(r),calls:Number(r.calls)||0,xfer:Number(r.xfer)||0,
+      conv:Number(r.conv)||((Number(r.calls)||0)>0?(Number(r.xfer)||0)/(Number(r.calls)||1)*100:0),days:1
+    })):[];
   }
 
-  // Filter by team
-  if(lbFilter !== 'all') data = data.filter(r => r.team === lbFilter);
-
-  // Sort by transfers descending
-  data = data.sort((a,b) => b.xfer - a.xfer).filter(r => r.name);
+  data=data.filter(r=>r&&r.name);
+  if(lbFilter!=='all') data=data.filter(r=>r.team===lbFilter);
+  data.sort((a,b)=>(b.xfer-a.xfer)||((b.conv||0)-(a.conv||0))||((b.calls||0)-(a.calls||0))||String(a.name).localeCompare(String(b.name)));
 
   if(!data.length){
-    if(noData){
-      noData.style.display  = 'block';
-      const noDataMsg = noData.querySelector('div:last-child');
-      if(noDataMsg) noDataMsg.textContent = isPrevWeek
-        ? 'No reports found for the previous week.'
-        : isWeekly
-        ? 'No reports uploaded for this week yet. Admin uploads daily CSVs and they accumulate here.'
-        : 'Admin uploads the daily CSV and it will appear here automatically.';
-    }
-    if(podium)  podium.style.display  = 'none';
-    if(list)    list.innerHTML = '';
-    return;
+    if(noData){ noData.classList.add('show'); const note=noData.querySelector('.lb-empty-note'); if(note) note.textContent=isPrevWeek?'No saved reports were found for the previous week.':isWeekly?'No saved reports are available for this week yet.':'Admin uploads the daily CSV and the performance board will update automatically.'; }
+    if(summary) summary.style.display='none'; if(podiumSec) podiumSec.style.display='none'; if(listPanel) listPanel.style.display='none';
+    if(list) list.innerHTML=''; if(podium) podium.innerHTML=''; return;
   }
 
-  if(noData)  noData.style.display  = 'none';
+  if(noData) noData.classList.remove('show'); if(summary) summary.style.display='grid'; if(podiumSec) podiumSec.style.display='block'; if(listPanel) listPanel.style.display='block';
+  const totalXfer=data.reduce((sum,r)=>sum+(Number(r.xfer)||0),0);
+  const avgXfer=data.length?totalXfer/data.length:0;
+  const top=data[0];
+  const filterLabel=lbFilter==='BB'?'Berbice only':lbFilter==='PR'?'Providence only':'All teams';
+  const withXfers=data.filter(r=>(Number(r.xfer)||0)>0).length;
 
-  const maxXfer = data[0] ? data[0].xfer || 1 : 1;
-  const myName  = currentUser && !currentUser.isAdmin ? (currentUser.name||'').toLowerCase().trim() : '';
+  const totalEl=document.getElementById('lb-total-transfers'); if(totalEl) totalEl.textContent=totalXfer.toLocaleString();
+  const totalNote=document.getElementById('lb-total-note'); if(totalNote) totalNote.textContent=isWeekly?`${reportCount} report${reportCount===1?'':'s'} · ${filterLabel}`:`Today · ${filterLabel}`;
+  const countEl=document.getElementById('lb-agent-count'); if(countEl) countEl.textContent=data.length.toLocaleString();
+  const countNote=document.getElementById('lb-agent-note'); if(countNote) countNote.textContent=`${withXfers} with 1+ transfer${withXfers===1?'':'s'}`;
+  const topName=document.getElementById('lb-top-name'); if(topName) topName.textContent=top?.name||'—';
+  const topNote=document.getElementById('lb-top-note'); if(topNote) topNote.textContent=`${top?.xfer||0} transfers · ${top?.team==='PR'?'Providence':'Berbice'}`;
+  const avgEl=document.getElementById('lb-average-xfer'); if(avgEl) avgEl.textContent=avgXfer.toFixed(1);
+  const avgNote=document.getElementById('lb-average-note'); if(avgNote) avgNote.textContent=isWeekly?'Average for selected week':'Average for today';
+  const rankingCount=document.getElementById('lb-ranking-count'); if(rankingCount) rankingCount.textContent=`${data.length} agent${data.length===1?'':'s'} · ${filterLabel}`;
+  const podiumMeta=document.getElementById('lb-podium-meta'); if(podiumMeta) podiumMeta.textContent=`Top ${Math.min(3,data.length)} · ${isWeekly?'weekly':'daily'} performance`;
 
-  // ── PODIUM (top 3) ──
-  if(podium && data.length >= 2){
-    const top = data.slice(0,3);
-    const heights = [120,160,100]; // 2nd, 1st, 3rd
-    const colors  = ['#94a3b8','#fbbf24','#fb923c'];
-    const glow    = ['','0 0 20px rgba(251,191,36,0.5)',''];
-    const order   = data.length >= 3 ? [top[1], top[0], top[2]] : (data.length === 2 ? [top[1], top[0]] : [top[0]]);
-    const podiumIdx = data.length >= 3 ? [1,0,2] : (data.length === 2 ? [1,0] : [0]);
+  const myName=currentUser&&!currentUser.isAdmin?String(currentUser.name||'').toLowerCase().trim():'';
+  const maxXfer=Math.max(...data.map(r=>Number(r.xfer)||0),1);
 
-    podium.innerHTML = order.map((agent, i)=>{
-      const realIdx = podiumIdx[i];
-      const h = data.length >= 3 ? heights[i] : (i===1 ? 160 : 120);
-      const c = colors[realIdx] || '#94a3b8';
-      const g = glow[realIdx] || '';
-      const medal = realIdx===0 ? '🥇' : realIdx===1 ? '🥈' : '🥉';
-      return `<div class="lb-podium-slot">
-        <div class="lb-podium-name">${agent.name.split(' ')[0]}</div>
-        <div class="lb-podium-val" style="color:${c};">${agent.xfer} <span style="font-size:0.6rem;font-weight:400;">xfer</span></div>
-        <div class="lb-podium-block" style="height:${h}px;background:linear-gradient(180deg,${c}22,${c}11);border:1px solid ${c}44;box-shadow:${g};">
-          <span>${medal}</span>
-        </div>
-      </div>`;
+  if(podium){
+    const top3=data.slice(0,3);
+    const displayOrder=top3.length>=3?[top3[1],top3[0],top3[2]]:top3.length===2?[top3[1],top3[0]]:[top3[0]];
+    const rankFor=agent=>data.indexOf(agent)+1;
+    podium.innerHTML=displayOrder.map(agent=>{
+      const rank=rankFor(agent),medal=rank===1?'🥇':rank===2?'🥈':'🥉';
+      const teamClass=agent.team==='PR'?'lb-team-pr':'lb-team-bb';
+      const teamText=agent.team==='PR'?'🌴 Providence':'🏠 Berbice';
+      return `<div class="lb-podium-card rank-${rank}"><div class="lb-podium-rank">${rank}</div><div class="lb-podium-medal">${medal}</div><div class="lb-podium-avatar">${lbEscape(lbInitials(agent.name))}</div><div style="min-width:0;width:100%;"><div class="lb-podium-name" title="${lbEscape(agent.name)}">${lbEscape(agent.name)}</div><div class="lb-podium-team"><span class="lb-team-badge ${teamClass}">${teamText}</span></div></div><div class="lb-podium-score">${Number(agent.xfer)||0}<span>${isWeekly?'Week Transfers':'Transfers Today'}</span></div><div class="lb-podium-meta"><span>${(Number(agent.calls)||0).toLocaleString()} calls</span><span>${lbFormatConv(agent.conv)} conv.</span></div></div>`;
     }).join('');
-    podium.style.display = 'flex';
-  } else {
-    if(podium) podium.style.display = 'none';
   }
 
-  // ── FULL LIST — 3 per row grid ──
   if(list){
-    list.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:7px;';
-    list.innerHTML = data.map((agent, idx)=>{
-      const rank = idx + 1;
-      const isMe = myName && agent.name.toLowerCase().trim() === myName;
-      const rankClass = rank===1 ? 'gold' : rank===2 ? 'silver' : rank===3 ? 'bronze' : '';
-      const xferColor = rank===1 ? '#fbbf24' : rank===2 ? '#94a3b8' : rank===3 ? '#fb923c' : 'var(--text)';
-      const teamBadgeClass = agent.team === 'BB' ? 'lb-team-bb' : 'lb-team-pr';
-      const teamLabel = agent.team === 'BB' ? '🏠 BERB' : agent.team === 'PR' ? '🌴 PROV' : (agent.team||'');
-      const barPct = maxXfer > 0 ? Math.round(agent.xfer / maxXfer * 100) : 0;
-      const barColor = rank===1 ? '#fbbf24' : rank===2 ? '#94a3b8' : rank===3 ? '#fb923c' : 'var(--accent)';
-
-      // Get status from ROSTER if available
-      let agentStatus = '';
-      if(typeof ROSTER !== 'undefined'){
-        const rAgent = Object.values(ROSTER).find(r => r.name && agent.name &&
-          r.name.toLowerCase().trim() === agent.name.toLowerCase().trim());
-        if(rAgent) agentStatus = rAgent.status || '';
-      }
-
-      return `<div class="lb-card${isMe?' lb-me':''}" style="flex-direction:column;align-items:flex-start;gap:8px;padding:14px 16px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;width:100%;gap:8px;">
-          <div class="lb-rank ${rankClass}" style="font-size:1.2rem;min-width:auto;">${rank<=3 ? (rank===1?'🥇':rank===2?'🥈':'🥉') : String(rank).padStart(2,'0')}</div>
-          <span class="lb-team-badge ${teamBadgeClass}">${teamLabel}</span>
-        </div>
-        <div class="lb-name" style="font-size:1rem;">
-          ${agent.name}${isMe?' <span style="color:var(--gold);font-size:0.62rem;">· YOU</span>':''}
-          ${agentStatus ? `<span class="lb-status">${agentStatus}</span>` : ''}
-        </div>
-        <div style="width:100%;">
-          <div class="lb-bar-wrap" style="width:100%;margin-bottom:6px;">
-            <div class="lb-bar-fill" style="width:${barPct}%;background:${barColor};"></div>
-          </div>
-          <div class="lb-xfer" style="color:${xferColor};font-size:1.8rem;">
-            ${agent.xfer}
-            <span class="lb-xfer-lbl" style="font-size:0.5rem;">${isPrevWeek ? 'PREV WEEK' : isWeekly ? 'WEEK TOTAL' : 'XFERS'}</span>
-          </div>
-        </div>
-      </div>`;
+    list.innerHTML=data.map((agent,idx)=>{
+      const rank=idx+1,isMe=!!(myName&&String(agent.name).toLowerCase().trim()===myName),roster=lbRosterInfo(agent),status=roster?.status||'';
+      const teamClass=agent.team==='PR'?'lb-team-pr':'lb-team-bb',teamText=agent.team==='PR'?'🌴 PROV':'🏠 BERB';
+      const progress=Math.max(0,Math.min(100,Math.round((Number(agent.xfer)||0)/maxXfer*100)));
+      const rankClass=rank===1?'top-1':rank===2?'top-2':rank===3?'top-3':'';
+      const rankText=rank<=3?(rank===1?'🥇':rank===2?'🥈':'🥉'):String(rank).padStart(2,'0');
+      const sub=[]; if(status) sub.push(status); if(isMe) sub.push('You'); if(isWeekly&&agent.days) sub.push(`${agent.days} day${agent.days===1?'':'s'} reported`);
+      return `<div class="lb-ranking-row${isMe?' lb-me':''}"><div class="lb-rank-cell ${rankClass}">${rankText}</div><div class="lb-agent-cell"><div class="lb-mini-avatar">${lbEscape(lbInitials(agent.name))}</div><div class="lb-agent-info"><div class="lb-agent-name">${lbEscape(agent.name)}</div><div class="lb-agent-sub">${lbEscape(sub.join(' · ')||'Performance record')}</div></div></div><div class="lb-col-team"><span class="lb-team-badge ${teamClass}">${teamText}</span></div><div class="lb-col-transfer"><div class="lb-transfer-value">${Number(agent.xfer)||0}</div></div><div class="lb-col-calls lb-metric muted">${(Number(agent.calls)||0).toLocaleString()}</div><div class="lb-col-conv lb-conv">${lbFormatConv(agent.conv)}</div><div class="lb-col-progress"><div class="lb-progress-wrap" title="${progress}% of leader"><div class="lb-progress-bar" style="width:${progress}%"></div></div></div></div>`;
     }).join('');
   }
 }
