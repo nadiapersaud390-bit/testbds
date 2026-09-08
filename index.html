@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -851,6 +849,72 @@ body.is-admin #page-admin.admin-page-active{display:flex !important;flex-directi
 .adm-table tbody tr:nth-child(odd){background:#070e1c;}
 .adm-table tbody tr:nth-child(even){background:#060b18;}
 .adm-table tbody tr:hover td{background:#0d1a30;cursor:pointer;}
+
+/* ── PROFESSIONAL AGENT PROFILE MANAGER ── */
+.profile-admin-shell{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(340px,.85fr);gap:14px;align-items:start;}
+.profile-admin-panel{background:linear-gradient(180deg,rgba(13,20,36,.96),rgba(7,13,26,.96));border:1px solid #1d2d49;border-radius:16px;box-shadow:0 14px 34px rgba(0,0,0,.22);overflow:hidden;}
+.profile-admin-head{padding:18px 18px 14px;border-bottom:1px solid #16253f;background:linear-gradient(135deg,rgba(96,165,250,.07),rgba(167,139,250,.035));}
+.profile-admin-title{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:#f1f5f9;}
+.profile-admin-sub{font-size:.68rem;color:#7385a0;line-height:1.55;margin-top:4px;}
+.profile-summary-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:13px;}
+.profile-summary-chip{padding:9px 11px;border:1px solid #1b2b46;border-radius:10px;background:rgba(4,10,22,.58);}
+.profile-summary-val{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;line-height:1;color:#e2e8f0;}
+.profile-summary-lbl{margin-top:3px;font-size:.5rem;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:#60708b;}
+.profile-toolbar{display:flex;gap:8px;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid #12213a;background:rgba(5,10,21,.5);}
+.profile-control{min-height:38px;padding:9px 12px;border:1px solid #253755;border-radius:9px;background:#080f1e;color:#e2e8f0;outline:none;font-family:'Nunito',sans-serif;font-size:.78rem;transition:border-color .15s,box-shadow .15s;}
+.profile-control:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(96,165,250,.08);}
+.profile-control.search{flex:1;min-width:180px;}
+.profile-list{max-height:610px;overflow:auto;padding:6px;}
+.profile-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:11px;align-items:center;padding:11px 12px;border:1px solid transparent;border-radius:11px;cursor:pointer;transition:background .15s,border-color .15s,transform .15s;margin-bottom:4px;}
+.profile-row:hover{background:#0c1729;border-color:#1d304f;transform:translateY(-1px);}
+.profile-row.selected{background:linear-gradient(90deg,rgba(96,165,250,.11),rgba(167,139,250,.06));border-color:#31547f;box-shadow:inset 3px 0 0 #60a5fa;}
+.profile-avatar-sm{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,#0f2e50,#0a1e36);border:1px solid #234b72;color:#67c6ff;font-family:'Barlow Condensed',sans-serif;font-size:.92rem;font-weight:900;letter-spacing:.6px;}
+.profile-row-name{font-size:.83rem;font-weight:800;color:#eef4ff;line-height:1.2;}
+.profile-row-meta{font-size:.61rem;color:#6f819b;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.profile-row-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px;}
+.profile-tag{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;border-radius:999px;font-size:.52rem;font-weight:900;letter-spacing:.8px;text-transform:uppercase;border:1px solid #233451;background:#0a1323;color:#7e91ad;}
+.profile-tag.bb{border-color:rgba(96,165,250,.34);background:rgba(96,165,250,.08);color:#60a5fa;}
+.profile-tag.pr{border-color:rgba(167,139,250,.35);background:rgba(167,139,250,.08);color:#a78bfa;}
+.profile-tag.agent{border-color:rgba(52,211,153,.28);background:rgba(52,211,153,.07);color:#34d399;}
+.profile-tag.trainee{border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.07);color:#fbbf24;}
+.profile-row-actions{display:flex;gap:6px;align-items:center;}
+.profile-mini-btn{padding:6px 9px;border-radius:8px;border:1px solid #263957;background:#0b1425;color:#8ca0bc;font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:900;letter-spacing:.8px;cursor:pointer;white-space:nowrap;}
+.profile-mini-btn:hover{border-color:#60a5fa;color:#8bd2ff;background:#0d1c31;}
+.profile-mini-btn.primary{border-color:rgba(96,165,250,.38);color:#60a5fa;background:rgba(96,165,250,.07);}
+.profile-edit-card{position:sticky;top:10px;min-height:350px;}
+.profile-edit-empty{display:grid;place-items:center;min-height:360px;padding:28px;text-align:center;color:#60708b;}
+.profile-edit-empty-icon{font-size:2rem;margin-bottom:10px;filter:grayscale(.25);}
+.profile-edit-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px;border-bottom:1px solid #182841;background:linear-gradient(135deg,rgba(96,165,250,.08),rgba(34,211,238,.025));}
+.profile-edit-name{font-family:'Barlow Condensed',sans-serif;font-size:1.25rem;font-weight:900;letter-spacing:.7px;color:#f8fafc;}
+.profile-edit-meta{font-size:.62rem;color:#70819a;margin-top:3px;}
+.profile-close-btn{width:32px;height:32px;border-radius:9px;border:1px solid #273854;background:#0b1424;color:#6f819b;cursor:pointer;font-weight:900;}
+.profile-close-btn:hover{border-color:#f87171;color:#f87171;}
+.profile-edit-body{padding:16px 18px 18px;}
+.profile-info-strip{display:flex;align-items:center;gap:8px;padding:9px 11px;margin-bottom:14px;border-radius:10px;border:1px solid rgba(52,211,153,.22);background:rgba(52,211,153,.045);color:#7d93aa;font-size:.62rem;line-height:1.45;}
+.profile-info-strip .dot{width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 10px rgba(52,211,153,.55);flex:0 0 auto;}
+.profile-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.profile-field.full{grid-column:1/-1;}
+.profile-label{display:block;margin-bottom:5px;font-size:.54rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#6d7f99;}
+.profile-label.blue{color:#60a5fa}.profile-label.green{color:#34d399}.profile-label.gold{color:#fbbf24}.profile-label.purple{color:#a78bfa}.profile-label.cyan{color:#22d3ee}
+.profile-input{width:100%;min-height:39px;padding:9px 11px;border:1px solid #283a58;border-radius:9px;background:#070e1c;color:#e6edf7;font-family:'Nunito',sans-serif;font-size:.78rem;outline:none;transition:border-color .15s,box-shadow .15s;}
+.profile-input:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(96,165,250,.08);}
+.profile-input[readonly]{color:#71839e;background:#09101d;cursor:not-allowed;}
+.profile-save-status{min-height:22px;margin:12px 0 8px;padding:0 2px;font-size:.67rem;text-align:center;font-weight:700;}
+.profile-actions{display:grid;grid-template-columns:1fr auto;gap:8px;}
+.profile-save-btn{min-height:43px;border:0;border-radius:10px;background:linear-gradient(90deg,#2563eb,#22d3ee);color:#03121b;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 22px rgba(37,99,235,.17);}
+.profile-save-btn:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.profile-save-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+.profile-open-btn{min-height:43px;padding:0 14px;border:1px solid #2a3d5d;border-radius:10px;background:#0a1323;color:#93a7c3;font-family:'Barlow Condensed',sans-serif;font-size:.74rem;font-weight:900;letter-spacing:1px;cursor:pointer;}
+.profile-open-btn:hover{border-color:#a78bfa;color:#c4b5fd;}
+.profile-new-form{display:none;margin:0 14px 14px;padding:16px;border:1px solid rgba(52,211,153,.25);border-radius:13px;background:linear-gradient(145deg,rgba(4,25,20,.78),rgba(5,14,25,.92));}
+.profile-new-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.profile-empty-list{text-align:center;color:#64748b;padding:30px 18px;font-size:.78rem;}
+.ap-header-actions{display:flex;align-items:center;gap:8px;}
+.ap-edit-profile-btn{display:none;padding:9px 13px;border-radius:9px;border:1px solid rgba(96,165,250,.35);background:rgba(96,165,250,.08);color:#7cc9ff;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:900;letter-spacing:1px;cursor:pointer;}
+.ap-edit-profile-btn:hover{border-color:#60a5fa;background:rgba(96,165,250,.13);}
+@media(max-width:900px){.profile-admin-shell{grid-template-columns:1fr}.profile-edit-card{position:static}.profile-list{max-height:430px;}}
+@media(max-width:620px){.profile-summary-row{grid-template-columns:repeat(3,1fr)}.profile-edit-grid,.profile-new-grid{grid-template-columns:1fr}.profile-field.full{grid-column:auto}.profile-actions{grid-template-columns:1fr}.profile-row{grid-template-columns:auto minmax(0,1fr)}.profile-row-actions{grid-column:1/-1;padding-left:49px}.profile-toolbar{flex-direction:column}.profile-control.search{width:100%}.profile-control{width:100%}}
+
 /* ── TEAM TOGGLE BUTTONS ── */
 .adm-team-btn{padding:10px 24px;border-radius:10px;border:2px solid var(--border);background:transparent;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;letter-spacing:1.5px;cursor:pointer;transition:all 0.15s;}
 .adm-team-btn.active[id="wk-bb-btn"]{background:rgba(96,165,250,0.12);border-color:var(--accent);color:var(--accent);}
@@ -1466,7 +1530,7 @@ input, textarea, select { color-scheme: dark; }
           <div style="font-size:0.6rem;color:#64748b;margin-top:4px;" id="rp-meta"></div>
         </div>
       </div>
-      <button class="ap-close" onclick="closeRepProfile()">✕ CLOSE</button>
+      <div class="ap-header-actions"><button id="ap-edit-profile-btn" class="ap-edit-profile-btn" type="button" onclick="editCurrentRepProfileFromOverlay()">✏ EDIT PROFILE</button><button class="ap-close" onclick="closeRepProfile()">✕ CLOSE</button></div>
     </div>
 
     <!-- Nav tabs -->
@@ -2036,153 +2100,91 @@ input, textarea, select { color-scheme: dark; }
     </div>
     <!-- ── AGENT PROFILES ── -->
     <div id="admin-profiles" class="admin-section">
-      <div class="admin-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
-          <div class="admin-card-title" style="margin-bottom:0;font-size:0.9rem;">👤 AGENT PROFILES</div>
-          <button onclick="toggleAddRepForm()" id="add-rep-toggle-btn" style="padding:9px 18px;border-radius:9px;border:none;background:linear-gradient(90deg,var(--green),var(--cyan));color:#000;font-family:'Barlow Condensed',sans-serif;font-size:0.88rem;font-weight:800;letter-spacing:1.5px;cursor:pointer;">＋ ADD NEW REP</button>
+      <div class="profile-admin-shell">
+
+        <!-- LEFT: roster list + add agent -->
+        <div class="profile-admin-panel">
+          <div class="profile-admin-head">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
+              <div>
+                <div class="profile-admin-title">👤 Agent Profile Management</div>
+                <div class="profile-admin-sub">Search the live Firebase roster, open an agent's full profile, or edit saved roster details from one place.</div>
+              </div>
+              <button id="add-rep-toggle-btn" type="button" onclick="toggleAddRepForm()" class="profile-mini-btn primary" style="padding:9px 13px;font-size:.7rem;">＋ ADD AGENT</button>
+            </div>
+            <div class="profile-summary-row">
+              <div class="profile-summary-chip"><div class="profile-summary-val" id="profile-total-count">—</div><div class="profile-summary-lbl">Active Profiles</div></div>
+              <div class="profile-summary-chip"><div class="profile-summary-val" id="profile-bb-count" style="color:#60a5fa;">—</div><div class="profile-summary-lbl">Berbice</div></div>
+              <div class="profile-summary-chip"><div class="profile-summary-val" id="profile-pr-count" style="color:#a78bfa;">—</div><div class="profile-summary-lbl">Providence</div></div>
+            </div>
+          </div>
+
+          <!-- ADD NEW REP -->
+          <div id="add-rep-form" class="profile-new-form">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px;">
+              <div>
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:.83rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#34d399;">✨ Create New Agent Profile</div>
+                <div style="font-size:.61rem;color:#6f819b;margin-top:2px;">Creates one Firebase roster record using the Agent ID as the document ID.</div>
+              </div>
+            </div>
+            <div class="profile-new-grid">
+              <div class="profile-field"><label class="profile-label green">Full Name *</label><input id="nr-name" class="profile-input" type="text" placeholder="e.g. Priya Ramkhelawan" oninput="autoFillYtel()"></div>
+              <div class="profile-field"><label class="profile-label green">Agent / User ID *</label><input id="nr-id" class="profile-input" type="text" inputmode="numeric" placeholder="e.g. 1042"></div>
+              <div class="profile-field"><label class="profile-label purple">Team *</label><select id="nr-team" class="profile-input" onchange="autoFillYtel()"><option value="BB">🏠 Berbice (BB)</option><option value="PR">🌴 Providence (PR)</option></select></div>
+              <div class="profile-field"><label class="profile-label cyan">Ytel Name *</label><input id="nr-ytel" class="profile-input" type="text" placeholder="GUYB / GUYP name"></div>
+              <div class="profile-field"><label class="profile-label blue">Shift</label><select id="nr-shift" class="profile-input"><option value="">— Select shift —</option><option value="10:00AM - 7:00PM">10:00AM - 7:00PM</option><option value="11:00am-8:00pm">11:00am-8:00pm</option><option value="11:45am-9:00pm">11:45am-9:00pm</option><option value="13:00pm - 22:00pm">13:00pm - 22:00pm</option></select></div>
+              <div class="profile-field"><label class="profile-label green">Lunch</label><input id="nr-lunch" class="profile-input" type="text" placeholder="e.g. 3:30PM-4:00PM"></div>
+              <div class="profile-field"><label class="profile-label gold">Break</label><input id="nr-break" class="profile-input" type="text" placeholder="e.g. 2:00PM-2:15PM"></div>
+              <div class="profile-field"><label class="profile-label purple">Status</label><select id="nr-status" class="profile-input"><option value="Agent">Agent</option><option value="Trainee">Trainee</option></select></div>
+            </div>
+            <div id="nr-status-msg" class="profile-save-status"></div>
+            <div class="profile-actions">
+              <button id="nr-save-btn" type="button" onclick="saveNewRep()" class="profile-save-btn">💾 Create Agent Profile</button>
+              <button type="button" onclick="toggleAddRepForm(false)" class="profile-open-btn">Cancel</button>
+            </div>
+          </div>
+
+          <div class="profile-toolbar">
+            <input id="profile-search" class="profile-control search" type="text" placeholder="🔍 Search name, ID or Ytel name..." oninput="filterProfileList()">
+            <select id="profile-team-filter" class="profile-control" onchange="filterProfileList()"><option value="all">All Teams</option><option value="BB">🏠 Berbice</option><option value="PR">🌴 Providence</option></select>
+            <button type="button" class="profile-mini-btn" onclick="refreshAgentProfiles()">↻ REFRESH</button>
+          </div>
+
+          <div id="profile-list" class="profile-list"><div class="profile-empty-list">Loading Firebase roster...</div></div>
         </div>
 
-        <!-- ── ADD NEW REP FORM ── -->
-        <div id="add-rep-form" style="display:none;background:#06120a;border:1.5px solid rgba(52,211,153,0.35);border-radius:14px;padding:18px;margin-bottom:16px;">
-          <div style="font-size:0.62rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:14px;">✨ NEW REP — FILL IN DETAILS</div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-            <div>
-              <div style="font-size:0.58rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Full Name *</div>
-              <input id="nr-name" type="text" placeholder="e.g. Priya Ramkhelawan"
-                style="width:100%;padding:9px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;"
-                oninput="autoFillYtel()" onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='#2a3a5a'">
-            </div>
-            <div>
-              <div style="font-size:0.58rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">User ID *</div>
-              <input id="nr-id" type="text" placeholder="e.g. 1042 (unique number)"
-                style="width:100%;padding:9px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;"
-                onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='#2a3a5a'">
-            </div>
-            <div>
-              <div style="font-size:0.58rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Team *</div>
-              <select id="nr-team" onchange="autoFillYtel()"
-                style="width:100%;padding:9px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;outline:none;box-sizing:border-box;"
-                onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='#2a3a5a'">
-                <option value="BB">🏠 Berbice (BB)</option>
-                <option value="PR">🌴 Providence (PR)</option>
-              </select>
-            </div>
-            <div>
-              <div style="font-size:0.58rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Ytel Name *</div>
-              <input id="nr-ytel" type="text" placeholder="e.g. GUYB Kleon Williams or GUYP Priya Sookram"
-                style="width:100%;padding:9px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;"
-                onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='#2a3a5a'">
-            </div>
-            <div>
-              <div style="font-size:0.58rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Shift</div>
-              <select id="nr-shift"
-                style="width:100%;padding:9px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;outline:none;box-sizing:border-box;">
-                <option value="">— Select shift —</option>
-                <option value="10:00AM - 7:00PM">10:00AM - 7:00PM</option>
-                <option value="11:00am-8:00pm">11:00am-8:00pm</option>
-                <option value="11:45am-9:00pm">11:45am-9:00pm</option>
-                <option value="13:00pm - 22:00pm">13:00pm - 22:00pm</option>
-              </select>
-            </div>
-            <div>
-              <div style="font-size:0.58rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Lunch Time</div>
-              <input id="nr-lunch" type="text" placeholder="e.g. 3:30-4:00 pm"
-                style="width:100%;padding:9px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;"
-                onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#2a3a5a'">
-            </div>
+        <!-- RIGHT: editor -->
+        <div id="profile-editor-card" class="profile-admin-panel profile-edit-card">
+          <div id="profile-edit-empty" class="profile-edit-empty">
+            <div><div class="profile-edit-empty-icon">👤</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;letter-spacing:1px;color:#94a3b8;">SELECT AN AGENT</div><div style="font-size:.66rem;line-height:1.55;margin-top:5px;max-width:270px;">Choose Edit beside an agent to load the latest saved Firebase profile.</div></div>
           </div>
 
-          <div style="margin-bottom:10px;">
-            <div style="font-size:0.58rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Status</div>
-            <select id="nr-status"
-              style="width:100%;padding:9px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;outline:none;box-sizing:border-box;">
-              <option value="Agent">Agent</option>
-              <option value="Trainee">Trainee</option>
-            </select>
-          </div>
-
-          <div id="nr-status-msg" style="font-size:0.72rem;min-height:20px;margin-bottom:10px;text-align:center;"></div>
-
-          <div style="display:flex;gap:8px;">
-            <button onclick="saveNewRep()" style="flex:1;padding:12px;border-radius:9px;border:none;background:linear-gradient(90deg,var(--green),var(--cyan));color:#000;font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;letter-spacing:1.5px;cursor:pointer;">💾 ADD REP TO SYSTEM</button>
-            <button onclick="toggleAddRepForm()" style="padding:12px 18px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:0.9rem;font-weight:800;cursor:pointer;">Cancel</button>
-          </div>
-        </div>
-
-        <!-- Search + team filter -->
-        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
-          <input type="text" id="profile-search" placeholder="🔍 Search agent name..." oninput="filterProfileList()"
-            style="flex:1;min-width:160px;padding:9px 14px;background:#0d1424;border:1.5px solid #2a3a5a;border-radius:8px;color:#e2e8f0;font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;">
-          <select id="profile-team-filter" onchange="filterProfileList()"
-            style="padding:9px 12px;background:#0d1424;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;outline:none;">
-            <option value="all">All Teams</option>
-            <option value="BB">🏠 Berbice (BB)</option>
-            <option value="PR">🌴 Providence (PR)</option>
-          </select>
-        </div>
-
-        <!-- Agent list -->
-        <div id="profile-list" style="display:flex;flex-direction:column;gap:0;"></div>
-
-        <!-- Edit panel — shown when agent selected -->
-        <div id="profile-edit-panel" style="display:none;margin-top:14px;background:#060d1a;border:1px solid #1a2a45;border-radius:12px;padding:16px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-            <div>
-              <div id="pe-name" style="font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:800;color:var(--text);"></div>
-              <div id="pe-meta" style="font-size:0.62rem;color:var(--muted);margin-top:2px;"></div>
+          <div id="profile-edit-panel" style="display:none;">
+            <div class="profile-edit-head">
+              <div><div id="pe-name" class="profile-edit-name">Agent Name</div><div id="pe-meta" class="profile-edit-meta">Firebase roster profile</div></div>
+              <button type="button" class="profile-close-btn" onclick="closeProfileEdit()">✕</button>
             </div>
-            <button onclick="closeProfileEdit()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:4px 8px;">✕</button>
-          </div>
+            <div class="profile-edit-body">
+              <div class="profile-info-strip"><span class="dot"></span><span>Edits below save directly to Firebase. Team changes also update today's live team views and report assignment.</span></div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-            <!-- Shift -->
-            <div>
-              <div style="font-size:0.6rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:5px;">⏰ Shift</div>
-              <select id="pe-shift"
-                style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;"
-                onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#2a3a5a'">
-                <option value="">— Select shift —</option>
-                <option value="10:00AM - 7:00PM">10:00AM - 7:00PM</option>
-                <option value="11:00am-8:00pm">11:00am-8:00pm</option>
-                <option value="11:45am-9:00pm">11:45am-9:00pm</option>
-                <option value="13:00pm - 22:00pm">13:00pm - 22:00pm</option>
-              </select>
-            </div>
-            <!-- Lunch -->
-            <div>
-              <div style="font-size:0.6rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:5px;">🍽 Lunch</div>
-              <input id="pe-lunch" type="text" placeholder="e.g. 3:30-4:00 pm"
-                style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;"
-                onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='#2a3a5a'">
-            </div>
-            <!-- Break -->
-            <div>
-              <div style="font-size:0.6rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:5px;">☕ Break</div>
-              <input id="pe-break" type="text" placeholder="e.g. 2:00-2:15 pm"
-                style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;font-family:'Nunito',sans-serif;outline:none;box-sizing:border-box;"
-                onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='#2a3a5a'">
-            </div>
-            <!-- Status -->
-            <div>
-              <div style="font-size:0.6rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);margin-bottom:5px;">📋 Status</div>
-              <select id="pe-status"
-                style="width:100%;padding:8px 12px;background:#090f1e;border:1.5px solid #2a3a5a;border-radius:8px;color:var(--text);font-size:0.82rem;outline:none;box-sizing:border-box;">
-                <option value="Agent">Agent</option>
-                <option value="Trainee">Trainee</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
+              <div class="profile-edit-grid">
+                <div class="profile-field full"><label class="profile-label blue">Full Name</label><input id="pe-full-name" class="profile-input" type="text" autocomplete="off"></div>
+                <div class="profile-field"><label class="profile-label">Agent / User ID</label><input id="pe-id" class="profile-input" type="text" readonly></div>
+                <div class="profile-field"><label class="profile-label purple">Team Assignment</label><select id="pe-team" class="profile-input" onchange="profileTeamChanged()"><option value="BB">🏠 Berbice (BB)</option><option value="PR">🌴 Providence (PR)</option></select></div>
+                <div class="profile-field full"><label class="profile-label cyan">Ytel Name</label><input id="pe-ytel" class="profile-input" type="text" placeholder="GUYB / GUYP Agent Name"></div>
+                <div class="profile-field"><label class="profile-label blue">Shift</label><select id="pe-shift" class="profile-input"><option value="">— Select shift —</option><option value="10:00AM - 7:00PM">10:00AM - 7:00PM</option><option value="11:00am-8:00pm">11:00am-8:00pm</option><option value="11:45am-9:00pm">11:45am-9:00pm</option><option value="13:00pm - 22:00pm">13:00pm - 22:00pm</option></select></div>
+                <div class="profile-field"><label class="profile-label green">Lunch Time</label><input id="pe-lunch" class="profile-input" type="text" placeholder="e.g. 3:30PM-4:00PM"></div>
+                <div class="profile-field"><label class="profile-label gold">Break Time</label><input id="pe-break" class="profile-input" type="text" placeholder="e.g. 2:00PM-2:15PM"></div>
+                <div class="profile-field"><label class="profile-label purple">Status</label><select id="pe-status" class="profile-input"><option value="Agent">Agent</option><option value="Trainee">Trainee</option><option value="Inactive">Inactive</option></select></div>
+              </div>
 
-          <div id="pe-save-status" style="font-size:0.7rem;text-align:center;margin-bottom:10px;min-height:18px;"></div>
-
-          <button onclick="saveProfileEdits()" style="width:100%;padding:12px;border-radius:9px;border:none;background:linear-gradient(90deg,var(--accent),var(--cyan));color:#000;font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;letter-spacing:1.5px;cursor:pointer;">
-            💾 SAVE ALL CHANGES TO FIREBASE
-          </button>
-
-          <div style="font-size:0.6rem;color:var(--muted);text-align:center;margin-top:8px;">
-            Shift, Lunch, Break &amp; Status → Firebase · Changes sync across open dashboards
+              <div id="pe-save-status" class="profile-save-status"></div>
+              <div class="profile-actions">
+                <button id="pe-save-btn" type="button" onclick="saveProfileEdits()" class="profile-save-btn">💾 Save Profile Changes</button>
+                <button type="button" onclick="openSelectedProfile()" class="profile-open-btn">OPEN FULL PROFILE</button>
+              </div>
+              <div style="font-size:.56rem;color:#5e708a;text-align:center;margin-top:9px;line-height:1.5;">Agent ID is locked because it is the Firebase document key. To change an ID, create a new profile instead of renaming the existing document.</div>
+            </div>
           </div>
         </div>
       </div>
@@ -5623,260 +5625,366 @@ async function loadRepCoach(id){
   }
 }
 let selectedProfileId = null;
+let selectedProfileSnapshot = null;
 
+function profileInitials(name){
+  return String(name||'').trim().split(/\s+/).filter(Boolean).slice(0,2).map(p=>p[0].toUpperCase()).join('') || 'A';
+}
+function profileSafe(value){
+  return String(value == null ? '' : value)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+function profileNormalizeYtel(name, team, current){
+  const cleanName=String(name||'').trim();
+  const prefix=team==='PR'?'GUYP ':'GUYB ';
+  const value=String(current||'').trim();
+  if(!value) return prefix+cleanName;
+  if(/^GUY[BP]\s+/i.test(value)) return value.replace(/^GUY[BP]\s+/i,prefix);
+  return value;
+}
 function autoFillYtel(){
-  const nameVal = document.getElementById('nr-name').value.trim();
-  const team    = document.getElementById('nr-team').value;
-  const ytelEl  = document.getElementById('nr-ytel');
+  const nameEl=document.getElementById('nr-name');
+  const teamEl=document.getElementById('nr-team');
+  const ytelEl=document.getElementById('nr-ytel');
+  if(!nameEl||!teamEl||!ytelEl) return;
+  const nameVal=nameEl.value.trim();
   if(!nameVal) return;
-  // Format: "GUYB First Last" (BB) or "GUYP First Last" (PR)
-  // e.g. "Kleon Williams" + BB → "GUYB Kleon Williams"
-  // e.g. "Priya Sookram"  + PR → "GUYP Priya Sookram"
-  const prefix = team === 'PR' ? 'GUYP ' : 'GUYB ';
-  // Only auto-fill if empty or was previously auto-filled (starts with GUY)
-  if(!ytelEl.value || ytelEl.value.startsWith('GUY')){
-    ytelEl.value = prefix + nameVal;
+  const previous=ytelEl.dataset.autoValue||'';
+  if(!ytelEl.value.trim() || ytelEl.value===previous || /^GUY[BP]\s+/i.test(ytelEl.value)){
+    const next=profileNormalizeYtel(nameVal,normalizeTeam(teamEl.value),ytelEl.value);
+    ytelEl.value=next;
+    ytelEl.dataset.autoValue=next;
   }
 }
+function profileTeamChanged(){
+  const nameEl=document.getElementById('pe-full-name');
+  const teamEl=document.getElementById('pe-team');
+  const ytelEl=document.getElementById('pe-ytel');
+  if(!nameEl||!teamEl||!ytelEl) return;
+  ytelEl.value=profileNormalizeYtel(nameEl.value,normalizeTeam(teamEl.value),ytelEl.value);
+}
 
-function toggleAddRepForm(){
-  const form = document.getElementById('add-rep-form');
-  const btn  = document.getElementById('add-rep-toggle-btn');
-  const open = form.style.display === 'none';
-  form.style.display = open ? '' : 'none';
-  btn.textContent = open ? '✕ CANCEL' : '＋ ADD NEW REP';
-  btn.style.background = open ? 'transparent' : 'linear-gradient(90deg,var(--green),var(--cyan))';
-  btn.style.border = open ? '1px solid var(--border)' : 'none';
-  btn.style.color = open ? 'var(--muted)' : '#000';
+function toggleAddRepForm(forceOpen){
+  const form=document.getElementById('add-rep-form');
+  const btn=document.getElementById('add-rep-toggle-btn');
+  if(!form||!btn) return;
+  const isOpen=form.style.display!=='none' && getComputedStyle(form).display!=='none';
+  const open=typeof forceOpen==='boolean'?forceOpen:!isOpen;
+  form.style.display=open?'block':'none';
+  btn.textContent=open?'✕ CANCEL':'＋ ADD AGENT';
   if(open){
-    document.getElementById('nr-name').value='';
-    document.getElementById('nr-id').value='';
-    document.getElementById('nr-ytel').value='';
-    document.getElementById('nr-lunch').value='';
-    document.getElementById('nr-status-msg').textContent='';
+    ['nr-name','nr-id','nr-ytel','nr-lunch','nr-break'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    const shift=document.getElementById('nr-shift'); if(shift) shift.value='';
+    const team=document.getElementById('nr-team'); if(team) team.value='BB';
+    const status=document.getElementById('nr-status'); if(status) status.value='Agent';
+    const msg=document.getElementById('nr-status-msg'); if(msg) msg.textContent='';
+    setTimeout(()=>document.getElementById('nr-name')?.focus(),50);
   }
 }
 
 async function saveNewRep(){
-  const msgEl = document.getElementById('nr-status-msg');
-  const name   = document.getElementById('nr-name').value.trim();
-  const idVal  = document.getElementById('nr-id').value.trim();
-  const team   = normalizeTeam(document.getElementById('nr-team').value);
-  const ytel   = document.getElementById('nr-ytel').value.trim();
-  const shift  = document.getElementById('nr-shift').value;
-  const lunch  = document.getElementById('nr-lunch').value.trim();
-  const status = document.getElementById('nr-status').value;
+  const msgEl=document.getElementById('nr-status-msg');
+  const saveBtn=document.getElementById('nr-save-btn');
+  const name=document.getElementById('nr-name').value.trim();
+  const idVal=document.getElementById('nr-id').value.trim();
+  const team=normalizeTeam(document.getElementById('nr-team').value);
+  let ytel=document.getElementById('nr-ytel').value.trim();
+  const shift=document.getElementById('nr-shift').value.trim();
+  const lunch=document.getElementById('nr-lunch').value.trim();
+  const brk=(document.getElementById('nr-break')?.value||'').trim();
+  const status=document.getElementById('nr-status').value.trim()||'Agent';
 
-  if(!name){ msgEl.style.color='var(--red)'; msgEl.textContent='⚠️ Full name is required.'; return; }
-  if(!idVal){ msgEl.style.color='var(--red)'; msgEl.textContent='⚠️ User ID is required.'; return; }
-  if(isNaN(idVal)){ msgEl.style.color='var(--red)'; msgEl.textContent='⚠️ User ID must be a number.'; return; }
-  if(!ytel){ msgEl.style.color='var(--red)'; msgEl.textContent='⚠️ Ytel Name is required (e.g. GUYB John Smith or GUYP John Smith).'; return; }
-  if(ROSTER[String(idVal)]){ msgEl.style.color='var(--red)'; msgEl.textContent='⚠️ A rep with ID '+idVal+' already exists: '+ROSTER[String(idVal)].name; return; }
+  const fail=(m)=>{if(msgEl){msgEl.style.color='var(--red)';msgEl.textContent=m;}};
+  if(!name) return fail('⚠ Full name is required.');
+  if(!idVal) return fail('⚠ Agent / User ID is required.');
+  if(!/^\d{3,}$/.test(idVal)) return fail('⚠ Agent / User ID must be a numeric ID.');
+  if(team!=='BB'&&team!=='PR') return fail('⚠ Select Berbice or Providence.');
+  ytel=profileNormalizeYtel(name,team,ytel);
+  document.getElementById('nr-ytel').value=ytel;
 
-  msgEl.style.color='var(--gold)';
-  msgEl.textContent='⏳ Saving to Firebase...';
-
+  if(saveBtn){saveBtn.disabled=true;saveBtn.textContent='⏳ Checking Firebase...';}
+  if(msgEl){msgEl.style.color='var(--muted)';msgEl.textContent='Checking for an existing profile...';}
   try{
     await ensureFirebaseAuth();
-    const payload = {
-      userId: String(idVal),
-      name,
-      team,
-      ytelName: ytel,
-      shift: shift || '',
-      lunch: lunch || '',
-      brk: '',
-      status: status || 'Agent',
-      inactive: false,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    const ref=db.collection('roster').doc(String(idVal));
+    const existing=await ref.get();
+    if(existing.exists) throw new Error('Agent ID '+idVal+' already exists in Firebase.');
+
+    const now=firebase.firestore.FieldValue.serverTimestamp();
+    const payload={
+      userId:String(idVal),name,team,ytelName:ytel,shift,lunch,brk,status,
+      inactive:false,teamOverride:true,teamSource:'admin-profile',teamUpdatedAt:now,
+      createdAt:now,updatedAt:now,profileUpdatedBy:currentUser?.name||currentUser?.username||'Admin'
     };
-    await db.collection('roster').doc(String(idVal)).set(payload);
-    ROSTER[String(idVal)] = {...payload, createdAt:null, updatedAt:null};
-    rosterLoaded = true;
-    rosterPollHash = getRosterFingerprint();
+    if(msgEl){msgEl.style.color='var(--gold)';msgEl.textContent='Saving new agent profile to Firebase...';}
+    await ref.set(payload,{merge:false});
 
-    msgEl.style.color='var(--green)';
-    msgEl.textContent='✅ '+name+' (ID: '+idVal+') added to Firebase successfully!';
-
-    setTimeout(async ()=>{
-      toggleAddRepForm();
-      await loadRoster();
-      renderProfileList();
-      renderAttTable();
-      if(typeof renderStatsTable === 'function') renderStatsTable();
-      const ovEl = document.getElementById('admin-overview');
-      if(ovEl && ovEl.style.display !== 'none') loadAdminOverview();
-      refreshBreakdownIfOpen();
-      if(weeklyTeam) loadWeeklyAttendance(weeklyTeam);
-      const monthlyEl = document.getElementById('admin-monthly');
-      if(monthlyEl && monthlyEl.style.display !== 'none') reRenderMonthly();
-    }, 500);
+    ROSTER[String(idVal)]={userId:String(idVal),name,team,ytelName:ytel,shift,lunch,brk,status};
+    rosterLoaded=true;
+    if(typeof getRosterFingerprint==='function') rosterPollHash=getRosterFingerprint();
+    if(msgEl){msgEl.style.color='var(--green)';msgEl.textContent='✅ '+name+' was added successfully.';}
+    renderProfileList();
+    updateProfileSummary();
+    setTimeout(()=>{toggleAddRepForm(false);selectProfile(String(idVal));},650);
   }catch(e){
-    msgEl.style.color='var(--red)';
-    msgEl.textContent='❌ Firebase save failed: '+(e.message || e);
+    fail('❌ '+(e.message||e));
+  }finally{
+    if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='💾 Create Agent Profile';}
   }
 }
 
-function loadAgentProfiles(){
-  if(!rosterLoaded){ loadRoster().then(()=>renderProfileList()); return; }
+async function loadAgentProfiles(){
+  const list=document.getElementById('profile-list');
+  if(list) list.innerHTML='<div class="profile-empty-list">⏳ Loading live Firebase roster...</div>';
+  await loadRoster();
   renderProfileList();
+  updateProfileSummary();
 }
-
+async function refreshAgentProfiles(){
+  const btn=document.querySelector('#admin-profiles .profile-toolbar .profile-mini-btn');
+  if(btn){btn.disabled=true;btn.textContent='⏳ REFRESHING';}
+  await loadRoster();
+  renderProfileList();
+  updateProfileSummary();
+  if(selectedProfileId && ROSTER[selectedProfileId]) await selectProfile(selectedProfileId,{keepScroll:true});
+  if(btn){btn.disabled=false;btn.textContent='↻ REFRESH';}
+}
+function updateProfileSummary(){
+  const vals=Object.values(ROSTER||{});
+  const total=document.getElementById('profile-total-count');
+  const bb=document.getElementById('profile-bb-count');
+  const pr=document.getElementById('profile-pr-count');
+  if(total) total.textContent=vals.length;
+  if(bb) bb.textContent=vals.filter(a=>a.team==='BB').length;
+  if(pr) pr.textContent=vals.filter(a=>a.team==='PR').length;
+}
 function renderProfileList(){
-  const search     = (document.getElementById('profile-search')||{value:''}).value.toLowerCase();
-  const teamFilter = (document.getElementById('profile-team-filter')||{value:'all'}).value;
-  const container  = document.getElementById('profile-list');
+  const search=(document.getElementById('profile-search')?.value||'').toLowerCase().trim();
+  const teamFilter=document.getElementById('profile-team-filter')?.value||'all';
+  const container=document.getElementById('profile-list');
   if(!container) return;
 
-  const agents = Object.values(ROSTER)
-    .filter(a => (teamFilter==='all'||a.team===teamFilter)
-              && (!search || a.name.toLowerCase().includes(search)))
-    .sort((a,b)=>a.name.localeCompare(b.name));
+  const agents=Object.values(ROSTER||{}).filter(a=>{
+    const blob=[a.name,a.userId,a.ytelName,a.shift,a.lunch].join(' ').toLowerCase();
+    return (teamFilter==='all'||a.team===teamFilter) && (!search||blob.includes(search));
+  }).sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));
 
-  if(!agents.length){
-    container.innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;font-size:0.82rem;">No agents found.</div>';
-    return;
-  }
+  updateProfileSummary();
+  if(!agents.length){container.innerHTML='<div class="profile-empty-list">No matching agent profiles found.</div>';return;}
 
-  container.innerHTML = agents.map(a=>{
-    const uid = a.userId || Object.keys(ROSTER).find(k=>ROSTER[k]===a) || '';
-    const teamColor = a.team==='BB'?'var(--accent)':'var(--purple)';
-    const isSelected = uid === selectedProfileId;
-    return `<div
-      style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid #0f1e35;cursor:pointer;background:${isSelected?'#0d1a30':'transparent'};transition:background 0.12s;"
-      onmouseover="this.style.background='#0a1424'" onmouseout="this.style.background='${isSelected?'#0d1a30':'transparent'}'">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;" onclick="openRepProfile('${uid}','${a.name.replace(/'/g,"\\'")}','${a.team}','${(a.shift||'').replace(/'/g,"\\'")}')">
-        <span style="font-size:0.65rem;font-weight:800;color:${teamColor};min-width:24px;">${a.team}</span>
-        <div>
-          <div style="font-weight:700;font-size:0.85rem;color:var(--text);">${a.name}</div>
-          <div style="font-size:0.65rem;color:var(--muted);">${a.shift||'No shift set'} ${a.lunch?'· '+a.lunch:''}</div>
-        </div>
+  container.innerHTML=agents.map(a=>{
+    const uid=String(a.userId||'');
+    const selected=uid===String(selectedProfileId||'');
+    const status=String(a.status||'Agent');
+    const statusCls=status.toLowerCase()==='trainee'?'trainee':'agent';
+    return `<div class="profile-row ${selected?'selected':''}" data-profile-id="${profileSafe(uid)}" onclick="selectProfile(this.dataset.profileId)">
+      <div class="profile-avatar-sm">${profileSafe(profileInitials(a.name))}</div>
+      <div style="min-width:0;">
+        <div class="profile-row-name">${profileSafe(a.name)}</div>
+        <div class="profile-row-meta">ID ${profileSafe(uid)} · ${profileSafe(a.shift||'No shift')} ${a.lunch?'· Lunch '+profileSafe(a.lunch):''}</div>
+        <div class="profile-row-tags"><span class="profile-tag ${a.team==='PR'?'pr':'bb'}">${a.team==='PR'?'Providence':'Berbice'}</span><span class="profile-tag ${statusCls}">${profileSafe(status)}</span>${a.ytelName?`<span class="profile-tag">${profileSafe(a.ytelName)}</span>`:''}</div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-size:0.65rem;color:var(--muted);">ID: ${uid}</span>
-        <button onclick="event.stopPropagation();selectProfile('${uid}')"
-          style="padding:3px 10px;border-radius:6px;border:1px solid #2a3a5a;background:#0d1424;color:#64748b;font-size:0.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:800;cursor:pointer;letter-spacing:1px;">
-          ✏️ EDIT
-        </button>
+      <div class="profile-row-actions">
+        <button type="button" class="profile-mini-btn primary" data-id="${profileSafe(uid)}" onclick="event.stopPropagation();selectProfile(this.dataset.id)">✏ EDIT</button>
+        <button type="button" class="profile-mini-btn" data-id="${profileSafe(uid)}" onclick="event.stopPropagation();openRepProfileById(this.dataset.id)">VIEW</button>
       </div>
     </div>`;
   }).join('');
 }
 
-function selectProfile(userId){
-  selectedProfileId = String(userId);
+async function selectProfile(userId, options={}){
+  const uid=String(userId||'').trim();
+  if(!uid) return;
+  selectedProfileId=uid;
   renderProfileList();
 
-  const agent = ROSTER[userId] || ROSTER[String(userId)];
-  if(!agent){ console.warn('Agent not found:', userId); return; }
+  const panel=document.getElementById('profile-edit-panel');
+  const empty=document.getElementById('profile-edit-empty');
+  const statusEl=document.getElementById('pe-save-status');
+  if(empty) empty.style.display='none';
+  if(panel) panel.style.display='block';
+  if(statusEl){statusEl.style.color='var(--muted)';statusEl.textContent='Loading latest Firebase profile...';}
 
-  const uid = agent.userId || userId;
-  document.getElementById('pe-name').textContent  = agent.name;
-  document.getElementById('pe-meta').textContent  = (agent.team==='BB'?'Berbice (BB)':'Providence (PR)')+' · ID: '+uid;
+  try{
+    await ensureFirebaseAuth();
+    const snap=await db.collection('roster').doc(uid).get();
+    if(!snap.exists) throw new Error('This profile no longer exists in Firebase.');
+    const raw=snap.data()||{};
+    const agent={
+      userId:uid,
+      name:String(raw.name||raw.Name||ROSTER[uid]?.name||'').trim(),
+      team:normalizeTeam(raw.team||ROSTER[uid]?.team||'BB'),
+      ytelName:String(raw.ytelName||raw.ytelname||ROSTER[uid]?.ytelName||'').trim(),
+      shift:String(raw.shift||ROSTER[uid]?.shift||'').trim(),
+      lunch:String(raw.lunch||ROSTER[uid]?.lunch||'').trim(),
+      brk:String(raw.brk||raw.break||ROSTER[uid]?.brk||'').trim(),
+      status:String(raw.status||ROSTER[uid]?.status||'Agent').trim()||'Agent'
+    };
+    selectedProfileSnapshot={...agent};
+    if(agent.status.toLowerCase()!=='inactive') ROSTER[uid]={...agent};
 
-  // Shift — fuzzy match to dropdown option
-  const shiftSel = document.getElementById('pe-shift');
-  const shiftVal = (agent.shift||'').toLowerCase().replace(/\s+/g,'');
-  let shiftMatched = '';
-  Array.from(shiftSel.options).forEach(opt=>{
-    if(opt.value && opt.value.toLowerCase().replace(/\s+/g,'') === shiftVal) shiftMatched = opt.value;
-  });
-  shiftSel.value = shiftMatched || agent.shift || '';
+    document.getElementById('pe-name').textContent=agent.name||'Unnamed Agent';
+    document.getElementById('pe-meta').textContent=(agent.team==='PR'?'Providence (PR)':'Berbice (BB)')+' · ID '+uid+' · Live Firebase record';
+    document.getElementById('pe-full-name').value=agent.name;
+    document.getElementById('pe-id').value=uid;
+    document.getElementById('pe-team').value=agent.team==='PR'?'PR':'BB';
+    document.getElementById('pe-ytel').value=agent.ytelName;
 
-  document.getElementById('pe-lunch').value       = agent.lunch  || '';
-  document.getElementById('pe-status').value      = agent.status || 'Agent';
-  document.getElementById('pe-save-status').textContent = '';
-
-  document.getElementById('pe-break').value = agent.brk || '';
-  db.collection('roster').doc(String(uid)).get().then(snap=>{
-    if(snap.exists && snap.data().brk)
-      document.getElementById('pe-break').value = snap.data().brk;
-  }).catch(()=>{});
-
-  document.getElementById('profile-edit-panel').style.display='';
-  document.getElementById('profile-edit-panel').scrollIntoView({behavior:'smooth',block:'nearest'});
+    const shiftSel=document.getElementById('pe-shift');
+    const exact=Array.from(shiftSel.options).find(opt=>opt.value.toLowerCase().replace(/\s+/g,'')===agent.shift.toLowerCase().replace(/\s+/g,''));
+    if(agent.shift && !exact && !Array.from(shiftSel.options).some(o=>o.value===agent.shift)){
+      const opt=document.createElement('option');opt.value=agent.shift;opt.textContent=agent.shift+' (saved)';shiftSel.appendChild(opt);
+    }
+    shiftSel.value=exact?.value||agent.shift||'';
+    document.getElementById('pe-lunch').value=agent.lunch;
+    document.getElementById('pe-break').value=agent.brk;
+    const statusSel=document.getElementById('pe-status');
+    if(!Array.from(statusSel.options).some(o=>o.value===agent.status)){
+      const opt=document.createElement('option');opt.value=agent.status;opt.textContent=agent.status;statusSel.appendChild(opt);
+    }
+    statusSel.value=agent.status;
+    if(statusEl) statusEl.textContent='';
+    renderProfileList();
+    if(!options.keepScroll) document.getElementById('profile-editor-card')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }catch(e){
+    if(statusEl){statusEl.style.color='var(--red)';statusEl.textContent='❌ '+(e.message||e);}
+  }
 }
-
-function filterProfileList(){
-  renderProfileList();
-  closeProfileEdit();
-}
-
+function filterProfileList(){renderProfileList();}
 function closeProfileEdit(){
-  selectedProfileId = null;
-  document.getElementById('profile-edit-panel').style.display='none';
+  selectedProfileId=null;selectedProfileSnapshot=null;
+  const panel=document.getElementById('profile-edit-panel');if(panel)panel.style.display='none';
+  const empty=document.getElementById('profile-edit-empty');if(empty)empty.style.display='grid';
   renderProfileList();
+}
+function openRepProfileById(userId){
+  const uid=String(userId||'').trim();
+  const a=ROSTER[uid];
+  if(a) openRepProfile(uid,a.name,a.team,a.shift||'');
+}
+function openSelectedProfile(){if(selectedProfileId) openRepProfileById(selectedProfileId);}
+
+async function syncProfileLiveViews(uid, previous, updated){
+  const now=firebase.firestore.FieldValue.serverTimestamp();
+  const today=getTodayGY();
+  const patchIfExists=async(collection,docId,payload)=>{
+    try{
+      const ref=db.collection(collection).doc(docId);
+      const snap=await ref.get();
+      if(snap.exists) await ref.set(payload,{merge:true});
+    }catch(e){ console.warn('Profile live-sync skipped for '+collection+':',e); }
+  };
+  await Promise.allSettled([
+    patchIfExists('attendance',uid+'_'+today,{name:updated.name,team:updated.team,shift:updated.shift,updatedAt:now}),
+    patchIfExists('sessions',uid+'_'+today,{name:updated.name,team:updated.team,updatedAt:now}),
+    patchIfExists('taps',uid+'_'+today,{name:updated.name,team:updated.team,updatedAt:now})
+  ]);
+
+  const oldName=String(previous?.name||'').toLowerCase().trim();
+  let reportChanged=false;
+  (statsData||[]).forEach(row=>{
+    const rowId=String(row.ytelId||row.userId||row.id||'').trim();
+    const rowName=String(row.name||'').toLowerCase().trim();
+    if(rowId===uid || (oldName && rowName===oldName)){
+      if(row.team!==updated.team || row.name!==updated.name) reportChanged=true;
+      row.team=updated.team;
+      row.name=updated.name;
+    }
+  });
+  if(reportChanged && statsDataDate===today){
+    const statsJSON=JSON.stringify(statsData);
+    await db.collection('reports').doc(today).set({statsJSON,profileAssignmentsUpdatedAt:now},{merge:true});
+    const hist=Array.isArray(reportHistory)?reportHistory.find(r=>r&&r.date===today):null;
+    if(hist) hist.statsJSON=statsJSON;
+  }
+
+  if(typeof updateGoalBars==='function') updateGoalBars();
+  if(typeof refreshBreakdownIfOpen==='function') refreshBreakdownIfOpen();
+  if(typeof renderStatsTable==='function') renderStatsTable();
+  if(typeof renderLeaderboard==='function') renderLeaderboard();
+  if(typeof renderAttTable==='function') renderAttTable();
+  if(typeof wpAllReports!=='undefined') wpAllReports=[];
+  if(typeof wpWeekRanges!=='undefined') wpWeekRanges=[];
+  const ov=document.getElementById('admin-overview');if(ov&&ov.style.display!=='none'&&typeof loadAdminOverview==='function') loadAdminOverview();
 }
 
 async function saveProfileEdits(){
   if(!selectedProfileId) return;
-  const agent = ROSTER[selectedProfileId];
-  const statusEl = document.getElementById('pe-save-status');
-  if(!agent){ statusEl.textContent='❌ Agent not found'; return; }
+  const uid=String(selectedProfileId);
+  const statusEl=document.getElementById('pe-save-status');
+  const saveBtn=document.getElementById('pe-save-btn');
+  const previous=selectedProfileSnapshot || ROSTER[uid] || {};
 
-  const uid       = String(agent.userId || selectedProfileId);
-  const newShift  = document.getElementById('pe-shift').value.trim();
-  const newLunch  = document.getElementById('pe-lunch').value.trim();
-  const newBreak  = document.getElementById('pe-break').value.trim();
-  const newStatus = document.getElementById('pe-status').value.trim() || 'Agent';
-  const saveBtn   = document.querySelector('#profile-edit-panel button[onclick="saveProfileEdits()"]');
+  const updated={
+    userId:uid,
+    name:document.getElementById('pe-full-name').value.trim(),
+    team:normalizeTeam(document.getElementById('pe-team').value),
+    ytelName:document.getElementById('pe-ytel').value.trim(),
+    shift:document.getElementById('pe-shift').value.trim(),
+    lunch:document.getElementById('pe-lunch').value.trim(),
+    brk:document.getElementById('pe-break').value.trim(),
+    status:document.getElementById('pe-status').value.trim()||'Agent'
+  };
+  if(!updated.name){statusEl.style.color='var(--red)';statusEl.textContent='⚠ Full name cannot be blank.';return;}
+  if(updated.team!=='BB'&&updated.team!=='PR'){statusEl.style.color='var(--red)';statusEl.textContent='⚠ Select a valid team.';return;}
+  updated.ytelName=profileNormalizeYtel(updated.name,updated.team,updated.ytelName);
+  document.getElementById('pe-ytel').value=updated.ytelName;
 
-  const updates = [];
-  if(newShift !== (agent.shift||'')) updates.push('Shift');
-  if(newLunch !== (agent.lunch||'')) updates.push('Lunch');
-  if(newBreak !== (agent.brk||'')) updates.push('Break');
-  if(newStatus !== (agent.status||'')) updates.push('Status');
+  const fields=[['name','Name'],['team','Team'],['ytelName','Ytel Name'],['shift','Shift'],['lunch','Lunch'],['brk','Break'],['status','Status']];
+  const changed=fields.filter(([k])=>String(updated[k]||'')!==String(previous[k]||'')).map(([,label])=>label);
+  if(!changed.length){statusEl.style.color='var(--muted)';statusEl.textContent='No changes detected — profile is already up to date.';setTimeout(()=>{if(statusEl)statusEl.textContent='';},2500);return;}
 
-  if(!updates.length){
-    statusEl.textContent='No changes detected.';
-    statusEl.style.color='#64748b';
-    setTimeout(()=>{ statusEl.textContent=''; },2000);
-    return;
+  if(updated.status.toLowerCase()==='inactive'){
+    const ok=confirm('Mark '+updated.name+' as Inactive?\n\nThe agent will be removed from the active roster list, but historical records will remain.');
+    if(!ok) return;
   }
 
-  if(saveBtn){ saveBtn.disabled=true; saveBtn.textContent='⏳ SAVING TO FIREBASE...'; saveBtn.style.opacity='0.7'; }
-  statusEl.textContent='Saving to Firebase...';
-  statusEl.style.color='#64748b';
-
+  if(saveBtn){saveBtn.disabled=true;saveBtn.textContent='⏳ Saving Profile...';}
+  statusEl.style.color='var(--muted)';statusEl.textContent='Saving '+changed.join(', ')+' to Firebase...';
   try{
     await ensureFirebaseAuth();
-    await db.collection('roster').doc(uid).set({
-      userId: uid,
-      shift: newShift,
-      lunch: newLunch,
-      brk: newBreak,
-      status: newStatus,
-      inactive: newStatus.toLowerCase()==='inactive',
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    }, {merge:true});
+    const now=firebase.firestore.FieldValue.serverTimestamp();
+    const payload={
+      ...updated,
+      inactive:updated.status.toLowerCase()==='inactive',
+      updatedAt:now,
+      profileUpdatedAt:now,
+      profileUpdatedBy:currentUser?.name||currentUser?.username||'Admin'
+    };
+    if(updated.team!==previous.team){
+      payload.teamOverride=true;payload.teamSource='admin-profile';payload.teamUpdatedAt=now;
+    }
+    await db.collection('roster').doc(uid).set(payload,{merge:true});
 
-    if(newStatus.toLowerCase()==='inactive'){
-      delete ROSTER[selectedProfileId];
-      statusEl.textContent='✅ Agent set to Inactive in Firebase';
-      statusEl.style.color='#34d399';
-      setTimeout(()=>closeProfileEdit(), 700);
-    } else {
-      ROSTER[selectedProfileId] = {...agent, shift:newShift, lunch:newLunch, brk:newBreak, status:newStatus};
-      statusEl.textContent='✅ '+updates.join(', ')+' saved to Firebase';
-      statusEl.style.color='#34d399';
-      renderProfileList();
-      setTimeout(()=>{ statusEl.textContent=''; },4000);
+    if(updated.status.toLowerCase()==='inactive') delete ROSTER[uid];
+    else ROSTER[uid]={...updated};
+    selectedProfileSnapshot={...updated};
+    if(typeof getRosterFingerprint==='function') rosterPollHash=getRosterFingerprint();
+
+    await syncProfileLiveViews(uid,previous,updated);
+
+    if(currentRepProfile && String(currentRepProfile.id)===uid){
+      Object.assign(currentRepProfile,{name:updated.name,team:updated.team,shift:updated.shift,lunch:updated.lunch,brk:updated.brk,status:updated.status,ytelName:updated.ytelName});
+    }
+    if(currentUser && String(currentUser.id)===uid){
+      Object.assign(currentUser,{name:updated.name,team:updated.team,shift:updated.shift,lunch:updated.lunch,brk:updated.brk,status:updated.status,ytelName:updated.ytelName});
+      sessionStorage.setItem('bds_user_'+getTodayGY(),JSON.stringify(currentUser));
+      showDashboard();
     }
 
-    if(saveBtn){
-      saveBtn.disabled=false;
-      saveBtn.style.opacity='1';
-      saveBtn.innerHTML='✅ DONE — SAVED TO FIREBASE';
-      setTimeout(()=>{ if(saveBtn) saveBtn.innerHTML='💾 SAVE ALL CHANGES TO FIREBASE'; },3000);
-    }
+    statusEl.style.color='var(--green)';statusEl.textContent='✅ Saved: '+changed.join(', ')+'. Firebase and live dashboard views are synchronized.';
+    renderProfileList();updateProfileSummary();
+    document.getElementById('pe-name').textContent=updated.name;
+    document.getElementById('pe-meta').textContent=(updated.team==='PR'?'Providence (PR)':'Berbice (BB)')+' · ID '+uid+' · Saved to Firebase';
+    if(updated.status.toLowerCase()==='inactive') setTimeout(()=>closeProfileEdit(),900);
   }catch(e){
-    statusEl.textContent='❌ Firebase save failed: '+(e.message || e);
-    statusEl.style.color='#f87171';
-    if(saveBtn){ saveBtn.disabled=false; saveBtn.style.opacity='1'; saveBtn.textContent='⚠️ RETRY SAVE'; }
+    console.error('Profile save failed:',e);
+    statusEl.style.color='var(--red)';statusEl.textContent='❌ Firebase save failed: '+(e.message||e);
+  }finally{
+    if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='💾 Save Profile Changes';}
   }
 }
-
 
 // ══════════════════════════════════════════════
 //  ROSE-ONLY MISSING-STATS + RESTORABLE ARCHIVE MANAGER
@@ -8260,62 +8368,71 @@ function filterStatsTable(){ renderStatsTable(); }
 // ══════════════════════════════════════════════
 
 async function openRepProfile(id,name,team,shift){
-  // Always resolve full agent from ROSTER — id may be empty or stale (e.g. stats table)
-  const rAll = Object.values(ROSTER);
-  const rKeys = Object.keys(ROSTER);
-  let rAgent = (id && id!=='') ? ROSTER[String(id)] : null;
-  if(!rAgent && name){
-    const nl = name.toLowerCase();
-    rAgent = rAll.find(r=>r.name.toLowerCase()===nl)
-          || rAll.find(r=>r.name.toLowerCase().includes(nl.split(' ')[0]) && r.name.toLowerCase().includes(nl.split(' ').slice(-1)[0]));
+  // Resolve from the live in-memory roster first, then refresh the full profile from Firebase.
+  const rAll=Object.values(ROSTER||{});
+  const rKeys=Object.keys(ROSTER||{});
+  let rAgent=(id&&id!=='')?ROSTER[String(id)]:null;
+  if(!rAgent&&name){
+    const nl=String(name).toLowerCase().trim();
+    rAgent=rAll.find(r=>String(r.name||'').toLowerCase().trim()===nl)
+      || rAll.find(r=>{
+        const rn=String(r.name||'').toLowerCase();
+        const parts=nl.split(/\s+/).filter(Boolean);
+        return parts.length&&rn.includes(parts[0])&&rn.includes(parts[parts.length-1]);
+      });
   }
-  // Get the actual userId key from ROSTER map
-  const resolvedId = rAgent
-    ? String(rKeys.find(k=>ROSTER[k]===rAgent)||id||'')
-    : String(id||'');
+  const resolvedId=rAgent?String(rKeys.find(k=>ROSTER[k]===rAgent)||id||''):String(id||'');
 
-  // Pull break time from Firebase
-  let brk = '';
-  if(resolvedId && resolvedId!==''&&resolvedId!=='unknown'){
+  let fresh={};
+  if(resolvedId&&resolvedId!=='unknown'){
     try{
-      const bSnap = await db.collection('roster').doc(resolvedId).get();
-      if(bSnap.exists) brk = bSnap.data().brk||'';
-    }catch(e){}
+      await ensureFirebaseAuth();
+      const snap=await db.collection('roster').doc(resolvedId).get();
+      if(snap.exists) fresh=snap.data()||{};
+    }catch(e){console.warn('Could not refresh agent profile from Firebase:',e);}
   }
 
-  currentRepProfile = {
-    id:     resolvedId,
-    name:   rAgent ? rAgent.name   : name,
-    team:   rAgent ? rAgent.team   : (team||'BB'),
-    shift:  rAgent ? rAgent.shift  : (shift||''),
-    lunch:  rAgent ? rAgent.lunch  : '',
-    brk,
-    status: rAgent ? (rAgent.status||'Agent') : 'Agent'
+  const freshTeam=normalizeTeam(fresh.team||rAgent?.team||team||'BB');
+  currentRepProfile={
+    id:resolvedId,
+    name:String(fresh.name||rAgent?.name||name||'Agent').trim(),
+    team:freshTeam==='PR'?'PR':'BB',
+    ytelName:String(fresh.ytelName||fresh.ytelname||rAgent?.ytelName||'').trim(),
+    shift:String(fresh.shift||rAgent?.shift||shift||'').trim(),
+    lunch:String(fresh.lunch||rAgent?.lunch||'').trim(),
+    brk:String(fresh.brk||fresh.break||rAgent?.brk||'').trim(),
+    status:String(fresh.status||rAgent?.status||'Agent').trim()||'Agent'
   };
+  if(resolvedId && currentRepProfile.status.toLowerCase()!=='inactive') ROSTER[resolvedId]={...currentRepProfile,userId:resolvedId};
 
-  const p = currentRepProfile;
-  const teamFull = p.team==='BB'?'Berbice':p.team==='PR'?'Providence':(p.team||'—');
-  document.getElementById('rp-name').textContent          = p.name;
-  document.getElementById('ap-avatar').textContent        = p.name.split(' ').map(x=>x[0]||'').join('').substring(0,2).toUpperCase();
-  document.getElementById('rp-meta').textContent          = 'ID: '+(resolvedId||'—')+' · Lunch: '+(p.lunch||'—');
-  document.getElementById('ap-team-badge').textContent    = p.team+' · '+teamFull;
-  document.getElementById('ap-status-badge').textContent  = p.status;
-  document.getElementById('ap-shift-badge').textContent   = p.shift||'No shift';
+  const p=currentRepProfile;
+  const teamFull=p.team==='BB'?'Berbice':'Providence';
+  document.getElementById('rp-name').textContent=p.name;
+  document.getElementById('ap-avatar').textContent=profileInitials(p.name);
+  document.getElementById('rp-meta').textContent='ID: '+(resolvedId||'—')+' · Lunch: '+(p.lunch||'—')+(p.ytelName?' · '+p.ytelName:'');
+  document.getElementById('ap-team-badge').textContent=p.team+' · '+teamFull;
+  document.getElementById('ap-status-badge').textContent=p.status;
+  document.getElementById('ap-shift-badge').textContent=p.shift||'No shift';
+  const editBtn=document.getElementById('ap-edit-profile-btn');
+  if(editBtn) editBtn.style.display=currentUser?.isAdmin?'inline-flex':'none';
 
   document.getElementById('rep-profile-overlay').classList.add('open');
   document.body.style.overflow='hidden';
 
-  // Pre-load monthly cache if not yet populated (so attendance data shows immediately)
-  if(Object.keys(monthlyCache).length === 0){
+  if(Object.keys(monthlyCache).length===0){
     loadMonthlyAttendance().catch(()=>{}).then(()=>{
-      // Refresh overview after monthly loads if still on that tab
-      if(currentRepProfile && document.getElementById('apt-overview')?.classList.contains('active')){
-        apLoadOverview(currentRepProfile.id, currentRepProfile.name);
-      }
+      if(currentRepProfile&&document.getElementById('apt-overview')?.classList.contains('active')) apLoadOverview(currentRepProfile.id,currentRepProfile.name);
     });
   }
+  apTab('overview',document.getElementById('apt-overview'));
+}
 
-  apTab('overview', document.getElementById('apt-overview'));
+function editCurrentRepProfileFromOverlay(){
+  if(!currentUser?.isAdmin||!currentRepProfile?.id) return;
+  const uid=String(currentRepProfile.id);
+  closeRepProfile();
+  switchAdminTab('profiles',document.getElementById('atab-profiles'));
+  setTimeout(()=>selectProfile(uid),80);
 }
 
 function closeRepProfile(){
