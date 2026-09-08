@@ -13,6 +13,7 @@
 <script src="js/firebase-config.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/schedule-professional.css">
 </head>
 <body>
 
@@ -358,62 +359,98 @@
 
     <!-- ── SCHEDULE TAB ── -->
     <div id="ap-schedule" style="display:none;">
-      <div class="ap-card">
-        <div class="ap-card-title">⏰ SHIFT &amp; SCHEDULE — saves directly to Google Sheet</div>
-
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          <div style="background:#060b18;border:1px solid #1a2540;border-radius:10px;padding:14px;">
-            <div style="font-size:0.55rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#60a5fa;margin-bottom:8px;">Shift Time</div>
-            <div class="ap-input-row">
-              <select id="rp-shift-input" class="ap-input"
-                onfocus="this.style.borderColor='#60a5fa'" onblur="this.style.borderColor='#2a3a5a'">
-                <option value="">— Select shift —</option>
-                <option value="10:00AM - 7:00PM">10:00AM - 7:00PM</option>
-                <option value="11:00am-8:00pm">11:00am-8:00pm</option>
-                <option value="11:45am-9:00pm">11:45am-9:00pm</option>
-                <option value="13:00pm - 22:00pm">13:00pm - 22:00pm</option>
-              </select>
-              <button class="ap-save-btn" onclick="saveRosterField('shift')">💾 Save</button>
-            </div>
-            <div id="rp-shift-status" class="ap-field-status"></div>
+      <div class="ap-card schedule-pro-shell">
+        <div class="schedule-pro-header">
+          <div>
+            <div class="schedule-pro-eyebrow">Agent Management</div>
+            <div class="schedule-pro-title">Schedule &amp; Team Assignment</div>
+            <div class="schedule-pro-subtitle">Manage the agent's work hours and branch assignment from one place.</div>
           </div>
-
-          <div style="background:#060b18;border:1px solid #1a2540;border-radius:10px;padding:14px;">
-            <div style="font-size:0.55rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#34d399;margin-bottom:8px;">Lunch Time</div>
-            <div class="ap-input-row">
-              <input id="rp-lunch-input" type="text" placeholder="e.g. 3:30-4:00 pm" class="ap-input"
-                onfocus="this.style.borderColor='#34d399'" onblur="this.style.borderColor='#2a3a5a'">
-              <button class="ap-save-btn" onclick="saveRosterField('lunch')" style="background:#064020;color:#34d399;">💾 Save</button>
-            </div>
-            <div id="rp-lunch-status" class="ap-field-status"></div>
-          </div>
-
-          <div style="background:#060b18;border:1px solid #1a2540;border-radius:10px;padding:14px;">
-            <div style="font-size:0.55rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fbbf24;margin-bottom:8px;">Break Time <span style="opacity:0.5;">(Firebase only)</span></div>
-            <div class="ap-input-row">
-              <input id="rp-break-input" type="text" placeholder="e.g. 2:00-2:15 pm" class="ap-input"
-                onfocus="this.style.borderColor='#fbbf24'" onblur="this.style.borderColor='#2a3a5a'">
-              <button class="ap-save-btn" onclick="saveRosterField('break')" style="background:#1a1000;color:#fbbf24;">💾 Save</button>
-            </div>
-            <div id="rp-break-status" class="ap-field-status"></div>
-          </div>
-
-          <div style="background:#060b18;border:1px solid #1a2540;border-radius:10px;padding:14px;">
-            <div style="font-size:0.55rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#a78bfa;margin-bottom:8px;">Team Assignment</div>
-            <div class="ap-input-row">
-              <select id="rp-team-input" class="ap-input"
-                onfocus="this.style.borderColor='#a78bfa'" onblur="this.style.borderColor='#2a3a5a'">
-                <option value="">— Select team —</option>
-                <option value="BB">🏠 Berbice (BB)</option>
-                <option value="PR">🌴 Providence (PR)</option>
-              </select>
-              <button class="ap-save-btn" onclick="saveRosterField('team')" style="background:#160e2c;color:#a78bfa;">💾 Save</button>
-            </div>
-            <div id="rp-team-status" class="ap-field-status"></div>
-          </div>
+          <div class="schedule-sync-chip"><span class="schedule-sync-dot"></span> FIREBASE SYNC</div>
         </div>
-        <div style="font-size:0.6rem;color:#64748b;margin-top:12px;text-align:center;">
-          Shift &amp; Lunch &amp; Team → Google Sheet · Break → Firebase · Agent sees changes on next login
+
+        <div class="schedule-pro-body">
+          <div class="schedule-current-assignment">
+            <span class="schedule-current-label">Current Team Assignment</span>
+            <span id="rp-team-current" class="schedule-current-value">Loading…</span>
+          </div>
+
+          <div class="schedule-pro-grid">
+            <section class="schedule-pro-field" style="--field-accent:#60a5fa;">
+              <div class="schedule-field-head">
+                <span class="schedule-field-icon">🕐</span>
+                <div>
+                  <div class="schedule-field-label">Shift Time</div>
+                  <div class="schedule-field-hint">Primary working hours</div>
+                </div>
+              </div>
+              <div class="schedule-input-row">
+                <select id="rp-shift-input" class="ap-input">
+                  <option value="">Select shift</option>
+                  <option value="10:00AM - 7:00PM">10:00 AM – 7:00 PM</option>
+                  <option value="11:00am-8:00pm">11:00 AM – 8:00 PM</option>
+                  <option value="11:45am-9:00pm">11:45 AM – 9:00 PM</option>
+                  <option value="13:00pm - 22:00pm">1:00 PM – 10:00 PM</option>
+                </select>
+                <button class="schedule-save-btn" data-save-field="shift" onclick="saveRosterField('shift')">Save changes</button>
+              </div>
+              <div id="rp-shift-status" class="ap-field-status"></div>
+            </section>
+
+            <section class="schedule-pro-field" style="--field-accent:#34d399;">
+              <div class="schedule-field-head">
+                <span class="schedule-field-icon">🍽️</span>
+                <div>
+                  <div class="schedule-field-label">Lunch Time</div>
+                  <div class="schedule-field-hint">Scheduled lunch window</div>
+                </div>
+              </div>
+              <div class="schedule-input-row">
+                <input id="rp-lunch-input" type="text" placeholder="e.g. 3:00PM–3:45PM" class="ap-input">
+                <button class="schedule-save-btn" data-save-field="lunch" onclick="saveRosterField('lunch')">Save changes</button>
+              </div>
+              <div id="rp-lunch-status" class="ap-field-status"></div>
+            </section>
+
+            <section class="schedule-pro-field" style="--field-accent:#fbbf24;">
+              <div class="schedule-field-head">
+                <span class="schedule-field-icon">☕</span>
+                <div>
+                  <div class="schedule-field-label">Break Time</div>
+                  <div class="schedule-field-hint">Optional break window · Firebase</div>
+                </div>
+              </div>
+              <div class="schedule-input-row">
+                <input id="rp-break-input" type="text" placeholder="e.g. 2:00PM–2:15PM" class="ap-input">
+                <button class="schedule-save-btn" data-save-field="break" onclick="saveRosterField('break')">Save changes</button>
+              </div>
+              <div id="rp-break-status" class="ap-field-status"></div>
+            </section>
+
+            <section class="schedule-pro-field team-card">
+              <div class="schedule-field-head">
+                <span class="schedule-field-icon">🏢</span>
+                <div>
+                  <div class="schedule-field-label">Team Assignment</div>
+                  <div class="schedule-field-hint">Move the agent between branches immediately</div>
+                </div>
+              </div>
+              <div class="schedule-input-row">
+                <select id="rp-team-input" class="ap-input">
+                  <option value="">Select team</option>
+                  <option value="BB">🏠 Berbice (BB)</option>
+                  <option value="PR">🌴 Providence (PR)</option>
+                </select>
+                <button class="schedule-save-btn" data-save-field="team" onclick="saveRosterField('team')">Move &amp; save</button>
+              </div>
+              <div id="rp-team-status" class="ap-field-status"></div>
+            </section>
+          </div>
+
+          <div class="schedule-pro-footer">
+            <span>●</span>
+            <span><strong>Team changes now apply immediately</strong> to the roster, today's attendance/session, and the currently loaded stats report. No CSV re-upload is required.</span>
+          </div>
         </div>
       </div>
     </div>
@@ -493,6 +530,7 @@
 
 <!-- ── APP ── -->
 <script src="js/app.js"></script>
+<script src="js/team-schedule-fix.js"></script>
 
 </body>
 </html>

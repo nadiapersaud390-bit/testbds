@@ -1,0 +1,30 @@
+BDS TEAM ASSIGNMENT FIX
+=======================
+
+Fixed behavior
+--------------
+1. Manual Team Assignment is now persistent in Firebase using teamOverride=true.
+2. A roster refresh can no longer switch the agent back because of an old GUYB/GUYP prefix.
+3. When you move an agent between BB and PR, the currently-loaded stats row moves immediately.
+4. Today's attendance and session records are updated immediately.
+5. The saved current report is updated so other open admin sessions can refresh through the existing Firebase listener.
+6. No CSV re-upload is required just to apply the team move.
+7. Schedule screen redesigned into a cleaner, more professional layout.
+
+Files added
+-----------
+css/schedule-professional.css
+js/team-schedule-fix.js
+
+File changed
+------------
+index.html
+
+IMPORTANT ABOUT THE ZIP YOU UPLOADED
+------------------------------------
+The uploaded ZIP only contained README.md and index.html, but index.html references other required files such as:
+  js/app.js
+  js/firebase-config.js
+  css/styles.css
+
+Those original referenced files were NOT present in the uploaded ZIP. This fixed package therefore contains the drop-in repair files and the updated index.html, but it still needs to be placed over your FULL dashboard project that contains the rest of the existing js/css files.
