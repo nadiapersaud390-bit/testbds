@@ -855,33 +855,41 @@ body.lead-alert-open{overflow:hidden;}
 #page-admin{display:none !important;}
 body.is-admin #tab-admin{display:flex !important;}
 body.is-admin #page-admin.admin-page-active{display:flex !important;flex-direction:column;}
-.access-chat-page{padding:16px;max-width:980px;margin:0 auto;width:100%;}
-.access-chat-shell{background:linear-gradient(145deg,#0d1628,#09111f);border:1px solid #243754;border-radius:16px;overflow:hidden;box-shadow:0 12px 35px rgba(0,0,0,.25);}
-.access-chat-head{padding:18px 20px;border-bottom:1px solid #243754;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
-.access-chat-kicker{font-size:.58rem;letter-spacing:2px;font-weight:900;color:#38bdf8;text-transform:uppercase;}
+.access-chat-page{padding:20px;max-width:1120px;margin:0 auto;width:100%;}
+.access-chat-shell{background:linear-gradient(145deg,#0d1628,#09111f);border:1px solid #263c5d;border-radius:18px;overflow:hidden;box-shadow:0 16px 45px rgba(0,0,0,.3);}
+.access-chat-head{padding:19px 22px;border-bottom:1px solid #243754;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:linear-gradient(90deg,rgba(14,31,55,.8),rgba(9,17,31,.8));}
+.access-chat-brand{display:flex;align-items:center;gap:12px;}
+.access-chat-logo{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(145deg,#2563eb,#06b6d4);box-shadow:0 6px 20px rgba(14,165,233,.22);font-size:1.25rem;}
+.access-chat-kicker{font-size:.56rem;letter-spacing:2px;font-weight:900;color:#38bdf8;text-transform:uppercase;}
 .access-chat-title{font-family:'Barlow Condensed',sans-serif;font-size:1.55rem;font-weight:900;letter-spacing:1px;margin-top:2px;}
-.access-chat-sub{font-size:.72rem;color:var(--muted);margin-top:4px;}
-.access-live-pill{font-size:.62rem;color:var(--green);border:1px solid rgba(52,211,153,.35);background:rgba(52,211,153,.08);border-radius:20px;padding:6px 10px;font-weight:800;white-space:nowrap;}
-.access-chat-body{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;padding:14px;}
-.access-messages{height:430px;overflow:auto;padding:4px 2px;display:flex;flex-direction:column;gap:8px;}
+.access-chat-sub{font-size:.7rem;color:var(--muted);margin-top:4px;}
+.access-chat-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.access-live-pill,.access-open-pill{font-size:.6rem;border-radius:20px;padding:7px 10px;font-weight:900;white-space:nowrap;letter-spacing:.4px;}
+.access-live-pill{color:var(--green);border:1px solid rgba(52,211,153,.35);background:rgba(52,211,153,.08);}
+.access-open-pill{color:#fbbf24;border:1px solid rgba(251,191,36,.35);background:rgba(251,191,36,.08);}
+.access-chat-body{padding:16px;background:rgba(4,10,20,.22);}
+.access-messages{height:455px;overflow:auto;padding:16px 14px;display:flex;flex-direction:column;gap:14px;background:#070f1d;border:1px solid #1b304e;border-radius:14px;}
 .access-empty{height:100%;display:grid;place-items:center;text-align:center;color:var(--muted);font-size:.75rem;padding:30px;}
-.access-msg{background:#111e33;border:1px solid #253b5e;border-radius:12px;padding:10px 12px;max-width:88%;align-self:flex-start;}
-.access-msg.mine{align-self:flex-end;background:rgba(59,130,246,.14);border-color:rgba(96,165,250,.35);}
-.access-msg.admin{border-color:rgba(251,191,36,.35);}
-.access-msg-meta{font-size:.62rem;color:#93c5fd;font-weight:800;margin-bottom:5px;}
+.access-msg{position:relative;background:#111e33;border:1px solid #253b5e;border-radius:5px 14px 14px 14px;padding:11px 14px 10px 50px;max-width:78%;min-width:210px;align-self:flex-start;box-shadow:0 4px 12px rgba(0,0,0,.12);}
+.access-msg.mine{align-self:flex-end;background:linear-gradient(145deg,rgba(30,86,160,.34),rgba(18,57,108,.28));border-color:rgba(96,165,250,.45);border-radius:14px 5px 14px 14px;}
+.access-msg.admin{border-color:rgba(251,191,36,.4);background:linear-gradient(145deg,rgba(73,54,18,.3),rgba(17,30,51,.9));}
+.access-msg-avatar{position:absolute;left:12px;top:12px;width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#24518a;color:#fff;font:900 .65rem 'Barlow Condensed',sans-serif;text-transform:uppercase;}
+.access-msg.admin .access-msg-avatar{background:#8b6414;color:#fff;}
+.access-msg-meta{font-size:.7rem;color:#dbeafe;font-weight:900;margin-bottom:6px;letter-spacing:.2px;}
 .access-msg.admin .access-msg-meta{color:var(--gold);}
-.access-msg-text{font-size:.82rem;line-height:1.35;white-space:pre-wrap;word-break:break-word;}
+.access-msg-text{font-size:.8rem;line-height:1.45;white-space:pre-wrap;word-break:break-word;color:#e5edf8;}
 .access-msg-time{font-size:.56rem;color:var(--muted);margin-top:6px;text-align:right;}
-.access-compose,.access-status-card{background:#0b1424;border:1px solid #203450;border-radius:12px;padding:13px;}
-.access-compose-title{font-size:.65rem;font-weight:900;letter-spacing:1.5px;color:#c4b5fd;text-transform:uppercase;margin-bottom:10px;}
-.access-label{font-size:.58rem;color:var(--muted);font-weight:800;letter-spacing:1px;text-transform:uppercase;display:block;margin:9px 0 5px;}
+.access-compose{background:#0b1424;border:1px solid #294263;border-radius:14px;padding:13px;margin-top:13px;box-shadow:0 6px 18px rgba(0,0,0,.14);}
+.access-compose-title{font-size:.65rem;font-weight:900;letter-spacing:1.5px;color:#c4b5fd;text-transform:uppercase;margin-bottom:9px;}
+.access-compose-user{font-size:.62rem;color:var(--muted);margin-bottom:9px;}
+.access-compose-user strong{color:#dbeafe;}
 .access-input,.access-select{width:100%;background:#080f1d;color:var(--text);border:1px solid #2a4163;border-radius:8px;padding:10px;font:700 .78rem 'Barlow Condensed',sans-serif;outline:none;}
 .access-input:focus,.access-select:focus{border-color:#38bdf8;}
-.access-textarea{min-height:105px;resize:vertical;letter-spacing:.2px;}
-.access-send-btn{width:100%;border:0;border-radius:8px;padding:11px;margin-top:10px;background:linear-gradient(90deg,#2563eb,#38bdf8);color:#03111f;font:900 .76rem 'Barlow Condensed',sans-serif;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;}
+.access-composer-row{display:grid;grid-template-columns:190px minmax(0,1fr) 180px;gap:8px;align-items:end;}
+.access-textarea{min-height:42px;height:42px;resize:none;letter-spacing:.2px;}
+.access-send-btn{width:100%;border:0;border-radius:8px;padding:12px;margin:0;background:linear-gradient(90deg,#2563eb,#38bdf8);color:#03111f;font:900 .76rem 'Barlow Condensed',sans-serif;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;height:42px;}
 .access-send-btn:disabled{opacity:.55;cursor:not-allowed;}
-.access-status-card{margin-top:12px;font-size:.68rem;color:var(--muted);line-height:1.45;}
-.access-status-card strong{color:var(--text);}
+.access-compose-note{font-size:.6rem;color:var(--muted);margin-top:7px;}
 .access-request-tag{display:inline-block;font-size:.54rem;letter-spacing:1px;color:#fbbf24;border:1px solid rgba(251,191,36,.35);border-radius:10px;padding:2px 6px;margin-left:6px;text-transform:uppercase;}
 .access-admin-alert{position:fixed;right:18px;bottom:18px;z-index:8500;display:none;width:min(390px,calc(100vw - 36px));background:linear-gradient(145deg,#1c1608,#111827);border:1px solid rgba(251,191,36,.65);border-radius:14px;padding:14px;box-shadow:0 14px 45px rgba(0,0,0,.55);}
 .access-admin-alert.show{display:block;animation:accessAlertIn .25s ease-out;}
@@ -890,7 +898,7 @@ body.is-admin #page-admin.admin-page-active{display:flex !important;flex-directi
 .access-admin-alert-actions{display:flex;gap:7px;margin-top:10px;}
 .access-admin-alert-actions button{border-radius:7px;padding:7px 10px;border:1px solid rgba(251,191,36,.4);background:rgba(251,191,36,.12);color:#fbbf24;font:800 .62rem 'Barlow Condensed',sans-serif;cursor:pointer;}
 @keyframes accessAlertIn{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
-@media(max-width:760px){.access-chat-body{grid-template-columns:1fr}.access-messages{height:360px}.access-msg{max-width:94%}}
+@media(max-width:760px){.access-chat-page{padding:10px}.access-chat-head{padding:15px}.access-messages{height:390px;padding:12px 8px}.access-msg{max-width:94%;min-width:0}.access-composer-row{grid-template-columns:1fr}.access-textarea{height:70px}.access-send-btn{height:42px}}
 .admin-tab-btn{padding:14px 10px;border-radius:10px;border:1.5px solid rgba(251,191,36,0.4);font-family:'Barlow Condensed',sans-serif;font-size:0.95rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.18s;background:rgba(251,191,36,0.08);color:var(--gold);align-items:center;justify-content:center;gap:6px;white-space:nowrap;}
 .admin-tab-btn:hover{background:rgba(251,191,36,0.15);}
 .admin-tab-btn.active{background:rgba(251,191,36,0.18);border-color:var(--gold);box-shadow:0 0 14px rgba(251,191,36,0.25);}
@@ -2483,32 +2491,37 @@ input, textarea, select { color-scheme: dark; }
     <div class="access-chat-page">
       <div class="access-chat-shell">
         <div class="access-chat-head">
-          <div>
-            <div class="access-chat-kicker">Firebase live group channel</div>
-            <div class="access-chat-title">🔐 Access Needed</div>
+          <div class="access-chat-brand">
+            <div class="access-chat-logo">🔐</div>
+            <div>
+            <div class="access-chat-kicker">Team support channel</div>
+            <div class="access-chat-title">Access Needed</div>
             <div class="access-chat-sub">Agents can ask for access here. Admins are alerted with the agent name, team, and exact request.</div>
+            </div>
           </div>
-          <div class="access-live-pill">● LIVE SYNC</div>
+          <div class="access-chat-tools">
+            <div class="access-live-pill">● FIREBASE LIVE</div>
+            <div class="access-open-pill">OPEN REQUESTS: <span id="access-open-count">0</span></div>
+          </div>
         </div>
         <div class="access-chat-body">
           <div class="access-messages" id="access-chat-messages"><div class="access-empty">Loading the access group chat…</div></div>
-          <div>
-            <div class="access-compose">
-              <div class="access-compose-title">Send access request</div>
-              <label class="access-label">What access do you need?</label>
-              <select class="access-select" id="access-request-type">
+          <div class="access-compose">
+            <div class="access-compose-title">Group chat · Send an access request</div>
+            <div class="access-compose-user">Sending as <strong id="access-compose-user">Signed-in agent</strong></div>
+            <div class="access-composer-row">
+              <select class="access-select" id="access-request-type" aria-label="Access type">
                 <option value="Website / link">Website / link</option>
                 <option value="CRM / account">CRM / account</option>
                 <option value="Dialer / phone system">Dialer / phone system</option>
                 <option value="Tool / software">Tool / software</option>
                 <option value="Other">Other</option>
               </select>
-              <label class="access-label">Message</label>
-              <textarea class="access-input access-textarea" id="access-request-text" placeholder="Example: I need access to the CRM for today’s shift."></textarea>
-              <button class="access-send-btn" id="access-send-btn" onclick="accessSendRequest()">SEND ACCESS REQUEST</button>
-              <div id="access-compose-status" style="font-size:.65rem;color:var(--muted);min-height:18px;margin-top:7px;text-align:center;"></div>
+              <textarea class="access-input access-textarea" id="access-request-text" placeholder="Type your message here..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();accessSendRequest();}"></textarea>
+              <button class="access-send-btn" id="access-send-btn" onclick="accessSendRequest()">SEND MESSAGE</button>
             </div>
-            <div class="access-status-card"><strong>How it works</strong><br>Every request is saved in Firebase. Admins receive an alert showing exactly who needs access and can reply in this group chat.</div>
+            <div class="access-compose-note">Your name and team are automatically shown to everyone in the chat. Press Enter to send.</div>
+            <div id="access-compose-status" style="font-size:.65rem;color:var(--muted);min-height:18px;margin-top:5px;"></div>
           </div>
         </div>
       </div>
@@ -5300,18 +5313,46 @@ function accessEscape(value){
 }
 function accessFormatTime(value){
   try{
-    const d = value && typeof value.toDate === 'function' ? value.toDate() : (value ? new Date(value) : new Date());
+    if(!value) return 'Sending…';
+    const d = value && typeof value.toDate === 'function' ? value.toDate() : (value ? new Date(value) : null);
+    if(!d || isNaN(d.getTime())) return 'Sending…';
     return d.toLocaleString('en-US',{timeZone:'America/Guyana',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
   }catch(e){ return ''; }
 }
+function accessServerMillis(value){
+  if(!value) return null;
+  if(typeof value.toMillis==='function') return value.toMillis();
+  if(typeof value.seconds==='number') return (value.seconds*1000)+(Number(value.nanoseconds||0)/1000000);
+  const parsed=Date.parse(value);
+  return isNaN(parsed)?null:parsed;
+}
+function accessInitials(name){
+  const parts=String(name||'Agent').trim().split(/\s+/).filter(Boolean);
+  return (parts.slice(0,2).map(function(part){return part.charAt(0);}).join('')||'A').toUpperCase();
+}
+function accessUpdateChatIdentity(){
+  const el=document.getElementById('access-compose-user');
+  if(!el || !currentUser) return;
+  const role=currentUser.isAdmin?'Admin':(currentUser.team||'Agent');
+  el.textContent=(currentUser.name||currentUser.username||'Signed-in user')+' · '+role;
+}
 function accessRenderMessages(){
   const el=document.getElementById('access-chat-messages'); if(!el) return;
+  accessUpdateChatIdentity();
   if(!accessChatMessages.length){el.innerHTML='<div class="access-empty">No messages yet.<br>Use the form to tell the admins what access you need.</div>';return;}
-  el.innerHTML=accessChatMessages.map(function(m){
+  const ordered=accessChatMessages.slice().sort(function(a,b){
+    const at=accessServerMillis(a.createdAt), bt=accessServerMillis(b.createdAt);
+    if(at===null && bt===null) return String(a.id||'').localeCompare(String(b.id||''));
+    if(at===null) return 1;
+    if(bt===null) return -1;
+    return at-bt || String(a.id||'').localeCompare(String(b.id||''));
+  });
+  el.innerHTML=ordered.map(function(m){
     const mine=currentUser && !currentUser.isAdmin && String(m.senderId||'')===String(currentUser.id||'');
     const admin=!!m.senderIsAdmin;
     const tag=m.isAccessRequest?'<span class="access-request-tag">Access request</span>':'';
     return '<div class="access-msg '+(mine?'mine ':'')+(admin?'admin':'')+'">'+
+      '<div class="access-msg-avatar">'+accessEscape(accessInitials(m.senderName))+'</div>'+
       '<div class="access-msg-meta">'+accessEscape(m.senderName||'Team member')+' · '+accessEscape(m.team||'')+' '+tag+'</div>'+
       '<div class="access-msg-text">'+accessEscape(m.text||'')+'</div>'+
       (m.accessType?'<div style="font-size:.62rem;color:#fbbf24;margin-top:5px;">Needed: '+accessEscape(m.accessType)+'</div>':'')+
@@ -5339,11 +5380,14 @@ function accessDismissAdminAlert(){
 async function accessStartChat(){
   if(!currentUser) return;
   try{ await ensureFirebaseAuth(); }catch(e){ console.warn('Access chat Firebase auth failed:',e); return; }
+  try{ await syncFirebaseClock(); }catch(e){ console.warn('Access chat Firebase clock sync failed:',e); }
   if(accessChatUnsubscribe) accessChatUnsubscribe();
   accessChatAdminBaselineReady=false; accessChatLastAdminRequestCount=0;
   accessChatUnsubscribe=db.collection('access_group_chat').orderBy('createdAt','asc').limitToLast(100).onSnapshot(function(snap){
     accessChatMessages=[]; snap.forEach(function(doc){accessChatMessages.push(Object.assign({id:doc.id},doc.data()));});
     accessRenderMessages();
+    const openCount=accessChatMessages.filter(function(m){return m.isAccessRequest && m.status!=='resolved';}).length;
+    const openEl=document.getElementById('access-open-count'); if(openEl) openEl.textContent=String(openCount);
     if(currentUser && currentUser.isAdmin){
       const openRequests=accessChatMessages.filter(function(m){return m.isAccessRequest && m.status!=='resolved';});
       const seen=Number(localStorage.getItem('bds_access_seen_'+getTodayGY())||0);
@@ -5367,7 +5411,9 @@ async function accessSendRequest(){
     await db.collection('access_group_chat').add({
       text:text,accessType:accessType,isAccessRequest:true,status:'open',
       senderId:String(currentUser.id||''),senderName:currentUser.name||'Agent',team:currentUser.team||'',
-      senderIsAdmin:!!currentUser.isAdmin,createdAt:firebase.firestore.FieldValue.serverTimestamp()
+      senderIsAdmin:!!currentUser.isAdmin,
+      createdAt:firebase.firestore.FieldValue.serverTimestamp(),
+      firebaseClockAtSendMs:getFirebaseNow().getTime()
     });
     textEl.value='';if(status){status.textContent='✅ Sent to the admins.';status.style.color='var(--green)';}
   }catch(e){if(status){status.textContent='Could not send: '+(e.message||'Firebase error');status.style.color='var(--red)';}}
