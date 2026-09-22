@@ -5333,8 +5333,9 @@ function accessInitials(name){
 function accessUpdateChatIdentity(){
   const el=document.getElementById('access-compose-user');
   if(!el || !currentUser) return;
+  const displayName=currentUser.name||currentUser.username||'Signed-in user';
   const role=currentUser.isAdmin?'Admin':(currentUser.team||'Agent');
-  el.textContent=(currentUser.name||currentUser.username||'Signed-in user')+' · '+role;
+  el.textContent=displayName+' · '+role;
 }
 function accessRenderMessages(){
   const el=document.getElementById('access-chat-messages'); if(!el) return;
@@ -5404,18 +5405,19 @@ async function accessSendRequest(){
   if(!currentUser) return;
   const textEl=document.getElementById('access-request-text'), typeEl=document.getElementById('access-request-type'), btn=document.getElementById('access-send-btn'), status=document.getElementById('access-compose-status');
   const text=String(textEl && textEl.value||'').trim(), accessType=String(typeEl && typeEl.value||'Other');
+  const senderName=currentUser.name||currentUser.username||'Admin';
   if(!text){if(status){status.textContent='Please explain what access you need.';status.style.color='var(--red)';}return;}
   btn.disabled=true;btn.textContent='SENDING...';if(status) status.textContent='';
   try{
     await ensureFirebaseAuth();
     await db.collection('access_group_chat').add({
       text:text,accessType:accessType,isAccessRequest:true,status:'open',
-      senderId:String(currentUser.id||''),senderName:currentUser.name||'Agent',team:currentUser.team||'',
+      senderId:String(currentUser.id||''),senderName:senderName,team:currentUser.team||'',
       senderIsAdmin:!!currentUser.isAdmin,
       createdAt:firebase.firestore.FieldValue.serverTimestamp(),
       firebaseClockAtSendMs:getFirebaseNow().getTime()
     });
-    textEl.value='';if(status){status.textContent='✅ Sent to the admins.';status.style.color='var(--green)';}
+    textEl.value='';if(status){status.textContent='✅ Sent to the group chat.';status.style.color='var(--green)';}
   }catch(e){if(status){status.textContent='Could not send: '+(e.message||'Firebase error');status.style.color='var(--red)';}}
   btn.disabled=false;btn.textContent='SEND ACCESS REQUEST';
 }
