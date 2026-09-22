@@ -856,39 +856,48 @@ body.lead-alert-open{overflow:hidden;}
 body.is-admin #tab-admin{display:flex !important;}
 body.is-admin #page-admin.admin-page-active{display:flex !important;flex-direction:column;}
 .access-chat-page{padding:20px;max-width:1120px;margin:0 auto;width:100%;}
-.access-chat-shell{background:linear-gradient(145deg,#0d1628,#09111f);border:1px solid #2b4770;border-radius:18px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.34),0 0 0 1px rgba(56,189,248,.04);}
-.access-chat-head{padding:19px 22px;border-bottom:1px solid #243754;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:linear-gradient(90deg,rgba(14,31,55,.9),rgba(9,17,31,.92));}
+.access-chat-shell{background:linear-gradient(145deg,#0d1628,#09111f);border:1px solid #263c5d;border-radius:18px;overflow:hidden;box-shadow:0 16px 45px rgba(0,0,0,.3);}
+.access-chat-head{padding:19px 22px;border-bottom:1px solid #243754;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:linear-gradient(90deg,rgba(14,31,55,.8),rgba(9,17,31,.8));}
 .access-chat-brand{display:flex;align-items:center;gap:12px;}
-.access-chat-logo{width:44px;height:44px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(145deg,#2563eb,#06b6d4);box-shadow:0 7px 22px rgba(14,165,233,.28);font-size:1.25rem;}
+.access-chat-logo{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(145deg,#2563eb,#06b6d4);box-shadow:0 6px 20px rgba(14,165,233,.22);font-size:1.25rem;}
 .access-chat-kicker{font-size:.56rem;letter-spacing:2px;font-weight:900;color:#38bdf8;text-transform:uppercase;}
 .access-chat-title{font-family:'Barlow Condensed',sans-serif;font-size:1.55rem;font-weight:900;letter-spacing:1px;margin-top:2px;}
 .access-chat-sub{font-size:.7rem;color:var(--muted);margin-top:4px;}
 .access-chat-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.access-live-pill,.access-open-pill{font-size:.6rem;border-radius:20px;padding:7px 11px;font-weight:900;white-space:nowrap;letter-spacing:.4px;}
+.access-live-pill,.access-open-pill{font-size:.6rem;border-radius:20px;padding:7px 10px;font-weight:900;white-space:nowrap;letter-spacing:.4px;}
 .access-live-pill{color:var(--green);border:1px solid rgba(52,211,153,.35);background:rgba(52,211,153,.08);}
 .access-open-pill{color:#fbbf24;border:1px solid rgba(251,191,36,.35);background:rgba(251,191,36,.08);}
 .access-chat-body{padding:16px;background:rgba(4,10,20,.22);}
-.access-messages{height:455px;overflow:auto;padding:18px 16px;display:flex;flex-direction:column;gap:14px;background:radial-gradient(circle at 50% 0%,rgba(31,73,125,.14),transparent 42%),#070f1d;border:1px solid #1b304e;border-radius:14px;scroll-behavior:smooth;}
+.access-messages{height:455px;overflow:auto;padding:16px 14px;display:flex;flex-direction:column;gap:14px;background:#070f1d;border:1px solid #1b304e;border-radius:14px;}
 .access-empty{height:100%;display:grid;place-items:center;text-align:center;color:var(--muted);font-size:.75rem;padding:30px;}
 .access-msg{position:relative;background:#111e33;border:1px solid #253b5e;border-radius:5px 14px 14px 14px;padding:11px 14px 10px 50px;max-width:78%;min-width:210px;align-self:flex-start;box-shadow:0 4px 12px rgba(0,0,0,.12);}
 .access-msg.mine{align-self:flex-end;background:linear-gradient(145deg,rgba(30,86,160,.34),rgba(18,57,108,.28));border-color:rgba(96,165,250,.45);border-radius:14px 5px 14px 14px;}
 .access-msg.admin{border-color:rgba(251,191,36,.4);background:linear-gradient(145deg,rgba(73,54,18,.3),rgba(17,30,51,.9));}
-.access-msg-avatar{position:absolute;left:12px;top:12px;width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#2563eb,#1e40af);color:#fff;font:900 .66rem 'Barlow Condensed',sans-serif;text-transform:uppercase;box-shadow:0 3px 8px rgba(0,0,0,.22);}
+.access-msg-avatar{position:absolute;left:12px;top:12px;width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#24518a;color:#fff;font:900 .65rem 'Barlow Condensed',sans-serif;text-transform:uppercase;}
 .access-msg.admin .access-msg-avatar{background:#8b6414;color:#fff;}
 .access-msg-meta{font-size:.7rem;color:#dbeafe;font-weight:900;margin-bottom:6px;letter-spacing:.2px;}
 .access-msg.admin .access-msg-meta{color:var(--gold);}
 .access-msg-text{font-size:.8rem;line-height:1.45;white-space:pre-wrap;word-break:break-word;color:#e5edf8;}
 .access-msg-time{font-size:.56rem;color:var(--muted);margin-top:6px;text-align:right;}
+.access-msg-actions{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.access-copy-btn,.access-delete-btn{border-radius:6px;padding:5px 8px;font:900 .55rem 'Barlow Condensed',sans-serif;letter-spacing:.7px;cursor:pointer;}
+.access-copy-btn{border:1px solid rgba(56,189,248,.4);background:rgba(56,189,248,.1);color:#7dd3fc;}
+.access-copy-btn:hover{background:rgba(56,189,248,.2);}
+.access-delete-btn{border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.08);color:#fca5a5;}
+.access-delete-btn:hover{background:rgba(248,113,113,.18);}
+.access-quick-replies{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 10px;}
+.access-quick-label{font-size:.58rem;font-weight:900;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-right:2px;}
+.access-quick-btn{border:1px solid rgba(251,191,36,.35);background:rgba(251,191,36,.08);color:#fbbf24;border-radius:7px;padding:6px 9px;font:800 .62rem 'Barlow Condensed',sans-serif;cursor:pointer;}
+.access-quick-btn:hover{background:rgba(251,191,36,.17);border-color:rgba(251,191,36,.65);}
 .access-compose{background:#0b1424;border:1px solid #294263;border-radius:14px;padding:13px;margin-top:13px;box-shadow:0 6px 18px rgba(0,0,0,.14);}
 .access-compose-title{font-size:.65rem;font-weight:900;letter-spacing:1.5px;color:#c4b5fd;text-transform:uppercase;margin-bottom:9px;}
 .access-compose-user{font-size:.62rem;color:var(--muted);margin-bottom:9px;}
 .access-compose-user strong{color:#dbeafe;}
 .access-input,.access-select{width:100%;background:#080f1d;color:var(--text);border:1px solid #2a4163;border-radius:8px;padding:10px;font:700 .78rem 'Barlow Condensed',sans-serif;outline:none;}
 .access-input:focus,.access-select:focus{border-color:#38bdf8;}
-.access-composer-row{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:8px;align-items:end;}
+.access-composer-row{display:grid;grid-template-columns:190px minmax(0,1fr) 180px;gap:8px;align-items:end;}
 .access-textarea{min-height:42px;height:42px;resize:none;letter-spacing:.2px;}
-.access-send-btn{width:100%;border:0;border-radius:9px;padding:12px;margin:0;background:linear-gradient(100deg,#2563eb,#06b6d4);color:#03111f;font:900 .76rem 'Barlow Condensed',sans-serif;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;height:42px;box-shadow:0 5px 14px rgba(14,165,233,.16);transition:transform .15s,filter .15s,box-shadow .15s;}
-.access-send-btn:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 7px 18px rgba(14,165,233,.25);}
+.access-send-btn{width:100%;border:0;border-radius:8px;padding:12px;margin:0;background:linear-gradient(90deg,#2563eb,#38bdf8);color:#03111f;font:900 .76rem 'Barlow Condensed',sans-serif;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;height:42px;}
 .access-send-btn:disabled{opacity:.55;cursor:not-allowed;}
 .access-compose-note{font-size:.6rem;color:var(--muted);margin-top:7px;}
 .access-request-tag{display:inline-block;font-size:.54rem;letter-spacing:1px;color:#fbbf24;border:1px solid rgba(251,191,36,.35);border-radius:10px;padding:2px 6px;margin-left:6px;text-transform:uppercase;}
@@ -898,6 +907,12 @@ body.is-admin #page-admin.admin-page-active{display:flex !important;flex-directi
 .access-admin-alert-copy{font-size:.74rem;line-height:1.4;margin-top:6px;color:#e5e7eb;}
 .access-admin-alert-actions{display:flex;gap:7px;margin-top:10px;}
 .access-admin-alert-actions button{border-radius:7px;padding:7px 10px;border:1px solid rgba(251,191,36,.4);background:rgba(251,191,36,.12);color:#fbbf24;font:800 .62rem 'Barlow Condensed',sans-serif;cursor:pointer;}
+.access-message-toast{position:fixed;right:18px;top:18px;z-index:8600;display:none;width:min(390px,calc(100vw - 36px));background:linear-gradient(145deg,#0e2840,#0b1424);border:1px solid rgba(56,189,248,.7);border-radius:14px;padding:14px;box-shadow:0 14px 45px rgba(0,0,0,.55);}
+.access-message-toast.show{display:block;animation:accessAlertIn .25s ease-out;}
+.access-message-toast-title{color:#7dd3fc;font:900 .82rem 'Barlow Condensed',sans-serif;letter-spacing:1.4px;text-transform:uppercase;}
+.access-message-toast-copy{font-size:.74rem;line-height:1.4;margin-top:6px;color:#e5e7eb;white-space:pre-wrap;word-break:break-word;}
+.access-message-toast-actions{display:flex;gap:7px;margin-top:10px;}
+.access-message-toast-actions button{border-radius:7px;padding:7px 10px;border:1px solid rgba(56,189,248,.45);background:rgba(56,189,248,.12);color:#7dd3fc;font:800 .62rem 'Barlow Condensed',sans-serif;cursor:pointer;}
 @keyframes accessAlertIn{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
 @media(max-width:760px){.access-chat-page{padding:10px}.access-chat-head{padding:15px}.access-messages{height:390px;padding:12px 8px}.access-msg{max-width:94%;min-width:0}.access-composer-row{grid-template-columns:1fr}.access-textarea{height:70px}.access-send-btn{height:42px}}
 .admin-tab-btn{padding:14px 10px;border-radius:10px;border:1.5px solid rgba(251,191,36,0.4);font-family:'Barlow Condensed',sans-serif;font-size:0.95rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.18s;background:rgba(251,191,36,0.08);color:var(--gold);align-items:center;justify-content:center;gap:6px;white-space:nowrap;}
@@ -2495,9 +2510,9 @@ input, textarea, select { color-scheme: dark; }
           <div class="access-chat-brand">
             <div class="access-chat-logo">🔐</div>
             <div>
-            <div class="access-chat-kicker">Team chatroom</div>
+            <div class="access-chat-kicker">Team support channel</div>
             <div class="access-chat-title">Access Needed</div>
-            <div class="access-chat-sub">Team members can communicate here. Messages are synced live through Firebase.</div>
+            <div class="access-chat-sub">Agents can ask for access here. Admins are alerted with the agent name, team, and exact request.</div>
             </div>
           </div>
           <div class="access-chat-tools">
@@ -2508,13 +2523,28 @@ input, textarea, select { color-scheme: dark; }
         <div class="access-chat-body">
           <div class="access-messages" id="access-chat-messages"><div class="access-empty">Loading the access group chat…</div></div>
           <div class="access-compose">
-            <div class="access-compose-title">Group chat · Send a message</div>
+            <div class="access-compose-title">Group chat · Send an access request</div>
             <div class="access-compose-user">Sending as <strong id="access-compose-user">Signed-in agent</strong></div>
+            <div id="access-admin-quick-replies" class="access-quick-replies" style="display:none;">
+              <span class="access-quick-label">Quick reply</span>
+              <button class="access-quick-btn" type="button" onclick="accessQuickReply('Done')">Done</button>
+              <button class="access-quick-btn" type="button" onclick="accessQuickReply('On it')">On it</button>
+              <button class="access-quick-btn" type="button" onclick="accessQuickReply(&quot;Can't work&quot;)">Can't work</button>
+              <button class="access-quick-btn" type="button" onclick="accessQuickReply('Run')">Run</button>
+              <button class="access-quick-btn" type="button" onclick="accessQuickReply('Add Spouse?')">Add Spouse?</button>
+            </div>
             <div class="access-composer-row">
-              <textarea class="access-input access-textarea" id="access-request-text" placeholder="Type a message..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();accessSendRequest();}"></textarea>
+              <select class="access-select" id="access-request-type" aria-label="Access type">
+                <option value="Website / link">Website / link</option>
+                <option value="CRM / account">CRM / account</option>
+                <option value="Dialer / phone system">Dialer / phone system</option>
+                <option value="Tool / software">Tool / software</option>
+                <option value="Other">Other</option>
+              </select>
+              <textarea class="access-input access-textarea" id="access-request-text" placeholder="Type your message here..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();accessSendRequest();}"></textarea>
               <button class="access-send-btn" id="access-send-btn" onclick="accessSendRequest()">SEND MESSAGE</button>
             </div>
-            <div class="access-compose-note">Your name and team are shown to everyone in the chat. Press Enter to send.</div>
+            <div class="access-compose-note">Your name and team are automatically shown to everyone in the chat. Press Enter to send.</div>
             <div id="access-compose-status" style="font-size:.65rem;color:var(--muted);min-height:18px;margin-top:5px;"></div>
           </div>
         </div>
@@ -5301,6 +5331,8 @@ let accessChatUnsubscribe = null;
 let accessChatMessages = [];
 let accessChatAdminBaselineReady = false;
 let accessChatLastAdminRequestCount = 0;
+let accessChatMessageBaselineReady = false;
+let accessMessageToastTimer = null;
 
 function accessEscape(value){
   return String(value == null ? '' : value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
@@ -5330,11 +5362,34 @@ function accessUpdateChatIdentity(){
   const displayName=currentUser.name||currentUser.username||'Signed-in user';
   const role=currentUser.isAdmin?'Admin':(currentUser.team||'Agent');
   el.textContent=displayName+' · '+role;
+  const quick=document.getElementById('access-admin-quick-replies');
+  if(quick) quick.style.display=currentUser.isAdmin?'flex':'none';
+}
+function accessExtractNumbers(text){
+  const found=String(text||'').match(/(?:\+?\d[\d\s().-]{4,}\d|\b\d{3,}\b)/g)||[];
+  return found.map(function(value){return value.trim();}).filter(function(value,index,all){return value && all.indexOf(value)===index;});
+}
+function accessCopyNumbers(button){
+  const numbers=button && button.getAttribute('data-copy-numbers') || '';
+  if(!numbers) return;
+  const done=function(){const old=button.textContent;button.textContent='COPIED';setTimeout(function(){button.textContent=old;},1400);};
+  if(navigator.clipboard && navigator.clipboard.writeText){navigator.clipboard.writeText(numbers).then(done).catch(function(){accessCopyNumbersFallback(numbers,button,done);});}
+  else accessCopyNumbersFallback(numbers,button,done);
+}
+function accessCopyNumbersFallback(numbers,button,done){
+  const area=document.createElement('textarea'); area.value=numbers; area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();
+  try{document.execCommand('copy');done();}catch(e){button.textContent='COPY FAILED';setTimeout(function(){button.textContent='COPY NUMBERS';},1400);} area.remove();
+}
+function accessQuickReply(text){
+  if(!currentUser || !currentUser.isAdmin) return;
+  const textEl=document.getElementById('access-request-text');
+  if(textEl) textEl.value=text;
+  accessSendRequest(text);
 }
 function accessRenderMessages(){
   const el=document.getElementById('access-chat-messages'); if(!el) return;
   accessUpdateChatIdentity();
-  if(!accessChatMessages.length){el.innerHTML='<div class="access-empty"><div style="font-size:2rem;margin-bottom:8px;">💬</div><strong style="color:#dbeafe;font-size:.82rem;">No messages yet</strong><span style="margin-top:4px;">Start the conversation with your team.</span></div>';return;}
+  if(!accessChatMessages.length){el.innerHTML='<div class="access-empty">No messages yet.<br>Use the form to tell the admins what access you need.</div>';return;}
   const ordered=accessChatMessages.slice().sort(function(a,b){
     const at=accessServerMillis(a.createdAt), bt=accessServerMillis(b.createdAt);
     if(at===null && bt===null) return String(a.id||'').localeCompare(String(b.id||''));
@@ -5345,13 +5400,29 @@ function accessRenderMessages(){
   el.innerHTML=ordered.map(function(m){
     const mine=currentUser && !currentUser.isAdmin && String(m.senderId||'')===String(currentUser.id||'');
     const admin=!!m.senderIsAdmin;
+    const tag=m.isAccessRequest?'<span class="access-request-tag">Access request</span>':'';
+    const numbers=accessExtractNumbers(m.text);
+    const canDelete=currentUser && (currentUser.isAdmin || String(m.senderId||'')===String(currentUser.id||''));
+    const actions=(numbers.length||canDelete)?'<div class="access-msg-actions">'+(numbers.length?'<button class="access-copy-btn" type="button" data-copy-numbers="'+accessEscape(numbers.join('\n'))+'" onclick="accessCopyNumbers(this)">COPY NUMBERS</button>':'')+(canDelete?'<button class="access-delete-btn" type="button" data-message-id="'+accessEscape(m.id)+'" onclick="accessDeleteMessage(this)">DELETE</button>':'')+'</div>':'';
     return '<div class="access-msg '+(mine?'mine ':'')+(admin?'admin':'')+'">'+
       '<div class="access-msg-avatar">'+accessEscape(accessInitials(m.senderName))+'</div>'+
-      '<div class="access-msg-meta">'+accessEscape(m.senderName||'Team member')+' · '+accessEscape(m.team||'')+'</div>'+
+      '<div class="access-msg-meta">'+accessEscape(m.senderName||'Team member')+' · '+accessEscape(m.team||'')+' '+tag+'</div>'+
       '<div class="access-msg-text">'+accessEscape(m.text||'')+'</div>'+
-      '<div class="access-msg-time">'+accessFormatTime(m.createdAt)+(m.status==='resolved'?' · Resolved':'')+'</div></div>';
+      (m.accessType?'<div style="font-size:.62rem;color:#fbbf24;margin-top:5px;">Needed: '+accessEscape(m.accessType)+'</div>':'')+
+      '<div class="access-msg-time">'+accessFormatTime(m.createdAt)+(m.status==='resolved'?' · Resolved':'')+'</div>'+actions+'</div>';
   }).join('');
   el.scrollTop=el.scrollHeight;
+}
+async function accessDeleteMessage(button){
+  const id=button && button.getAttribute('data-message-id');
+  const message=accessChatMessages.find(function(item){return String(item.id)===String(id);});
+  if(!id || !message || !currentUser) return;
+  const allowed=currentUser.isAdmin || String(message.senderId||'')===String(currentUser.id||'');
+  if(!allowed) return;
+  if(!window.confirm('Delete this chat message?')) return;
+  button.disabled=true;button.textContent='DELETING...';
+  try{await ensureFirebaseAuth();await db.collection('access_group_chat').doc(id).delete();}
+  catch(e){button.disabled=false;button.textContent='DELETE';window.alert('Could not delete message: '+(e.message||'Firebase error'));}
 }
 function accessShowAdminAlert(requests){
   if(!currentUser || !currentUser.isAdmin || !requests.length) return;
@@ -5370,15 +5441,49 @@ function accessDismissAdminAlert(){
   const badge=document.getElementById('access-unread-badge'); if(badge){badge.textContent='';badge.style.display='none';}
   if(currentUser && currentUser.isAdmin) localStorage.setItem('bds_access_seen_'+getTodayGY(),String(accessChatLastAdminRequestCount));
 }
+function accessDismissMessageToast(){
+  const toast=document.getElementById('access-message-toast'); if(toast) toast.classList.remove('show');
+  if(accessMessageToastTimer){clearTimeout(accessMessageToastTimer);accessMessageToastTimer=null;}
+}
+function accessShowNewMessageNotification(message){
+  if(!currentUser || !currentUser.isAdmin) return;
+  const chatOpen=document.getElementById('page-access-chat') && document.getElementById('page-access-chat').classList.contains('active');
+  if(chatOpen) return;
+  const sender=message.senderName||'Agent';
+  const body=sender+(message.team?' · '+message.team:'')+'\n'+String(message.text||'');
+  let toast=document.getElementById('access-message-toast');
+  if(!toast){toast=document.createElement('div');toast.id='access-message-toast';toast.className='access-message-toast';document.body.appendChild(toast);}
+  toast.innerHTML='<div class="access-message-toast-title">💬 New group chat message</div><div class="access-message-toast-copy">'+accessEscape(body)+'</div><div class="access-message-toast-actions"><button onclick="switchTab(&quot;access-chat&quot;);accessDismissMessageToast()">OPEN CHAT</button><button onclick="accessDismissMessageToast()">DISMISS</button></div>';
+  toast.classList.add('show');
+  if(accessMessageToastTimer) clearTimeout(accessMessageToastTimer);
+  accessMessageToastTimer=setTimeout(accessDismissMessageToast,9000);
+  if(typeof Notification!=='undefined' && Notification.permission==='granted'){
+    try{const notice=new Notification('New team chat message',{body:body,tag:'bds-access-chat'});notice.onclick=function(){window.focus();switchTab('access-chat');notice.close();};}catch(e){}
+  }
+}
 async function accessStartChat(){
   if(!currentUser) return;
   try{ await ensureFirebaseAuth(); }catch(e){ console.warn('Access chat Firebase auth failed:',e); return; }
   try{ await syncFirebaseClock(); }catch(e){ console.warn('Access chat Firebase clock sync failed:',e); }
   if(accessChatUnsubscribe) accessChatUnsubscribe();
-  accessChatAdminBaselineReady=false; accessChatLastAdminRequestCount=0;
+  accessChatAdminBaselineReady=false; accessChatMessageBaselineReady=false; accessChatLastAdminRequestCount=0;
+  if(currentUser.isAdmin && typeof Notification!=='undefined' && Notification.permission==='default'){
+    try{Notification.requestPermission().catch(function(){});}catch(e){}
+  }
   accessChatUnsubscribe=db.collection('access_group_chat').orderBy('createdAt','asc').limitToLast(100).onSnapshot(function(snap){
+    const incoming=[];
+    if(accessChatMessageBaselineReady && currentUser && currentUser.isAdmin){
+      snap.docChanges().forEach(function(change){
+        if(change.type==='added'){
+          const data=Object.assign({id:change.doc.id},change.doc.data());
+          if(!data.senderIsAdmin) incoming.push(data);
+        }
+      });
+    }
     accessChatMessages=[]; snap.forEach(function(doc){accessChatMessages.push(Object.assign({id:doc.id},doc.data()));});
     accessRenderMessages();
+    accessChatMessageBaselineReady=true;
+    incoming.forEach(accessShowNewMessageNotification);
     const openCount=accessChatMessages.filter(function(m){return m.isAccessRequest && m.status!=='resolved';}).length;
     const openEl=document.getElementById('access-open-count'); if(openEl) openEl.textContent=String(openCount);
     if(currentUser && currentUser.isAdmin){
@@ -5393,17 +5498,17 @@ async function accessStartChat(){
     const el=document.getElementById('access-chat-messages'); if(el) el.innerHTML='<div class="access-empty">Unable to load the access chat right now. Please check Firebase connection.</div>';
   });
 }
-async function accessSendRequest(){
+async function accessSendRequest(prefilledText){
   if(!currentUser) return;
-  const textEl=document.getElementById('access-request-text'), btn=document.getElementById('access-send-btn'), status=document.getElementById('access-compose-status');
-  const text=String(textEl && textEl.value||'').trim();
+  const textEl=document.getElementById('access-request-text'), typeEl=document.getElementById('access-request-type'), btn=document.getElementById('access-send-btn'), status=document.getElementById('access-compose-status');
+  const text=String(prefilledText!=null?prefilledText:(textEl && textEl.value||'')).trim(), accessType=String(typeEl && typeEl.value||'Other');
   const senderName=currentUser.name||currentUser.username||'Admin';
   if(!text){if(status){status.textContent='Please explain what access you need.';status.style.color='var(--red)';}return;}
   btn.disabled=true;btn.textContent='SENDING...';if(status) status.textContent='';
   try{
     await ensureFirebaseAuth();
     await db.collection('access_group_chat').add({
-      text:text,accessType:'Access needed',isAccessRequest:true,status:'open',
+      text:text,accessType:accessType,isAccessRequest:true,status:'open',
       senderId:String(currentUser.id||''),senderName:senderName,team:currentUser.team||'',
       senderIsAdmin:!!currentUser.isAdmin,
       createdAt:firebase.firestore.FieldValue.serverTimestamp(),
