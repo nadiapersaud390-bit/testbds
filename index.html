@@ -890,12 +890,13 @@ body.is-admin #page-admin.admin-page-active{display:flex !important;flex-directi
 .access-quick-btn{border:1px solid rgba(251,191,36,.35);background:rgba(251,191,36,.08);color:#fbbf24;border-radius:7px;padding:6px 9px;font:800 .62rem 'Barlow Condensed',sans-serif;cursor:pointer;}
 .access-quick-btn:hover{background:rgba(251,191,36,.17);border-color:rgba(251,191,36,.65);}
 .access-compose{background:#0b1424;border:1px solid #294263;border-radius:14px;padding:13px;margin-top:13px;box-shadow:0 6px 18px rgba(0,0,0,.14);}
-.access-compose-title{font-size:.65rem;font-weight:900;letter-spacing:1.5px;color:#c4b5fd;text-transform:uppercase;margin-bottom:9px;}
+.access-compose-title{font-size:.78rem;font-weight:900;letter-spacing:1.5px;color:#c4b5fd;text-transform:uppercase;margin-bottom:9px;}
+.access-compose-title-chat{font-size:1.08rem;color:#f8fafc;letter-spacing:1px;}
 .access-compose-user{font-size:.62rem;color:var(--muted);margin-bottom:9px;}
 .access-compose-user strong{color:#dbeafe;}
 .access-input,.access-select{width:100%;background:#080f1d;color:var(--text);border:1px solid #2a4163;border-radius:8px;padding:10px;font:700 .78rem 'Barlow Condensed',sans-serif;outline:none;}
 .access-input:focus,.access-select:focus{border-color:#38bdf8;}
-.access-composer-row{display:grid;grid-template-columns:190px minmax(0,1fr) 180px;gap:8px;align-items:end;}
+.access-composer-row{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:8px;align-items:end;}
 .access-textarea{min-height:42px;height:42px;resize:none;letter-spacing:.2px;}
 .access-send-btn{width:100%;border:0;border-radius:8px;padding:12px;margin:0;background:linear-gradient(90deg,#2563eb,#38bdf8);color:#03111f;font:900 .76rem 'Barlow Condensed',sans-serif;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;height:42px;}
 .access-send-btn:disabled{opacity:.55;cursor:not-allowed;}
@@ -2523,7 +2524,7 @@ input, textarea, select { color-scheme: dark; }
         <div class="access-chat-body">
           <div class="access-messages" id="access-chat-messages"><div class="access-empty">Loading the access group chat…</div></div>
           <div class="access-compose">
-            <div class="access-compose-title">Group chat · Send an access request</div>
+            <div class="access-compose-title"><span class="access-compose-title-chat">Group Chat</span> · Send a message</div>
             <div class="access-compose-user">Sending as <strong id="access-compose-user">Signed-in agent</strong></div>
             <div id="access-admin-quick-replies" class="access-quick-replies" style="display:none;">
               <span class="access-quick-label">Quick reply</span>
@@ -2534,13 +2535,6 @@ input, textarea, select { color-scheme: dark; }
               <button class="access-quick-btn" type="button" onclick="accessQuickReply('Add Spouse?')">Add Spouse?</button>
             </div>
             <div class="access-composer-row">
-              <select class="access-select" id="access-request-type" aria-label="Access type">
-                <option value="Website / link">Website / link</option>
-                <option value="CRM / account">CRM / account</option>
-                <option value="Dialer / phone system">Dialer / phone system</option>
-                <option value="Tool / software">Tool / software</option>
-                <option value="Other">Other</option>
-              </select>
               <textarea class="access-input access-textarea" id="access-request-text" placeholder="Type your message here..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();accessSendRequest();}"></textarea>
               <button class="access-send-btn" id="access-send-btn" onclick="accessSendRequest()">SEND MESSAGE</button>
             </div>
@@ -5500,8 +5494,8 @@ async function accessStartChat(){
 }
 async function accessSendRequest(prefilledText){
   if(!currentUser) return;
-  const textEl=document.getElementById('access-request-text'), typeEl=document.getElementById('access-request-type'), btn=document.getElementById('access-send-btn'), status=document.getElementById('access-compose-status');
-  const text=String(prefilledText!=null?prefilledText:(textEl && textEl.value||'')).trim(), accessType=String(typeEl && typeEl.value||'Other');
+  const textEl=document.getElementById('access-request-text'), btn=document.getElementById('access-send-btn'), status=document.getElementById('access-compose-status');
+  const text=String(prefilledText!=null?prefilledText:(textEl && textEl.value||'')).trim(), accessType='Other';
   const senderName=currentUser.name||currentUser.username||'Admin';
   if(!text){if(status){status.textContent='Please explain what access you need.';status.style.color='var(--red)';}return;}
   btn.disabled=true;btn.textContent='SENDING...';if(status) status.textContent='';
@@ -5516,7 +5510,7 @@ async function accessSendRequest(prefilledText){
     });
     textEl.value='';if(status){status.textContent='✅ Sent to the group chat.';status.style.color='var(--green)';}
   }catch(e){if(status){status.textContent='Could not send: '+(e.message||'Firebase error');status.style.color='var(--red)';}}
-  btn.disabled=false;btn.textContent='SEND ACCESS REQUEST';
+  btn.disabled=false;btn.textContent='SEND MESSAGE';
 }
 
 function normalizeAdminUsername(value){
