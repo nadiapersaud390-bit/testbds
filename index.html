@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -25,11 +27,10 @@ const db   = firebase.firestore();
 const auth = firebase.auth();
 
 // ── App version check ──────────────────────────────────────────
-// Team assignment persistence patch: 2026-09-08
 // Update this string every time you deploy a new version.
 // The Firestore doc settings/app_version { v: "..." } must match.
 // When they differ, a reload banner appears for all logged-in users.
-const APP_VERSION = '2026-08-03-rose-archive-dark-r13';
+const APP_VERSION = '2026-08-05-access-guide-r14';
 
 // Dark theme only.
 document.documentElement.setAttribute('data-theme', 'dark');
@@ -628,6 +629,27 @@ body.lead-alert-open{overflow:hidden;}
 .lb-week-btn{border:1px solid transparent;background:transparent;color:#71839d;padding:7px 15px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:900;letter-spacing:1.2px;cursor:pointer;}
 .lb-week-btn.active{color:#fff;background:rgba(167,139,250,.18);border-color:rgba(167,139,250,.36);}
 .lb-week-btn[data-week="prev"].active{color:#fde68a;background:rgba(251,191,36,.10);border-color:rgba(251,191,36,.30);}
+.lb-day-history{display:flex;align-items:center;gap:12px;margin:0 0 14px;padding:10px 12px;border:1px solid rgba(30,45,74,.82);border-radius:14px;background:linear-gradient(135deg,rgba(9,18,34,.92),rgba(6,13,26,.82));box-shadow:0 8px 24px rgba(0,0,0,.10);}
+.lb-day-history.hidden{display:none;}
+.lb-day-history-label{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding-right:10px;border-right:1px solid rgba(30,45,74,.78);}
+.lb-day-history-icon{width:31px;height:31px;border-radius:9px;display:grid;place-items:center;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.18);font-size:.9rem;}
+.lb-day-history-title{font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#a7b6ca;white-space:nowrap;}
+.lb-day-history-sub{margin-top:2px;font-size:.54rem;color:#53657e;white-space:nowrap;}
+.lb-day-pills{display:flex;gap:7px;align-items:center;overflow-x:auto;padding:1px 1px 3px;scrollbar-width:thin;flex:1;}
+.lb-day-pill{appearance:none;min-width:105px;border:1px solid rgba(30,45,74,.92);border-radius:10px;background:#081225;color:#7f90a9;padding:8px 10px;cursor:pointer;text-align:left;transition:transform .16s ease,border-color .16s ease,background .16s ease,color .16s ease;flex:0 0 auto;}
+.lb-day-pill:hover{transform:translateY(-1px);border-color:rgba(96,165,250,.34);color:#d7e2f0;background:#0b172a;}
+.lb-day-pill.active{border-color:rgba(251,191,36,.52);background:linear-gradient(145deg,rgba(251,191,36,.12),rgba(251,146,60,.055));box-shadow:0 7px 18px rgba(251,191,36,.08);}
+.lb-day-pill.today{border-color:rgba(52,211,153,.28);}
+.lb-day-pill.today.active{border-color:rgba(52,211,153,.52);background:linear-gradient(145deg,rgba(52,211,153,.11),rgba(56,189,248,.05));box-shadow:0 7px 18px rgba(52,211,153,.07);}
+.lb-day-pill.no-report{opacity:.58;}
+.lb-day-pill-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.lb-day-name{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:900;letter-spacing:1.3px;text-transform:uppercase;color:#cbd5e1;}
+.lb-day-pill.active .lb-day-name{color:#fff;}
+.lb-day-tag{font-family:'Barlow Condensed',sans-serif;font-size:.48rem;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:var(--green);}
+.lb-day-leads{margin-top:4px;font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:.5px;line-height:1;color:#f1f5f9;}
+.lb-day-leads span{font-family:'Barlow Condensed',sans-serif;font-size:.48rem;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#60718a;margin-left:3px;}
+.lb-day-date{margin-top:3px;font-size:.52rem;color:#566981;}
+@media(max-width:720px){.lb-day-history{align-items:flex-start;flex-direction:column;gap:8px}.lb-day-history-label{width:100%;border-right:none;border-bottom:1px solid rgba(30,45,74,.65);padding:0 0 8px}.lb-day-pills{width:100%}.lb-day-pill{min-width:96px;}}
 .lb-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px;}
 .lb-summary-card{position:relative;overflow:hidden;min-height:106px;padding:14px 15px;border-radius:14px;border:1px solid var(--border);background:linear-gradient(145deg,rgba(17,28,48,.92),rgba(9,17,31,.92));box-shadow:0 8px 24px rgba(0,0,0,.14);}
 .lb-summary-card::after{content:'';position:absolute;right:-25px;bottom:-35px;width:90px;height:90px;border-radius:50%;background:rgba(96,165,250,.035);}
@@ -916,7 +938,6 @@ body.is-admin #page-admin.admin-page-active{display:flex !important;flex-directi
 .adm-table tbody tr:nth-child(odd){background:#070e1c;}
 .adm-table tbody tr:nth-child(even){background:#060b18;}
 .adm-table tbody tr:hover td{background:#0d1a30;cursor:pointer;}
-
 /* ── ADMIN AGENT PROFILE CENTER — PROFESSIONAL REDESIGN ── */
 .profile-hub{border:1px solid #1a2b46;border-radius:22px;overflow:hidden;background:linear-gradient(180deg,#09111f 0%,#070d19 100%);box-shadow:0 26px 70px rgba(0,0,0,.34);}
 .profile-hub-header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 24px;border-bottom:1px solid #182943;background:radial-gradient(circle at 8% 0%,rgba(96,165,250,.16),transparent 34%),linear-gradient(135deg,#0d1a2d 0%,#09111f 58%,#0b1220 100%);}
@@ -1296,8 +1317,491 @@ body.is-admin #agent-target-widget{display:none !important;}
 html { color-scheme: dark; }
 input, textarea, select { color-scheme: dark; }
 
+
+/* ── ACCESS GUIDE — ELIGIBILITY DECISION CENTER ── */
+#page-dbs{
+  background:
+    radial-gradient(circle at 8% 0%,rgba(96,165,250,.08),transparent 28%),
+    radial-gradient(circle at 92% 12%,rgba(167,139,250,.06),transparent 24%),
+    var(--bg);
+}
+.access-guide-shell{
+  width:100%;max-width:1180px;margin:0 auto;padding:24px;
+  display:flex;flex-direction:column;gap:16px;
+}
+.access-guide-hero{
+  position:relative;overflow:hidden;
+  display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr);gap:22px;align-items:center;
+  padding:24px 26px;border:1px solid #263754;border-radius:18px;
+  background:linear-gradient(145deg,rgba(17,28,48,.98),rgba(9,16,31,.98));
+  box-shadow:0 16px 40px rgba(0,0,0,.22);
+}
+.access-guide-hero::after{
+  content:'';position:absolute;inset:auto -80px -110px auto;width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(96,165,250,.12),transparent 68%);pointer-events:none;
+}
+.access-guide-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:10px;padding:5px 10px;
+  border:1px solid rgba(96,165,250,.35);border-radius:999px;background:rgba(96,165,250,.08);
+  color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:900;
+  letter-spacing:2.2px;text-transform:uppercase;
+}
+.access-guide-title{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(2.35rem,4.5vw,4rem);line-height:.95;
+  letter-spacing:4px;color:#f8fafc;text-transform:uppercase;
+}
+.access-guide-subtitle{max-width:650px;margin-top:11px;color:#9aa9bf;font-size:.82rem;line-height:1.65;font-weight:600;}
+.access-guide-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;position:relative;z-index:1;}
+.access-guide-step{
+  min-height:92px;padding:13px 12px;border:1px solid #263754;border-radius:12px;background:rgba(6,11,24,.68);
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.access-guide-step-num{font-family:'Bebas Neue',sans-serif;font-size:1.45rem;line-height:1;color:var(--accent);letter-spacing:1px;}
+.access-guide-step-label{font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:#e5edf8;}
+.access-guide-step-copy{font-size:.59rem;line-height:1.4;color:#71829b;font-weight:700;}
+.access-state-alert{
+  display:grid;grid-template-columns:minmax(260px,.75fr) minmax(0,1.25fr);gap:18px;align-items:center;
+  padding:18px 20px;border:1px solid rgba(248,113,113,.62);border-left:5px solid var(--red);border-radius:16px;
+  background:linear-gradient(100deg,rgba(248,113,113,.13),rgba(248,113,113,.035));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+}
+.access-alert-heading{display:flex;align-items:flex-start;gap:12px;}
+.access-alert-icon{
+  width:40px;height:40px;flex:0 0 40px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+  background:rgba(248,113,113,.13);border:1px solid rgba(248,113,113,.35);font-size:1.15rem;
+}
+.access-alert-title{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:900;letter-spacing:2px;color:#ff8e8e;text-transform:uppercase;}
+.access-alert-copy{margin-top:3px;color:#8fa0b7;font-size:.7rem;line-height:1.5;font-weight:650;}
+.access-state-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
+.access-state-chip{
+  min-height:52px;padding:9px 10px;border:1px solid rgba(248,113,113,.28);border-radius:11px;
+  background:rgba(4,9,20,.55);display:flex;align-items:center;gap:9px;
+}
+.access-state-code{
+  width:30px;height:30px;flex:0 0 30px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  background:rgba(248,113,113,.14);color:#ff9b9b;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:900;letter-spacing:1px;
+}
+.access-state-name{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:900;letter-spacing:1px;color:#f2f5f9;text-transform:uppercase;}
+.access-decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
+.access-decision-card{
+  overflow:hidden;border:1px solid #24334e;border-radius:16px;background:linear-gradient(155deg,rgba(17,28,48,.96),rgba(9,15,29,.96));
+  box-shadow:0 12px 30px rgba(0,0,0,.16);
+}
+.access-decision-card.is-yes{border-top:4px solid var(--green);}
+.access-decision-card.is-no{border-top:4px solid var(--red);}
+.access-decision-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 18px 14px;border-bottom:1px solid #1f2d46;}
+.access-decision-heading{display:flex;align-items:center;gap:11px;}
+.access-decision-mark{
+  width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;
+}
+.is-yes .access-decision-mark{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.32);color:var(--green);}
+.is-no .access-decision-mark{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.32);color:var(--red);}
+.access-decision-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:#f0f5fb;}
+.access-decision-caption{margin-top:2px;font-size:.62rem;color:#72839d;font-weight:700;}
+.access-decision-badge{padding:5px 9px;border-radius:999px;font-size:.56rem;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;white-space:nowrap;}
+.is-yes .access-decision-badge{color:var(--green);background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);}
+.is-no .access-decision-badge{color:var(--red);background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);}
+.access-status-list{display:flex;flex-direction:column;padding:7px 10px 11px;}
+.access-status-row{
+  display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;
+  min-height:54px;padding:9px 8px;border-bottom:1px solid rgba(36,51,78,.72);
+}
+.access-status-row:last-child{border-bottom:0;}
+.access-status-index{
+  width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;font-size:.67rem;font-weight:900;
+}
+.is-yes .access-status-index{background:rgba(52,211,153,.1);color:var(--green);}
+.is-no .access-status-index{background:rgba(248,113,113,.1);color:var(--red);}
+.access-status-name{font-size:.78rem;font-weight:800;color:#e3eaf4;line-height:1.35;}
+.access-status-note{margin-top:3px;font-size:.62rem;line-height:1.45;color:#8291a7;font-weight:650;}
+.access-status-note strong{color:var(--gold);}
+.access-status-action{
+  justify-self:end;padding:5px 8px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:900;
+  letter-spacing:1px;text-transform:uppercase;white-space:nowrap;
+}
+.is-yes .access-status-action{color:var(--green);background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.22);}
+.is-no .access-status-action{color:var(--red);background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.22);}
+.access-timing-card{
+  padding:18px 19px;border:1px solid rgba(251,191,36,.38);border-radius:16px;
+  background:linear-gradient(145deg,rgba(251,191,36,.075),rgba(9,15,29,.92));
+}
+.access-section-header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:13px;}
+.access-section-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:var(--gold);}
+.access-section-subtitle{font-size:.64rem;color:#7e8da4;font-weight:700;}
+.access-timing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.access-timing-rule{padding:14px;border:1px solid rgba(251,191,36,.22);border-radius:12px;background:rgba(6,11,24,.62);}
+.access-timing-status{font-size:.76rem;font-weight:850;color:#edf2f8;line-height:1.35;}
+.access-timing-window{margin:8px 0 5px;font-family:'Bebas Neue',sans-serif;font-size:1.65rem;letter-spacing:2px;color:var(--gold);line-height:1;}
+.access-timing-result{font-size:.65rem;line-height:1.5;color:#8898ae;font-weight:650;}
+.access-timing-result strong{color:var(--green);}
+.access-guide-footer{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;
+  border:1px dashed #314361;border-radius:13px;background:rgba(96,165,250,.045);
+}
+.access-guide-footer-copy{font-size:.7rem;line-height:1.55;color:#91a1b7;font-weight:650;}
+.access-guide-footer-copy strong{color:#dbe7f5;}
+.access-guide-footer-tag{flex:0 0 auto;padding:7px 10px;border-radius:8px;background:rgba(96,165,250,.09);border:1px solid rgba(96,165,250,.24);color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;}
+@media(max-width:980px){
+  .access-guide-hero{grid-template-columns:1fr;}
+  .access-state-alert{grid-template-columns:1fr;}
+  .access-state-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:760px){
+  .access-guide-shell{padding:14px;gap:12px;}
+  .access-guide-hero{padding:19px 17px;border-radius:15px;}
+  .access-guide-steps{grid-template-columns:1fr;}
+  .access-guide-step{min-height:68px;}
+  .access-state-alert{padding:15px;}
+  .access-decision-grid{grid-template-columns:1fr;}
+  .access-timing-grid{grid-template-columns:1fr;}
+  .access-section-header{align-items:flex-start;flex-direction:column;gap:4px;}
+  .access-guide-footer{align-items:flex-start;flex-direction:column;}
+}
+@media(max-width:480px){
+  .access-state-grid{grid-template-columns:1fr;}
+  .access-status-row{grid-template-columns:30px minmax(0,1fr);}
+  .access-status-action{grid-column:2;justify-self:start;}
+  .access-decision-header{align-items:flex-start;}
+  .access-decision-badge{display:none;}
+}
+
+
+/* ── TIPS — LIVE CALL COACHING CENTER ── */
+#page-tips{
+  background:
+    radial-gradient(circle at 10% 0%,rgba(167,139,250,.08),transparent 27%),
+    radial-gradient(circle at 90% 8%,rgba(34,211,238,.06),transparent 24%),
+    var(--bg);
+}
+.coach-shell{width:100%;max-width:1180px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:16px;}
+.coach-hero{
+  position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr);gap:22px;align-items:center;
+  padding:24px 26px;border:1px solid #293653;border-radius:18px;
+  background:linear-gradient(145deg,rgba(23,20,48,.98),rgba(8,15,29,.98));box-shadow:0 16px 40px rgba(0,0,0,.22);
+}
+.coach-hero::after{content:'';position:absolute;right:-82px;bottom:-120px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.14),transparent 68%);pointer-events:none;}
+.coach-eyebrow,.asep-pro-eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:10px;padding:5px 10px;border-radius:999px;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:900;letter-spacing:2.1px;text-transform:uppercase;}
+.coach-eyebrow{border:1px solid rgba(167,139,250,.36);background:rgba(167,139,250,.08);color:var(--purple);}
+.coach-title,.asep-pro-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.35rem,4.5vw,4rem);line-height:.95;letter-spacing:4px;color:#f8fafc;text-transform:uppercase;}
+.coach-subtitle,.asep-pro-subtitle{max-width:650px;margin-top:11px;color:#9aa9bf;font-size:.82rem;line-height:1.65;font-weight:600;}
+.coach-signal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;position:relative;z-index:1;}
+.coach-signal{min-height:92px;padding:13px 12px;border:1px solid #2b3855;border-radius:12px;background:rgba(6,11,24,.68);display:flex;flex-direction:column;justify-content:space-between;}
+.coach-signal-icon{width:29px;height:29px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(167,139,250,.1);color:var(--purple);font-size:.86rem;font-weight:900;}
+.coach-signal-title{font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:900;letter-spacing:1.3px;text-transform:uppercase;color:#e8edf6;}
+.coach-signal-copy{font-size:.58rem;line-height:1.4;color:#75849b;font-weight:700;}
+.coach-rule{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 17px;border:1px solid rgba(34,211,238,.28);border-left:5px solid var(--cyan);border-radius:14px;background:linear-gradient(100deg,rgba(34,211,238,.09),rgba(9,15,29,.8));}
+.coach-rule-main{display:flex;align-items:center;gap:11px;min-width:0;}
+.coach-rule-mark{width:37px;height:37px;flex:0 0 37px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(34,211,238,.11);border:1px solid rgba(34,211,238,.27);color:var(--cyan);font-weight:900;}
+.coach-rule-title{font-family:'Barlow Condensed',sans-serif;font-size:.98rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#eef4fa;}
+.coach-rule-copy{margin-top:2px;font-size:.66rem;line-height:1.5;color:#8392a8;font-weight:650;}
+.coach-rule-tag{flex:0 0 auto;padding:6px 10px;border-radius:999px;border:1px solid rgba(34,211,238,.25);background:rgba(34,211,238,.07);color:var(--cyan);font-family:'Barlow Condensed',sans-serif;font-size:.59rem;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;}
+.coach-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
+.coach-card{overflow:hidden;border:1px solid #24334e;border-radius:16px;background:linear-gradient(155deg,rgba(17,28,48,.96),rgba(9,15,29,.96));box-shadow:0 12px 30px rgba(0,0,0,.16);}
+.coach-card.full{grid-column:1/-1;}
+.coach-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px 13px;border-bottom:1px solid #1f2d46;}
+.coach-card-heading{display:flex;align-items:center;gap:10px;}
+.coach-card-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.95rem;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.25);color:var(--accent);}
+.coach-card-title{font-family:'Barlow Condensed',sans-serif;font-size:.98rem;font-weight:900;letter-spacing:1.7px;text-transform:uppercase;color:#eff4fa;}
+.coach-card-kicker{margin-top:2px;font-size:.61rem;color:#72839c;font-weight:700;}
+.coach-card-badge{padding:5px 9px;border-radius:999px;border:1px solid #2a3b59;background:#0b1426;color:#8291a7;font-size:.54rem;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;white-space:nowrap;}
+.coach-card-body{padding:16px 18px 18px;}
+.coach-pace-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+.coach-pace{min-height:126px;padding:13px 11px;border:1px solid #273650;border-radius:12px;background:rgba(6,11,24,.6);display:flex;flex-direction:column;align-items:center;text-align:center;}
+.coach-pace.is-bad{border-color:rgba(248,113,113,.26);background:rgba(248,113,113,.045);}
+.coach-pace.is-best{border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.065);box-shadow:inset 0 0 0 1px rgba(52,211,153,.06);}
+.coach-pace.is-warn{border-color:rgba(251,191,36,.25);background:rgba(251,191,36,.045);}
+.coach-pace-meter{height:34px;display:flex;align-items:center;justify-content:center;gap:3px;margin-bottom:8px;}
+.coach-pace-meter span{display:block;width:4px;border-radius:4px;background:#50617b;}
+.coach-pace.is-bad .coach-pace-meter span{background:var(--red);}
+.coach-pace.is-best .coach-pace-meter span{background:var(--green);}
+.coach-pace.is-warn .coach-pace-meter span{background:var(--gold);}
+.coach-pace-meter span:nth-child(1){height:10px}.coach-pace-meter span:nth-child(2){height:20px}.coach-pace-meter span:nth-child(3){height:30px}.coach-pace-meter span:nth-child(4){height:18px}.coach-pace-meter span:nth-child(5){height:26px}
+.coach-pace-name{font-family:'Barlow Condensed',sans-serif;font-size:.76rem;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:#e7edf6;}
+.coach-pace-copy{margin-top:6px;font-size:.62rem;line-height:1.45;color:#8190a6;font-weight:650;}
+.coach-pace.is-bad .coach-pace-name{color:var(--red)}.coach-pace.is-best .coach-pace-name{color:var(--green)}.coach-pace.is-warn .coach-pace-name{color:var(--gold)}
+.coach-note{margin-top:11px;padding:10px 12px;border-radius:9px;background:rgba(96,165,250,.06);border:1px dashed rgba(96,165,250,.25);font-size:.68rem;line-height:1.55;color:#91a0b6;font-weight:650;}
+.coach-note strong{color:#dce7f5;}
+.coach-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.coach-example{padding:13px;border-radius:11px;border:1px solid #283752;background:rgba(6,11,24,.62);}
+.coach-example.is-wrong{border-color:rgba(248,113,113,.28);}.coach-example.is-right{border-color:rgba(52,211,153,.3);}
+.coach-example-label{font-family:'Barlow Condensed',sans-serif;font-size:.64rem;font-weight:900;letter-spacing:1.3px;text-transform:uppercase;margin-bottom:8px;}
+.coach-example.is-wrong .coach-example-label{color:var(--red)}.coach-example.is-right .coach-example-label{color:var(--green)}
+.coach-example-copy{font-size:.72rem;line-height:1.65;color:#a7b3c5;font-weight:650;}
+.coach-pause-mark{display:inline-block;margin:0 3px;padding:2px 6px;border-radius:5px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:var(--gold);font-size:.59rem;font-weight:900;letter-spacing:.8px;}
+.coach-punch-wrap{display:grid;grid-template-columns:minmax(220px,.55fr) minmax(0,1.45fr);gap:18px;align-items:center;}
+.coach-punch-copy{font-size:.7rem;line-height:1.65;color:#8291a8;font-weight:650;}
+.coach-punch-copy strong{color:#dfe7f2;}
+#punch-words{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:7px!important;margin:0!important;}
+#punch-words>div,#punch-words>span{min-height:40px!important;padding:8px 6px!important;border-radius:9px!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;background:rgba(167,139,250,.075)!important;border:1px solid rgba(167,139,250,.22)!important;color:#c9bbff!important;font-family:'Barlow Condensed',sans-serif!important;font-size:.62rem!important;font-weight:900!important;letter-spacing:.8px!important;line-height:1.15!important;box-shadow:none!important;}
+.coach-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.coach-check{display:grid;grid-template-columns:28px minmax(0,1fr);gap:9px;align-items:start;padding:10px;border:1px solid #26354f;border-radius:10px;background:rgba(6,11,24,.56);}
+.coach-check-mark{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(52,211,153,.1);color:var(--green);font-weight:900;}
+.coach-check-title{font-size:.7rem;font-weight:850;color:#e5ebf4;line-height:1.35;}
+.coach-check-copy{margin-top:2px;font-size:.59rem;line-height:1.45;color:#75849a;font-weight:650;}
+.coach-trust-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.coach-trust{min-height:58px;padding:10px 12px;border:1px solid rgba(251,191,36,.23);border-radius:10px;background:rgba(251,191,36,.055);display:flex;align-items:center;gap:9px;color:#f3d27b;font-size:.72rem;font-weight:800;}
+.coach-trust-num{width:24px;height:24px;flex:0 0 24px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:rgba(251,191,36,.1);color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:.64rem;font-weight:900;}
+
+/* ── A.S.E.P — OBJECTION CONTROL FRAMEWORK ── */
+#page-asep{background:radial-gradient(circle at 8% 0%,rgba(34,211,238,.075),transparent 28%),radial-gradient(circle at 92% 10%,rgba(52,211,153,.05),transparent 23%),var(--bg);}
+.asep-pro-shell{width:100%;max-width:1180px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:16px;}
+.asep-pro-hero{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr);gap:22px;align-items:center;padding:24px 26px;border:1px solid #263754;border-radius:18px;background:linear-gradient(145deg,rgba(7,27,37,.98),rgba(8,15,29,.98));box-shadow:0 16px 40px rgba(0,0,0,.22);}
+.asep-pro-hero::after{content:'';position:absolute;right:-80px;bottom:-120px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,.13),transparent 68%);pointer-events:none;}
+.asep-pro-eyebrow{border:1px solid rgba(34,211,238,.34);background:rgba(34,211,238,.075);color:var(--cyan);}
+.asep-pro-formula{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;position:relative;z-index:1;}
+.asep-pro-letter{min-height:92px;padding:12px 10px;border:1px solid #294057;border-radius:12px;background:rgba(6,11,24,.67);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.asep-pro-letter b{font-family:'Bebas Neue',sans-serif;font-size:2rem;line-height:1;letter-spacing:2px;color:var(--cyan);}
+.asep-pro-letter span{margin-top:6px;font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#dce6f1;}
+.asep-pro-letter:nth-child(2) b{color:var(--gold)}.asep-pro-letter:nth-child(3) b{color:var(--accent)}.asep-pro-letter:nth-child(4) b{color:var(--green)}
+.asep-pro-rule{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 17px;border:1px solid rgba(52,211,153,.3);border-left:5px solid var(--green);border-radius:14px;background:linear-gradient(100deg,rgba(52,211,153,.085),rgba(9,15,29,.82));}
+.asep-pro-rule-main{display:flex;align-items:center;gap:11px;}
+.asep-pro-rule-mark{width:38px;height:38px;flex:0 0 38px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--green);font-weight:900;}
+.asep-pro-rule-title{font-family:'Barlow Condensed',sans-serif;font-size:.98rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#eff6f4;}
+.asep-pro-rule-copy{margin-top:2px;font-size:.66rem;line-height:1.5;color:#8495a8;font-weight:650;}
+.asep-pro-rule-tag{flex:0 0 auto;padding:6px 10px;border-radius:999px;border:1px solid rgba(52,211,153,.25);background:rgba(52,211,153,.07);color:var(--green);font-family:'Barlow Condensed',sans-serif;font-size:.59rem;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;}
+.asep-pro-step-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.asep-pro-step{position:relative;overflow:hidden;min-height:280px;padding:17px 15px 15px;border:1px solid #263650;border-top:4px solid var(--cyan);border-radius:15px;background:linear-gradient(155deg,rgba(17,28,48,.96),rgba(9,15,29,.96));box-shadow:0 10px 26px rgba(0,0,0,.15);}
+.asep-pro-step:nth-child(2){border-top-color:var(--gold)}.asep-pro-step:nth-child(3){border-top-color:var(--accent)}.asep-pro-step:nth-child(4){border-top-color:var(--green)}
+.asep-pro-step-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.asep-pro-step-num{width:39px;height:39px;flex:0 0 39px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.27);color:var(--cyan);font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:1px;}
+.asep-pro-step:nth-child(2) .asep-pro-step-num{background:rgba(251,191,36,.09);border-color:rgba(251,191,36,.26);color:var(--gold)}.asep-pro-step:nth-child(3) .asep-pro-step-num{background:rgba(96,165,250,.09);border-color:rgba(96,165,250,.25);color:var(--accent)}.asep-pro-step:nth-child(4) .asep-pro-step-num{background:rgba(52,211,153,.09);border-color:rgba(52,211,153,.25);color:var(--green)}
+.asep-pro-step-name{font-family:'Barlow Condensed',sans-serif;font-size:.94rem;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:#eff4fa;}
+.asep-pro-step-purpose{font-size:.59rem;color:#73839b;font-weight:700;margin-top:2px;}
+.asep-pro-step-copy{font-size:.68rem;line-height:1.58;color:#8d9cb1;font-weight:650;min-height:54px;}
+.asep-pro-phrases{display:flex;flex-direction:column;gap:6px;margin-top:12px;}
+.asep-pro-phrase{padding:8px 9px;border-radius:8px;border:1px solid #293954;background:rgba(6,11,24,.58);font-size:.63rem;line-height:1.45;color:#c8d2e0;font-weight:700;}
+.asep-pro-step:nth-child(1) .asep-pro-phrase{border-color:rgba(34,211,238,.2)}.asep-pro-step:nth-child(2) .asep-pro-phrase{border-color:rgba(251,191,36,.2)}.asep-pro-step:nth-child(3) .asep-pro-phrase{border-color:rgba(96,165,250,.2)}.asep-pro-step:nth-child(4) .asep-pro-phrase{border-color:rgba(52,211,153,.2)}
+.asep-pro-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:16px;align-items:start;}
+.asep-pro-card{overflow:hidden;border:1px solid #24334e;border-radius:16px;background:linear-gradient(155deg,rgba(17,28,48,.96),rgba(9,15,29,.96));box-shadow:0 12px 30px rgba(0,0,0,.16);}
+.asep-pro-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px 13px;border-bottom:1px solid #1f2d46;}
+.asep-pro-card-title{font-family:'Barlow Condensed',sans-serif;font-size:.98rem;font-weight:900;letter-spacing:1.7px;text-transform:uppercase;color:#eff4fa;}
+.asep-pro-card-sub{margin-top:2px;font-size:.61rem;color:#72839c;font-weight:700;}
+.asep-pro-card-body{padding:16px 18px 18px;}
+.asep-pro-objection{padding:12px 14px;border:1px solid rgba(248,113,113,.26);border-left:4px solid var(--red);border-radius:10px;background:rgba(248,113,113,.055);font-size:.74rem;line-height:1.55;color:#d7dde7;font-weight:750;}
+.asep-pro-flow{display:flex;flex-direction:column;margin-top:12px;}
+.asep-pro-flow-row{display:grid;grid-template-columns:38px minmax(0,1fr);gap:10px;position:relative;padding-bottom:11px;}
+.asep-pro-flow-row:not(:last-child)::after{content:'';position:absolute;left:18px;top:38px;bottom:0;width:1px;background:#2c3d59;}
+.asep-pro-flow-letter{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.25);color:var(--cyan);font-family:'Bebas Neue',sans-serif;font-size:1.2rem;z-index:1;}
+.asep-pro-flow-row:nth-child(2) .asep-pro-flow-letter{background:rgba(251,191,36,.09);border-color:rgba(251,191,36,.24);color:var(--gold)}.asep-pro-flow-row:nth-child(3) .asep-pro-flow-letter{background:rgba(96,165,250,.09);border-color:rgba(96,165,250,.24);color:var(--accent)}.asep-pro-flow-row:nth-child(4) .asep-pro-flow-letter{background:rgba(52,211,153,.09);border-color:rgba(52,211,153,.24);color:var(--green)}
+.asep-pro-flow-copy{padding:8px 10px;border:1px solid #283751;border-radius:9px;background:rgba(6,11,24,.56);font-size:.68rem;line-height:1.55;color:#c5cfdd;font-weight:700;}
+.asep-pro-flow-copy strong{color:#f0f4f8;}
+.asep-pro-do-list{display:flex;flex-direction:column;gap:8px;}
+.asep-pro-do{display:grid;grid-template-columns:29px minmax(0,1fr);gap:9px;align-items:start;padding:10px;border:1px solid #273650;border-radius:10px;background:rgba(6,11,24,.56);}
+.asep-pro-do-mark{width:29px;height:29px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;}
+.asep-pro-do.is-do .asep-pro-do-mark{background:rgba(52,211,153,.1);color:var(--green)}.asep-pro-do.is-dont .asep-pro-do-mark{background:rgba(248,113,113,.1);color:var(--red)}
+.asep-pro-do-title{font-size:.68rem;font-weight:850;color:#e2e9f2;line-height:1.35;}
+.asep-pro-do-copy{margin-top:2px;font-size:.58rem;line-height:1.45;color:#75849a;font-weight:650;}
+.asep-pro-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;border:1px dashed #314361;border-radius:13px;background:rgba(96,165,250,.045);}
+.asep-pro-footer-copy{font-size:.7rem;line-height:1.55;color:#91a1b7;font-weight:650;}.asep-pro-footer-copy strong{color:#dbe7f5;}
+.asep-pro-footer-tag{flex:0 0 auto;padding:7px 10px;border-radius:8px;background:rgba(96,165,250,.09);border:1px solid rgba(96,165,250,.24);color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;}
+@media(max-width:980px){
+  .coach-hero,.asep-pro-hero{grid-template-columns:1fr;}
+  .coach-punch-wrap{grid-template-columns:1fr;}
+  #punch-words{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
+  .asep-pro-step-grid{grid-template-columns:repeat(2,1fr);}
+  .asep-pro-grid{grid-template-columns:1fr;}
+}
+@media(max-width:760px){
+  .coach-shell,.asep-pro-shell{padding:14px;gap:12px;}
+  .coach-hero,.asep-pro-hero{padding:19px 17px;border-radius:15px;}
+  .coach-signal-grid{grid-template-columns:1fr;}.coach-signal{min-height:68px;}
+  .coach-rule,.asep-pro-rule{align-items:flex-start;flex-direction:column;}
+  .coach-grid{grid-template-columns:1fr;}.coach-card.full{grid-column:auto;}
+  .coach-pace-grid{grid-template-columns:1fr;}.coach-pace{min-height:auto;}
+  .coach-compare{grid-template-columns:1fr;}
+  .coach-check-grid,.coach-trust-grid{grid-template-columns:1fr;}
+  #punch-words{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .asep-pro-formula{grid-template-columns:repeat(2,1fr);}
+  .asep-pro-step-grid{grid-template-columns:1fr;}.asep-pro-step{min-height:auto;}
+  .asep-pro-footer{align-items:flex-start;flex-direction:column;}
+}
+@media(max-width:480px){
+  .coach-card-head,.asep-pro-card-head{align-items:flex-start;}.coach-card-badge{display:none;}
+  .coach-rule-tag,.asep-pro-rule-tag{display:none;}
+  #punch-words{grid-template-columns:1fr 1fr!important;}
+}
+
+
+/* ── SPANISH — PROFESSIONAL TRANSFER PROTOCOL ── */
+#page-spanish{
+  background:
+    radial-gradient(circle at 8% 0%,rgba(251,146,60,.085),transparent 28%),
+    radial-gradient(circle at 94% 8%,rgba(248,113,113,.055),transparent 24%),
+    var(--bg);
+}
+.spanish-pro-shell{width:100%;max-width:1180px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:16px;}
+.spanish-pro-hero{
+  position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.28fr) minmax(320px,.72fr);gap:22px;align-items:center;
+  padding:24px 26px;border:1px solid #3a3040;border-radius:18px;
+  background:linear-gradient(145deg,rgba(35,22,25,.98),rgba(8,15,29,.98));box-shadow:0 16px 40px rgba(0,0,0,.22);
+}
+.spanish-pro-hero::after{content:'';position:absolute;right:-82px;bottom:-122px;width:290px;height:290px;border-radius:50%;background:radial-gradient(circle,rgba(251,146,60,.15),transparent 68%);pointer-events:none;}
+.spanish-pro-eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:10px;padding:5px 10px;border-radius:999px;border:1px solid rgba(251,146,60,.34);background:rgba(251,146,60,.08);color:var(--orange);font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:900;letter-spacing:2.1px;text-transform:uppercase;}
+.spanish-pro-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.35rem,4.5vw,4rem);line-height:.95;letter-spacing:4px;color:#f8fafc;text-transform:uppercase;}
+.spanish-pro-subtitle{max-width:660px;margin-top:11px;color:#9aa9bf;font-size:.82rem;line-height:1.65;font-weight:600;}
+.spanish-pro-line-card{position:relative;z-index:1;padding:17px;border:1px solid rgba(251,146,60,.31);border-radius:15px;background:linear-gradient(150deg,rgba(251,146,60,.11),rgba(6,11,24,.78));box-shadow:0 12px 30px rgba(0,0,0,.18);}
+.spanish-pro-line-kicker{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:#f6ad75;}
+.spanish-pro-number{margin:8px 0 4px;font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3rem);line-height:1;letter-spacing:3px;color:#fff;white-space:nowrap;}
+.spanish-pro-line-copy{font-size:.61rem;line-height:1.5;color:#8e9caf;font-weight:700;}
+.spanish-pro-call{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:13px;padding:10px 12px;border-radius:10px;border:1px solid rgba(251,146,60,.4);background:rgba(251,146,60,.13);color:#ffd5b6;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;transition:.18s ease;}
+.spanish-pro-call:hover{transform:translateY(-1px);background:rgba(251,146,60,.2);border-color:rgba(251,146,60,.62);}
+.spanish-pro-rule{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 17px;border:1px solid rgba(248,113,113,.31);border-left:5px solid var(--red);border-radius:14px;background:linear-gradient(100deg,rgba(248,113,113,.085),rgba(9,15,29,.82));}
+.spanish-pro-rule-main{display:flex;align-items:center;gap:11px;min-width:0;}
+.spanish-pro-rule-mark{width:38px;height:38px;flex:0 0 38px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);color:var(--red);font-weight:900;}
+.spanish-pro-rule-title{font-family:'Barlow Condensed',sans-serif;font-size:.98rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#f7eeee;}
+.spanish-pro-rule-copy{margin-top:2px;font-size:.66rem;line-height:1.5;color:#8f9bad;font-weight:650;}
+.spanish-pro-rule-copy strong{color:#f5c0c0;}
+.spanish-pro-rule-tag{flex:0 0 auto;padding:6px 10px;border-radius:999px;border:1px solid rgba(248,113,113,.25);background:rgba(248,113,113,.07);color:var(--red);font-family:'Barlow Condensed',sans-serif;font-size:.59rem;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;}
+.spanish-pro-step-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.spanish-pro-step{position:relative;overflow:hidden;min-height:224px;padding:17px 15px 15px;border:1px solid #2e334a;border-top:4px solid var(--orange);border-radius:15px;background:linear-gradient(155deg,rgba(25,28,45,.96),rgba(9,15,29,.96));box-shadow:0 10px 26px rgba(0,0,0,.15);}
+.spanish-pro-step:nth-child(2){border-top-color:var(--gold)}.spanish-pro-step:nth-child(3){border-top-color:var(--accent)}.spanish-pro-step:nth-child(4){border-top-color:var(--green)}
+.spanish-pro-step-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.spanish-pro-step-num{width:39px;height:39px;flex:0 0 39px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.27);color:var(--orange);font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:1px;}
+.spanish-pro-step:nth-child(2) .spanish-pro-step-num{background:rgba(251,191,36,.09);border-color:rgba(251,191,36,.26);color:var(--gold)}.spanish-pro-step:nth-child(3) .spanish-pro-step-num{background:rgba(96,165,250,.09);border-color:rgba(96,165,250,.25);color:var(--accent)}.spanish-pro-step:nth-child(4) .spanish-pro-step-num{background:rgba(52,211,153,.09);border-color:rgba(52,211,153,.25);color:var(--green)}
+.spanish-pro-step-name{font-family:'Barlow Condensed',sans-serif;font-size:.94rem;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:#eff4fa;}
+.spanish-pro-step-purpose{font-size:.59rem;color:#73839b;font-weight:700;margin-top:2px;}
+.spanish-pro-step-copy{font-size:.68rem;line-height:1.58;color:#8d9cb1;font-weight:650;}
+.spanish-pro-step-cue{margin-top:12px;padding:8px 9px;border-radius:8px;border:1px solid rgba(251,146,60,.2);background:rgba(6,11,24,.58);font-size:.63rem;line-height:1.45;color:#c8d2e0;font-weight:700;}
+.spanish-pro-step:nth-child(2) .spanish-pro-step-cue{border-color:rgba(251,191,36,.2)}.spanish-pro-step:nth-child(3) .spanish-pro-step-cue{border-color:rgba(96,165,250,.2)}.spanish-pro-step:nth-child(4) .spanish-pro-step-cue{border-color:rgba(52,211,153,.2)}
+.spanish-pro-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:16px;align-items:start;}
+.spanish-pro-card{overflow:hidden;border:1px solid #29334a;border-radius:16px;background:linear-gradient(155deg,rgba(17,28,48,.96),rgba(9,15,29,.96));box-shadow:0 12px 30px rgba(0,0,0,.16);}
+.spanish-pro-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px 13px;border-bottom:1px solid #1f2d46;}
+.spanish-pro-card-heading{display:flex;align-items:center;gap:10px;}
+.spanish-pro-card-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.95rem;background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.25);color:var(--orange);}
+.spanish-pro-card-title{font-family:'Barlow Condensed',sans-serif;font-size:.98rem;font-weight:900;letter-spacing:1.7px;text-transform:uppercase;color:#eff4fa;}
+.spanish-pro-card-sub{margin-top:2px;font-size:.61rem;color:#72839c;font-weight:700;}
+.spanish-pro-card-badge{padding:5px 9px;border-radius:999px;border:1px solid rgba(251,146,60,.25);background:rgba(251,146,60,.07);color:var(--orange);font-size:.54rem;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;white-space:nowrap;}
+.spanish-pro-card-body{padding:16px 18px 18px;}
+.spanish-pro-script-label{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;color:var(--orange);}
+.spanish-pro-script{margin-top:9px;padding:15px 16px;border:1px solid rgba(251,146,60,.23);border-left:4px solid var(--orange);border-radius:11px;background:rgba(251,146,60,.05);font-size:.82rem;line-height:1.78;color:#d6dee9;font-weight:700;}
+.spanish-pro-script strong{color:#fff1e6;}
+.spanish-pro-handoff{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:12px;}
+.spanish-pro-handoff-step{padding:6px 8px;border:1px solid #2c3b55;border-radius:8px;background:rgba(6,11,24,.58);font-family:'Barlow Condensed',sans-serif;font-size:.61rem;font-weight:900;letter-spacing:.8px;text-transform:uppercase;color:#b9c6d8;}
+.spanish-pro-handoff-arrow{color:#596a83;font-size:.75rem;font-weight:900;}
+.spanish-pro-checklist{display:flex;flex-direction:column;gap:8px;}
+.spanish-pro-check{display:grid;grid-template-columns:30px minmax(0,1fr);gap:9px;align-items:center;padding:10px;border:1px solid #29374f;border-radius:10px;background:rgba(6,11,24,.56);cursor:pointer;}
+.spanish-pro-check input{width:18px;height:18px;margin:0;accent-color:var(--green);cursor:pointer;justify-self:center;}
+.spanish-pro-check span{font-size:.66rem;line-height:1.45;color:#c7d1df;font-weight:700;}
+.spanish-pro-check strong{color:#edf4fb;}
+.spanish-pro-risk{padding:15px 16px;border:1px solid rgba(248,113,113,.25);border-radius:14px;background:rgba(248,113,113,.045);}
+.spanish-pro-risk-title{font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:900;letter-spacing:1.3px;text-transform:uppercase;color:var(--red);}
+.spanish-pro-risk-list{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
+.spanish-pro-risk-item{padding:10px;border:1px solid rgba(248,113,113,.18);border-radius:9px;background:rgba(6,11,24,.48);font-size:.62rem;line-height:1.45;color:#aeb9c8;font-weight:700;}
+.spanish-pro-risk-item strong{display:block;margin-bottom:3px;color:#eef2f7;font-size:.65rem;}
+.spanish-pro-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;border:1px dashed #3d3f55;border-radius:13px;background:rgba(251,146,60,.035);}
+.spanish-pro-footer-copy{font-size:.7rem;line-height:1.55;color:#91a1b7;font-weight:650;}.spanish-pro-footer-copy strong{color:#f1e1d5;}
+.spanish-pro-footer-tag{flex:0 0 auto;padding:7px 10px;border-radius:8px;background:rgba(251,146,60,.09);border:1px solid rgba(251,146,60,.24);color:var(--orange);font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;}
+@media(max-width:980px){
+  .spanish-pro-hero{grid-template-columns:1fr;}
+  .spanish-pro-step-grid{grid-template-columns:repeat(2,1fr);}
+  .spanish-pro-grid{grid-template-columns:1fr;}
+  .spanish-pro-risk-list{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:760px){
+  .spanish-pro-shell{padding:14px;gap:12px;}
+  .spanish-pro-hero{padding:19px 17px;border-radius:15px;}
+  .spanish-pro-rule{align-items:flex-start;flex-direction:column;}
+  .spanish-pro-step-grid{grid-template-columns:1fr;}.spanish-pro-step{min-height:auto;}
+  .spanish-pro-risk-list{grid-template-columns:1fr;}
+  .spanish-pro-footer{align-items:flex-start;flex-direction:column;}
+}
+@media(max-width:480px){
+  .spanish-pro-card-head{align-items:flex-start;}.spanish-pro-card-badge,.spanish-pro-rule-tag{display:none;}
+  .spanish-pro-number{font-size:2.15rem;letter-spacing:2px;}
+  .spanish-pro-handoff-arrow{display:none;}
+  .spanish-pro-handoff{display:grid;grid-template-columns:1fr;}
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   DISPO + SUNDAY PROTOCOL — PROFESSIONAL OPERATIONS UI
+══════════════════════════════════════════════════════════════ */
+#page-dispo{
+  background:
+    radial-gradient(circle at 8% 0%,rgba(52,211,153,.065),transparent 27%),
+    radial-gradient(circle at 92% 3%,rgba(96,165,250,.055),transparent 25%),
+    var(--bg);
+}
+.dispo-pro-shell{width:100%;max-width:1180px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:16px;}
+.dispo-pro-hero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:22px;padding:24px 26px;border:1px solid #29384f;border-radius:18px;background:linear-gradient(145deg,rgba(15,28,47,.98),rgba(7,13,25,.98));box-shadow:0 16px 40px rgba(0,0,0,.22);}
+.dispo-pro-hero::after{content:'';position:absolute;right:-100px;top:-120px;width:310px;height:310px;border-radius:50%;background:radial-gradient(circle,rgba(52,211,153,.13),transparent 68%);pointer-events:none;}
+.dispo-pro-eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:10px;padding:5px 10px;border-radius:999px;border:1px solid rgba(52,211,153,.3);background:rgba(52,211,153,.07);color:var(--green);font-family:'Barlow Condensed',sans-serif;font-size:.66rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;}
+.dispo-pro-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.35rem,4.5vw,4rem);line-height:.95;letter-spacing:4px;color:#f8fafc;text-transform:uppercase;}
+.dispo-pro-subtitle{max-width:720px;margin-top:10px;color:#91a0b5;font-size:.8rem;line-height:1.65;font-weight:650;}
+.dispo-pro-standard{position:relative;z-index:1;flex:0 0 auto;min-width:235px;padding:15px 16px;border:1px solid rgba(96,165,250,.28);border-radius:14px;background:rgba(96,165,250,.065);}
+.dispo-pro-standard-label{font-family:'Barlow Condensed',sans-serif;font-size:.57rem;font-weight:900;letter-spacing:1.7px;text-transform:uppercase;color:var(--accent);}
+.dispo-pro-standard-main{margin-top:5px;font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;letter-spacing:1px;color:#edf4ff;text-transform:uppercase;}
+.dispo-pro-standard-copy{margin-top:4px;font-size:.61rem;line-height:1.45;color:#7f91aa;font-weight:700;}
+.dispo-pro-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.dispo-pro-card{--tone:96,165,250;position:relative;overflow:hidden;min-height:225px;padding:18px;border:1px solid rgba(var(--tone),.25);border-top:4px solid rgb(var(--tone));border-radius:16px;background:linear-gradient(155deg,rgba(17,28,48,.97),rgba(7,13,25,.98));box-shadow:0 12px 30px rgba(0,0,0,.16);display:flex;flex-direction:column;}
+.dispo-pro-card.green{--tone:52,211,153}.dispo-pro-card.gold{--tone:251,191,36}.dispo-pro-card.purple{--tone:167,139,250}.dispo-pro-card.red{--tone:248,113,113}
+.dispo-pro-card::after{content:'';position:absolute;right:-55px;bottom:-75px;width:175px;height:175px;border-radius:50%;background:radial-gradient(circle,rgba(var(--tone),.11),transparent 70%);pointer-events:none;}
+.dispo-pro-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;position:relative;z-index:1;}
+.dispo-pro-card-id{display:flex;align-items:center;gap:11px;min-width:0;}
+.dispo-pro-icon{width:42px;height:42px;flex:0 0 42px;border-radius:12px;display:grid;place-items:center;background:rgba(var(--tone),.09);border:1px solid rgba(var(--tone),.24);font-size:1.05rem;}
+.dispo-pro-label{font-family:'Barlow Condensed',sans-serif;font-size:1.02rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#eff4fa;}
+.dispo-pro-kicker{margin-top:2px;font-size:.58rem;color:#70819a;font-weight:700;}
+.dispo-pro-status{padding:5px 8px;border-radius:999px;border:1px solid rgba(var(--tone),.27);background:rgba(var(--tone),.07);color:rgb(var(--tone));font-family:'Barlow Condensed',sans-serif;font-size:.54rem;font-weight:900;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;}
+.dispo-pro-purpose{position:relative;z-index:1;margin:17px 0 14px;padding:11px 12px;border:1px solid #25344c;border-radius:10px;background:rgba(5,10,21,.55);font-size:.68rem;line-height:1.55;color:#aab7c8;font-weight:650;}
+.dispo-pro-purpose strong{display:block;margin-bottom:2px;color:#eef4fb;font-family:'Barlow Condensed',sans-serif;font-size:.67rem;letter-spacing:1px;text-transform:uppercase;}
+.dispo-pro-btn{position:relative;z-index:1;margin-top:auto;width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(var(--tone),.48);background:rgba(var(--tone),.13);color:rgb(var(--tone));font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:.18s ease;}
+.dispo-pro-btn:hover{transform:translateY(-1px);background:rgba(var(--tone),.21);border-color:rgba(var(--tone),.68);box-shadow:0 9px 24px rgba(0,0,0,.2);}
+.dispo-pro-reminders{overflow:hidden;border:1px solid #26354d;border-radius:16px;background:linear-gradient(155deg,rgba(15,24,41,.96),rgba(7,13,25,.97));}
+.dispo-pro-reminder-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 17px 12px;border-bottom:1px solid #1c2940;}
+.dispo-pro-reminder-title{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:900;letter-spacing:1.7px;text-transform:uppercase;color:#eef4fb;}
+.dispo-pro-reminder-tag{padding:5px 9px;border-radius:999px;border:1px solid rgba(34,211,238,.22);background:rgba(34,211,238,.055);color:var(--cyan);font-size:.54rem;font-weight:900;letter-spacing:1px;text-transform:uppercase;}
+.dispo-pro-reminder-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:14px 16px 16px;}
+.dispo-pro-reminder{display:grid;grid-template-columns:34px minmax(0,1fr);gap:9px;align-items:center;padding:10px 11px;border:1px solid #24334b;border-radius:10px;background:rgba(6,11,24,.56);}
+.dispo-pro-reminder-icon{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:rgba(56,189,248,.075);border:1px solid rgba(56,189,248,.18);font-size:.88rem;}
+.dispo-pro-reminder strong{display:block;font-size:.66rem;color:#eef4fb;}.dispo-pro-reminder span{display:block;margin-top:1px;font-size:.58rem;line-height:1.35;color:#73839b;font-weight:650;}
+
+/* top navigation treatment */
+.tab-btn.t-dispo{border-color:rgba(52,211,153,.26);color:#79b7a2;background:linear-gradient(145deg,rgba(52,211,153,.045),#0d1424);}
+.tab-btn.t-dispo:hover{border-color:rgba(52,211,153,.48);color:var(--green);}
+.tab-btn.t-dispo.active{background:linear-gradient(145deg,rgba(52,211,153,.14),rgba(6,26,14,.86));border-color:var(--green);color:var(--green);box-shadow:0 0 18px rgba(52,211,153,.16);}
+
+#page-sunday{background:radial-gradient(circle at 10% 0%,rgba(167,139,250,.085),transparent 28%),radial-gradient(circle at 94% 8%,rgba(251,191,36,.045),transparent 24%),var(--bg);}
+.sunday-pro-shell{width:100%;max-width:1180px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:16px;}
+.sunday-pro-hero{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);gap:22px;align-items:center;padding:25px 26px;border:1px solid #3a3153;border-radius:18px;background:linear-gradient(145deg,rgba(29,20,48,.98),rgba(8,14,27,.98));box-shadow:0 16px 40px rgba(0,0,0,.22);}
+.sunday-pro-hero::after{content:'';position:absolute;right:-95px;top:-115px;width:310px;height:310px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.17),transparent 68%);pointer-events:none;}
+.sunday-pro-eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:10px;padding:5px 10px;border-radius:999px;border:1px solid rgba(167,139,250,.34);background:rgba(167,139,250,.08);color:var(--purple);font-family:'Barlow Condensed',sans-serif;font-size:.67rem;font-weight:900;letter-spacing:2.1px;text-transform:uppercase;}
+.sunday-pro-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.35rem,4.5vw,4rem);line-height:.95;letter-spacing:4px;color:#f8fafc;text-transform:uppercase;}
+.sunday-pro-subtitle{max-width:700px;margin-top:10px;color:#988eab;font-size:.81rem;line-height:1.65;font-weight:650;}
+.sunday-pro-shift{position:relative;z-index:1;padding:17px;border:1px solid rgba(167,139,250,.31);border-radius:15px;background:linear-gradient(150deg,rgba(167,139,250,.11),rgba(6,11,24,.78));}
+.sunday-pro-shift-label{font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:900;letter-spacing:1.7px;text-transform:uppercase;color:#c4b5fd;}
+.sunday-pro-shift-time{margin:7px 0 3px;font-family:'Bebas Neue',sans-serif;font-size:2.4rem;line-height:1;letter-spacing:3px;color:#fff;}
+.sunday-pro-shift-copy{font-size:.6rem;line-height:1.45;color:#81768f;font-weight:700;}
+.sunday-pro-rule{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 17px;border:1px solid rgba(251,191,36,.25);border-left:5px solid var(--gold);border-radius:14px;background:linear-gradient(100deg,rgba(251,191,36,.065),rgba(9,15,29,.82));}
+.sunday-pro-rule-main{display:flex;align-items:center;gap:11px;min-width:0;}
+.sunday-pro-rule-mark{width:39px;height:39px;flex:0 0 39px;border-radius:10px;display:grid;place-items:center;background:rgba(251,191,36,.09);border:1px solid rgba(251,191,36,.22);color:var(--gold);font-weight:900;}
+.sunday-pro-rule-title{font-family:'Barlow Condensed',sans-serif;font-size:.98rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#f7f2e7;}
+.sunday-pro-rule-copy{margin-top:2px;font-size:.66rem;line-height:1.5;color:#8f9bad;font-weight:650;}.sunday-pro-rule-copy strong{color:#f6dda1;}
+.sunday-pro-rule-tag{flex:0 0 auto;padding:6px 10px;border-radius:999px;border:1px solid rgba(251,191,36,.22);background:rgba(251,191,36,.055);color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;}
+.sunday-pro-step-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.sunday-pro-step{position:relative;overflow:hidden;min-height:190px;padding:17px;border:1px solid #302c46;border-top:4px solid var(--purple);border-radius:15px;background:linear-gradient(155deg,rgba(22,24,43,.97),rgba(8,14,27,.97));box-shadow:0 10px 26px rgba(0,0,0,.15);}
+.sunday-pro-step:nth-child(2){border-top-color:var(--accent)}.sunday-pro-step:nth-child(3){border-top-color:var(--gold)}
+.sunday-pro-step-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}.sunday-pro-step-num{width:39px;height:39px;flex:0 0 39px;border-radius:11px;display:grid;place-items:center;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.27);color:var(--purple);font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:1px;}
+.sunday-pro-step:nth-child(2) .sunday-pro-step-num{background:rgba(96,165,250,.09);border-color:rgba(96,165,250,.25);color:var(--accent)}.sunday-pro-step:nth-child(3) .sunday-pro-step-num{background:rgba(251,191,36,.09);border-color:rgba(251,191,36,.25);color:var(--gold)}
+.sunday-pro-step-title{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:900;letter-spacing:1.3px;text-transform:uppercase;color:#eff4fa;}.sunday-pro-step-sub{font-size:.58rem;color:#73839b;font-weight:700;margin-top:2px;}
+.sunday-pro-step-copy{font-size:.69rem;line-height:1.58;color:#9ba8b9;font-weight:650;}.sunday-pro-step-copy strong{color:#eef4fb;}
+.sunday-pro-grid{display:grid;grid-template-columns:minmax(0,1.28fr) minmax(320px,.72fr);gap:16px;align-items:start;}
+.sunday-pro-script-card,.sunday-pro-check-card{overflow:hidden;border:1px solid #302d47;border-radius:16px;background:linear-gradient(155deg,rgba(18,25,44,.97),rgba(8,14,27,.97));box-shadow:0 12px 30px rgba(0,0,0,.16);}
+.sunday-pro-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px 13px;border-bottom:1px solid #242943;}.sunday-pro-card-heading{display:flex;align-items:center;gap:10px;}.sunday-pro-card-icon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);color:var(--purple);font-size:.95rem;}.sunday-pro-card-title{font-family:'Barlow Condensed',sans-serif;font-size:.98rem;font-weight:900;letter-spacing:1.7px;text-transform:uppercase;color:#eff4fa;}.sunday-pro-card-sub{margin-top:2px;font-size:.6rem;color:#72839c;font-weight:700;}.sunday-pro-card-badge{padding:5px 9px;border-radius:999px;border:1px solid rgba(167,139,250,.25);background:rgba(167,139,250,.065);color:var(--purple);font-size:.54rem;font-weight:900;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;}
+.sunday-pro-card-body{padding:16px 18px 18px;}.sunday-pro-script-label{font-family:'Barlow Condensed',sans-serif;font-size:.59rem;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;color:#b8a8ea;}.sunday-pro-script{margin-top:9px;padding:17px;border:1px solid rgba(167,139,250,.24);border-left:4px solid var(--purple);border-radius:11px;background:rgba(167,139,250,.055);font-size:.84rem;line-height:1.8;color:#d6dee9;font-weight:700;font-style:italic;}.sunday-pro-script strong{color:#ffe491;font-style:normal;}.sunday-pro-script-note{margin-top:10px;font-size:.62rem;line-height:1.45;color:#80758f;font-weight:700;}
+.sunday-pro-progress-wrap{padding:11px 18px;border-bottom:1px solid #242943;background:rgba(167,139,250,.035);}.sunday-pro-progress-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;font-family:'Barlow Condensed',sans-serif;font-size:.59rem;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#8f82a2;}.sunday-pro-progress-meta strong{color:var(--purple);}.sunday-pro-progress-track{height:6px;border-radius:999px;background:#0a1020;overflow:hidden;border:1px solid #242943;}.sunday-pro-progress-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--purple),var(--accent));transition:width .25s ease;}
+.sunday-pro-checklist{display:flex;flex-direction:column;gap:8px;}.sunday-pro-check{display:grid;grid-template-columns:31px minmax(0,1fr);gap:9px;align-items:center;padding:10px;border:1px solid #29354c;border-radius:10px;background:rgba(6,11,24,.56);cursor:pointer;transition:.15s ease;}.sunday-pro-check:hover{border-color:#3a4660;background:rgba(12,19,35,.72);}.sunday-pro-check.done{border-color:rgba(52,211,153,.23);background:rgba(52,211,153,.045);}.sunday-pro-check input{width:18px;height:18px;margin:0;accent-color:var(--purple);cursor:pointer;justify-self:center;}.sunday-pro-check span{font-size:.66rem;line-height:1.45;color:#c7d1df;font-weight:700;}.sunday-pro-check strong{color:#eef4fb;}
+.sunday-pro-tip{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;border:1px dashed rgba(167,139,250,.34);border-radius:13px;background:rgba(167,139,250,.035);}.sunday-pro-tip-copy{font-size:.7rem;line-height:1.55;color:#91a1b7;font-weight:650;}.sunday-pro-tip-copy strong{color:#d9d0ff;}.sunday-pro-tip-tag{flex:0 0 auto;padding:7px 10px;border-radius:8px;background:rgba(167,139,250,.09);border:1px solid rgba(167,139,250,.24);color:var(--purple);font-family:'Barlow Condensed',sans-serif;font-size:.61rem;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;}
+.tab-btn.t-sunday{border-color:rgba(167,139,250,.34);background:linear-gradient(145deg,rgba(167,139,250,.055),#0d1424);color:#a997d4;}
+.tab-btn.t-sunday:hover{border-color:rgba(167,139,250,.55);color:#c4b5fd;}.tab-btn.t-sunday.active{background:linear-gradient(145deg,rgba(167,139,250,.16),rgba(18,8,40,.88));border-color:#c084fc;color:#d8b4fe;box-shadow:0 0 18px rgba(192,132,252,.18);}
+@media(max-width:980px){.dispo-pro-reminder-grid{grid-template-columns:repeat(2,1fr)}.sunday-pro-hero{grid-template-columns:1fr}.sunday-pro-grid{grid-template-columns:1fr}.sunday-pro-step-grid{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:760px){.dispo-pro-shell,.sunday-pro-shell{padding:14px;gap:12px}.dispo-pro-hero{padding:19px 17px;align-items:flex-start;flex-direction:column}.dispo-pro-standard{width:100%;min-width:0}.dispo-pro-grid{grid-template-columns:1fr}.dispo-pro-reminder-grid{grid-template-columns:1fr}.sunday-pro-hero{padding:19px 17px;border-radius:15px}.sunday-pro-rule{align-items:flex-start;flex-direction:column}.sunday-pro-step-grid{grid-template-columns:1fr}.sunday-pro-tip{align-items:flex-start;flex-direction:column}}
+@media(max-width:480px){.dispo-pro-reminder-tag,.sunday-pro-card-badge,.sunday-pro-rule-tag{display:none}.dispo-pro-card-head,.sunday-pro-card-head{align-items:flex-start}}
+
 </style>
 <body>
+<!-- Agent Profile + Leaderboard professional redesign merged into the 2026-09-08 Access Guide build. -->
+
 <!-- ── NEW LEAD CELEBRATION POPUP ── -->
 <div id="xfer-banner" role="dialog" aria-modal="true" aria-labelledby="xfer-banner-title" aria-hidden="true">
   <div class="xfer-banner-inner">
@@ -2955,324 +3459,559 @@ input, textarea, select { color-scheme: dark; }
 
   <!-- DISPOSITION -->
   <div class="tab-page" id="page-dispo">
-    <div class="dispo-grid">
-      <div class="dsec" style="border-top:4px solid var(--green);">
-        <span class="dlabel" style="color:var(--green)">&#9989; TRANSFERRED</span>
-        <button class="dbtn" style="background:var(--green);color:#fff;" onclick="location.reload()">LIVE TRANSFER DONE<span>Client connected to specialist</span></button>
-      </div>
-      <div class="dsec" style="border-top:4px solid var(--gold);">
-        <span class="dlabel" style="color:var(--gold)">&#128197; CALLBACK</span>
-        <button class="dbtn" style="background:var(--gold);color:#fff;" onclick="location.reload()">SET CALLBACK<span>Client requested call back</span></button>
-      </div>
-      <div class="dsec" style="border-top:4px solid var(--purple);">
-        <span class="dlabel" style="color:var(--purple)">&#128245; NO ANSWER</span>
-        <button class="dbtn" style="background:var(--purple);color:#fff;" onclick="location.reload()">VOICEMAIL / NO ANSWER<span>Log attempt, move on</span></button>
-      </div>
-      <div class="dsec" style="border-top:4px solid var(--red);">
-        <span class="dlabel" style="color:var(--red)">&#10060; NOT QUALIFIED</span>
-        <button class="dbtn" style="background:var(--red);color:#fff;" onclick="location.reload()">DQ &mdash; END CALL<span>Does not meet criteria</span></button>
-      </div>
-      <div class="dsec" style="grid-column:1/-1;border-top:4px solid var(--accent2);">
-        <span class="dlabel" style="color:var(--accent2)">&#128204; QUICK REMINDERS</span>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
-          <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);border-radius:8px;padding:10px;font-size:0.78rem;line-height:1.6;color:#cbd5e1;">&#129496; <strong style="color:var(--text)">Stay calm</strong> &mdash; energy transfers</div>
-          <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);border-radius:8px;padding:10px;font-size:0.78rem;line-height:1.6;color:#cbd5e1;">&#9208;&#65039; <strong style="color:var(--text)">Pause</strong> after punch words</div>
-          <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);border-radius:8px;padding:10px;font-size:0.78rem;line-height:1.6;color:#cbd5e1;">&#127919; <strong style="color:var(--text)">Always pivot</strong> back to script</div>
-          <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);border-radius:8px;padding:10px;font-size:0.78rem;line-height:1.6;color:#cbd5e1;">&#129296; <strong style="color:var(--text)">Ask &amp; wait</strong> &mdash; silence wins</div>
-          <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);border-radius:8px;padding:10px;font-size:0.78rem;line-height:1.6;color:#cbd5e1;">&#128203; <strong style="color:var(--text)">Use their name</strong> to build trust</div>
-          <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);border-radius:8px;padding:10px;font-size:0.78rem;line-height:1.6;color:#cbd5e1;">&#128516; <strong style="color:var(--text)">Smile while you talk</strong> &mdash; they feel it</div>
+    <div class="dispo-pro-shell">
+      <section class="dispo-pro-hero" aria-labelledby="dispo-pro-title">
+        <div>
+          <div class="dispo-pro-eyebrow">● Call Completion Center</div>
+          <h1 class="dispo-pro-title" id="dispo-pro-title">Choose the Correct Disposition</h1>
+          <p class="dispo-pro-subtitle">Finish every call with a clean, accurate outcome. Select the disposition that matches what actually happened, complete the required note or handoff, then move confidently to the next call.</p>
         </div>
-      </div>
+        <div class="dispo-pro-standard">
+          <div class="dispo-pro-standard-label">Agent Standard</div>
+          <div class="dispo-pro-standard-main">Accurate · Clear · Complete</div>
+          <div class="dispo-pro-standard-copy">The disposition should tell the next person exactly where the customer stands.</div>
+        </div>
+      </section>
+
+      <section class="dispo-pro-grid" aria-label="Disposition options">
+        <article class="dispo-pro-card green">
+          <div class="dispo-pro-card-head"><div class="dispo-pro-card-id"><div class="dispo-pro-icon">✓</div><div><div class="dispo-pro-label">Transferred</div><div class="dispo-pro-kicker">Successful specialist handoff</div></div></div><div class="dispo-pro-status">Completed</div></div>
+          <div class="dispo-pro-purpose"><strong>Use when</strong>The client has been connected to the specialist and the live transfer is complete.</div>
+          <button class="dispo-pro-btn" onclick="location.reload()">Live Transfer Done</button>
+        </article>
+        <article class="dispo-pro-card gold">
+          <div class="dispo-pro-card-head"><div class="dispo-pro-card-id"><div class="dispo-pro-icon">↻</div><div><div class="dispo-pro-label">Callback</div><div class="dispo-pro-kicker">Customer requested another time</div></div></div><div class="dispo-pro-status">Follow Up</div></div>
+          <div class="dispo-pro-purpose"><strong>Use when</strong>The client requested a call back. Confirm the date or time window before ending the call.</div>
+          <button class="dispo-pro-btn" onclick="location.reload()">Set Callback</button>
+        </article>
+        <article class="dispo-pro-card purple">
+          <div class="dispo-pro-card-head"><div class="dispo-pro-card-id"><div class="dispo-pro-icon">☎</div><div><div class="dispo-pro-label">No Answer</div><div class="dispo-pro-kicker">Attempt made, customer unavailable</div></div></div><div class="dispo-pro-status">Attempted</div></div>
+          <div class="dispo-pro-purpose"><strong>Use when</strong>The call reached voicemail or there was no answer. Log the attempt and continue.</div>
+          <button class="dispo-pro-btn" onclick="location.reload()">Voicemail / No Answer</button>
+        </article>
+        <article class="dispo-pro-card red">
+          <div class="dispo-pro-card-head"><div class="dispo-pro-card-id"><div class="dispo-pro-icon">×</div><div><div class="dispo-pro-label">Not Qualified</div><div class="dispo-pro-kicker">Does not meet required criteria</div></div></div><div class="dispo-pro-status">DQ</div></div>
+          <div class="dispo-pro-purpose"><strong>Use when</strong>The customer does not meet the qualification criteria. End the call clearly and professionally.</div>
+          <button class="dispo-pro-btn" onclick="location.reload()">DQ — End Call</button>
+        </article>
+      </section>
+
+      <section class="dispo-pro-reminders">
+        <header class="dispo-pro-reminder-head"><div class="dispo-pro-reminder-title">Quick Call-Control Reminders</div><div class="dispo-pro-reminder-tag">Before You Submit</div></header>
+        <div class="dispo-pro-reminder-grid">
+          <div class="dispo-pro-reminder"><div class="dispo-pro-reminder-icon">🧘</div><div><strong>Stay calm</strong><span>Your energy carries through the call.</span></div></div>
+          <div class="dispo-pro-reminder"><div class="dispo-pro-reminder-icon">⏸</div><div><strong>Use the pause</strong><span>Pause after punch words and questions.</span></div></div>
+          <div class="dispo-pro-reminder"><div class="dispo-pro-reminder-icon">🎯</div><div><strong>Always pivot</strong><span>Bring the conversation back to the script.</span></div></div>
+          <div class="dispo-pro-reminder"><div class="dispo-pro-reminder-icon">🤫</div><div><strong>Ask &amp; wait</strong><span>Silence gives the customer room to answer.</span></div></div>
+          <div class="dispo-pro-reminder"><div class="dispo-pro-reminder-icon">👤</div><div><strong>Use their name</strong><span>Personal language builds trust and control.</span></div></div>
+          <div class="dispo-pro-reminder"><div class="dispo-pro-reminder-icon">🙂</div><div><strong>Smile while talking</strong><span>A warmer tone is easier to hear than you think.</span></div></div>
+        </div>
+      </section>
     </div>
   </div>
 
   <!-- TIPS -->
   <div class="tab-page" id="page-tips">
-    <div class="tips-view">
-      <div class="rb" style="border-left:4px solid var(--accent2);">
-        <div class="rblabel" style="color:var(--accent2);">&#127897;&#65039; SPEAKING PACE</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">
-          <div style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:8px;padding:10px;text-align:center;"><div style="color:var(--red);font-size:0.62rem;font-weight:800;">TOO FAST &#10060;</div><div style="font-size:0.65rem;color:var(--muted);margin-top:4px;">They zone out or get suspicious.</div></div>
-          <div style="background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.4);border-radius:8px;padding:10px;text-align:center;"><div style="color:var(--green);font-size:0.62rem;font-weight:800;">JUST RIGHT &#9989;</div><div style="font-size:0.65rem;color:var(--muted);margin-top:4px;">Calm, clear, confident.</div></div>
-          <div style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:8px;padding:10px;text-align:center;"><div style="color:var(--gold);font-size:0.62rem;font-weight:800;">TOO SLOW &#9888;&#65039;</div><div style="font-size:0.65rem;color:var(--muted);margin-top:4px;">Sounds unsure. Busy people hang up.</div></div>
+    <div class="coach-shell">
+      <section class="coach-hero">
+        <div>
+          <div class="coach-eyebrow">&#9679; Live Call Coaching</div>
+          <h1 class="coach-title">Control the Call</h1>
+          <p class="coach-subtitle">Professional delivery is not about sounding louder. It is about controlling pace, tone, timing and the next question so the customer can follow you with confidence.</p>
         </div>
-        <div style="font-size:0.8rem;color:var(--muted);">Speak like you're explaining something important to a sharp friend &mdash; not reading a script.</div>
-      </div>
-      <div class="rb" style="border-left:4px solid var(--gold);">
-        <div class="rblabel" style="color:var(--gold);">&#9208;&#65039; THE PAUSE &mdash; YOUR MOST POWERFUL TOOL</div>
-        <div class="rbtext">Pause <strong style="color:var(--gold)">AFTER</strong> your punch word &mdash; not before.<br><br>
-        <span style="color:var(--red);font-weight:700;">WRONG:</span> <em style="color:var(--muted);">"I want to talk to you about&hellip; working capital."</em><br>
-        <span style="color:var(--green);font-weight:700;">RIGHT:</span> "We can get you access to <strong style="color:var(--accent);">working capital.</strong> <span style="color:var(--gold);font-weight:700;">[PAUSE]</span> Does that interest you?"<br><br>
-        Silence after a strong word = confidence.</div>
-      </div>
-      <div class="rb" style="border-left:4px solid var(--purple);">
-        <div class="rblabel" style="color:var(--purple);">&#128074; PUNCH WORDS &mdash; HIT THESE WITH WEIGHT</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;" id="punch-words"></div>
-        <div style="font-size:0.78rem;color:var(--muted);">Slow down slightly on punch words. Drop your voice a touch &mdash; heavier, not louder. Pause 1 beat after.</div>
-      </div>
-      <div class="rb" style="border-left:4px solid var(--green);">
-        <div class="rblabel" style="color:var(--green);">&#129504; MINDSET</div>
-        <div class="rbtext" style="line-height:2;">
-          &#9989; <strong>Speak clearly, calmly</strong> &mdash; they're busy, make it easy to follow<br>
-          &#9989; <strong>Sit up straight</strong> &mdash; posture affects your voice; they hear it<br>
-          &#9989; <strong>Smile while you talk</strong> &mdash; they feel it, they can't see it<br>
-          &#9888;&#65039; <strong style="color:var(--gold);">No filler words</strong> &mdash; no "um", "like" &mdash; silence is better<br>
-          &#9888;&#65039; <strong style="color:var(--gold);">Ask a question &mdash; then WAIT.</strong> First to speak loses.
+        <div class="coach-signal-grid" aria-label="Three call control signals">
+          <div class="coach-signal"><div class="coach-signal-icon">01</div><div><div class="coach-signal-title">Pace</div><div class="coach-signal-copy">Clear enough to follow. Efficient enough to hold attention.</div></div></div>
+          <div class="coach-signal"><div class="coach-signal-icon">02</div><div><div class="coach-signal-title">Tone</div><div class="coach-signal-copy">Warm, calm and certain — never rushed or robotic.</div></div></div>
+          <div class="coach-signal"><div class="coach-signal-icon">03</div><div><div class="coach-signal-title">Pause</div><div class="coach-signal-copy">Use silence after the key point and after every question.</div></div></div>
         </div>
-      </div>
-      <div class="rb" style="border-left:4px solid var(--accent);">
-        <div class="rblabel" style="color:var(--accent);">&#128260; MICRO-TRUST PHRASES &mdash; USE EVERY 2 QUESTIONS</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:8px;padding:10px;text-align:center;font-size:0.85rem;color:var(--gold);font-weight:700;">"Perfect, thank you."</div>
-          <div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:8px;padding:10px;text-align:center;font-size:0.85rem;color:var(--gold);font-weight:700;">"Got it, that helps."</div>
-          <div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:8px;padding:10px;text-align:center;font-size:0.85rem;color:var(--gold);font-weight:700;">"Great to know."</div>
-          <div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:8px;padding:10px;text-align:center;font-size:0.85rem;color:var(--gold);font-weight:700;">"Appreciate that."</div>
+      </section>
+
+      <section class="coach-rule">
+        <div class="coach-rule-main">
+          <div class="coach-rule-mark">&#9733;</div>
+          <div><div class="coach-rule-title">Sound guided — not scripted</div><div class="coach-rule-copy">Know the purpose of each line, speak naturally, and move directly to the next required question.</div></div>
         </div>
+        <div class="coach-rule-tag">Core Delivery Standard</div>
+      </section>
+
+      <div class="coach-grid">
+        <section class="coach-card">
+          <header class="coach-card-head"><div class="coach-card-heading"><div class="coach-card-icon">&#9654;</div><div><div class="coach-card-title">Speaking Pace</div><div class="coach-card-kicker">Keep the customer with you</div></div></div><div class="coach-card-badge">Delivery</div></header>
+          <div class="coach-card-body">
+            <div class="coach-pace-grid">
+              <div class="coach-pace is-bad"><div class="coach-pace-meter"><span></span><span></span><span></span><span></span><span></span></div><div class="coach-pace-name">Too Fast</div><div class="coach-pace-copy">Sounds rushed and makes the customer suspicious or confused.</div></div>
+              <div class="coach-pace is-best"><div class="coach-pace-meter"><span></span><span></span><span></span><span></span><span></span></div><div class="coach-pace-name">Controlled</div><div class="coach-pace-copy">Calm, clear and confident. The customer can process every point.</div></div>
+              <div class="coach-pace is-warn"><div class="coach-pace-meter"><span></span><span></span><span></span><span></span><span></span></div><div class="coach-pace-name">Too Slow</div><div class="coach-pace-copy">Sounds uncertain and gives a busy customer time to disengage.</div></div>
+            </div>
+            <div class="coach-note"><strong>Target:</strong> Speak as if you are explaining something important to a sharp business owner — not reading from a screen.</div>
+          </div>
+        </section>
+
+        <section class="coach-card">
+          <header class="coach-card-head"><div class="coach-card-heading"><div class="coach-card-icon">&#10074;&#10074;</div><div><div class="coach-card-title">Power of the Pause</div><div class="coach-card-kicker">Place silence where it creates confidence</div></div></div><div class="coach-card-badge">Timing</div></header>
+          <div class="coach-card-body">
+            <div class="coach-compare">
+              <div class="coach-example is-wrong"><div class="coach-example-label">&#10005; Weak Delivery</div><div class="coach-example-copy">“We help businesses access… <span class="coach-pause-mark">PAUSE</span> working capital.”<br><br>The pause arrives before the important point and makes the line sound uncertain.</div></div>
+              <div class="coach-example is-right"><div class="coach-example-label">&#10003; Strong Delivery</div><div class="coach-example-copy">“We help businesses access <strong>working capital.</strong> <span class="coach-pause-mark">PAUSE</span> Approximately how much annual revenue does the business generate?”</div></div>
+            </div>
+            <div class="coach-note"><strong>Rule:</strong> Finish the key statement, pause one beat, ask the next required question, then wait.</div>
+          </div>
+        </section>
+
+        <section class="coach-card full">
+          <header class="coach-card-head"><div class="coach-card-heading"><div class="coach-card-icon">&#9670;</div><div><div class="coach-card-title">Punch Words</div><div class="coach-card-kicker">Give the important words more weight — not more volume</div></div></div><div class="coach-card-badge">Vocal Emphasis</div></header>
+          <div class="coach-card-body">
+            <div class="coach-punch-wrap">
+              <div class="coach-punch-copy"><strong>How to deliver them:</strong><br>Slow down slightly, lower your voice a touch, finish the phrase cleanly and pause for one beat. Heavy and controlled is stronger than loud.</div>
+              <div id="punch-words"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="coach-card">
+          <header class="coach-card-head"><div class="coach-card-heading"><div class="coach-card-icon">&#10003;</div><div><div class="coach-card-title">Confidence Checklist</div><div class="coach-card-kicker">Reset before every call</div></div></div><div class="coach-card-badge">Mindset</div></header>
+          <div class="coach-card-body">
+            <div class="coach-check-grid">
+              <div class="coach-check"><div class="coach-check-mark">&#10003;</div><div><div class="coach-check-title">Sit upright</div><div class="coach-check-copy">Posture improves breath support and vocal authority.</div></div></div>
+              <div class="coach-check"><div class="coach-check-mark">&#10003;</div><div><div class="coach-check-title">Smile naturally</div><div class="coach-check-copy">A warmer expression produces a warmer tone.</div></div></div>
+              <div class="coach-check"><div class="coach-check-mark">&#10003;</div><div><div class="coach-check-title">Remove filler words</div><div class="coach-check-copy">Use a brief pause instead of “um,” “like” or repeated wording.</div></div></div>
+              <div class="coach-check"><div class="coach-check-mark">&#10003;</div><div><div class="coach-check-title">Ask — then wait</div><div class="coach-check-copy">Do not answer your own question or talk over the customer.</div></div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="coach-card">
+          <header class="coach-card-head"><div class="coach-card-heading"><div class="coach-card-icon">&#8644;</div><div><div class="coach-card-title">Micro-Trust Phrases</div><div class="coach-card-kicker">Use naturally after every few answers</div></div></div><div class="coach-card-badge">Rapport</div></header>
+          <div class="coach-card-body">
+            <div class="coach-trust-grid">
+              <div class="coach-trust"><div class="coach-trust-num">01</div>“Perfect, thank you.”</div>
+              <div class="coach-trust"><div class="coach-trust-num">02</div>“Got it, that helps.”</div>
+              <div class="coach-trust"><div class="coach-trust-num">03</div>“Great, I have that noted.”</div>
+              <div class="coach-trust"><div class="coach-trust-num">04</div>“I appreciate that.”</div>
+            </div>
+            <div class="coach-note"><strong>Keep it natural:</strong> One short acknowledgement is enough. Avoid repeating the same phrase after every answer.</div>
+          </div>
+        </section>
       </div>
     </div>
   </div>
+
 
   <!-- ASEP -->
   <div class="tab-page" id="page-asep">
-    <div class="script-view">
-      <div class="phase-tag" style="background:rgba(34,211,238,0.1);color:var(--cyan);border-color:rgba(34,211,238,0.4);">&#9881;&#65039; Rebuttal Framework</div>
-      <div style="font-size:0.78rem;color:var(--muted);margin-bottom:14px;">Use for <strong style="color:var(--text)">every objection</strong> &mdash; 4-step flow.</div>
-      <div class="asep-box">
-        <div class="asep-step">
-          <div class="asep-num">A</div>
-          <div class="asep-c"><strong>ACKNOWLEDGE</strong> &mdash; Validate the concern.<div class="chips"><span class="chip">"I understand, [Name]"</span><span class="chip">"Thanks for asking"</span><span class="chip">"I'm glad you mentioned that"</span></div></div>
+    <div class="asep-pro-shell">
+      <section class="asep-pro-hero">
+        <div>
+          <div class="asep-pro-eyebrow">&#9679; Objection Control Framework</div>
+          <h1 class="asep-pro-title">A.S.E.P.</h1>
+          <p class="asep-pro-subtitle">A four-step structure for handling objections without arguing, over-explaining or losing control of the call. Keep each response concise and return to the script.</p>
         </div>
-        <div class="asep-step">
-          <div class="asep-num" style="background:var(--gold);">S</div>
-          <div class="asep-c"><strong>SOFTEN</strong> &mdash; Show empathy, don't fight it.<div class="chips"><span class="chip" style="background:var(--gold-light);border-color:#fcd34d;color:var(--gold);">"Most clients had the same question"</span><span class="chip" style="background:var(--gold-light);border-color:#fcd34d;color:var(--gold);">"Totally valid point"</span></div></div>
+        <div class="asep-pro-formula" aria-label="ASEP framework">
+          <div class="asep-pro-letter"><b>A</b><span>Acknowledge</span></div>
+          <div class="asep-pro-letter"><b>S</b><span>Soften</span></div>
+          <div class="asep-pro-letter"><b>E</b><span>Explain</span></div>
+          <div class="asep-pro-letter"><b>P</b><span>Pivot</span></div>
         </div>
-        <div class="asep-step">
-          <div class="asep-num" style="background:var(--cyan);">E</div>
-          <div class="asep-c"><strong>EXPLAIN</strong> &mdash; Give the direct rebuttal. Answer the concern.</div>
-        </div>
-        <div class="asep-step">
-          <div class="asep-num" style="background:var(--green);">P</div>
-          <div class="asep-c"><strong>PIVOT</strong> &mdash; Get back into the script with a question.<div class="chips"><span class="chip" style="background:var(--green-light);border-color:#6ee7b7;color:var(--green);">"So going back&hellip;"</span><span class="chip" style="background:var(--green-light);border-color:#6ee7b7;color:var(--green);">"Let me get that confirmed&hellip;"</span><span class="chip" style="background:var(--green-light);border-color:#6ee7b7;color:var(--green);">"Let's see what you qualify for&hellip;"</span></div></div>
-        </div>
+      </section>
+
+      <section class="asep-pro-rule">
+        <div class="asep-pro-rule-main"><div class="asep-pro-rule-mark">&#8594;</div><div><div class="asep-pro-rule-title">Every rebuttal must return to the next script question</div><div class="asep-pro-rule-copy">The goal is not to win an argument. Resolve the concern briefly, then continue the qualification process.</div></div></div>
+        <div class="asep-pro-rule-tag">Keep Forward Motion</div>
+      </section>
+
+      <section class="asep-pro-step-grid">
+        <article class="asep-pro-step">
+          <div class="asep-pro-step-top"><div class="asep-pro-step-num">A</div><div><div class="asep-pro-step-name">Acknowledge</div><div class="asep-pro-step-purpose">Show that you heard the concern</div></div></div>
+          <div class="asep-pro-step-copy">Confirm the customer’s concern without agreeing with a negative assumption or becoming defensive.</div>
+          <div class="asep-pro-phrases"><div class="asep-pro-phrase">“I understand, [Name].”</div><div class="asep-pro-phrase">“Thank you for letting me know.”</div><div class="asep-pro-phrase">“I’m glad you mentioned that.”</div></div>
+        </article>
+        <article class="asep-pro-step">
+          <div class="asep-pro-step-top"><div class="asep-pro-step-num">S</div><div><div class="asep-pro-step-name">Soften</div><div class="asep-pro-step-purpose">Lower resistance before answering</div></div></div>
+          <div class="asep-pro-step-copy">Use one calm sentence that makes the concern feel reasonable. Do not overdo empathy or sound rehearsed.</div>
+          <div class="asep-pro-phrases"><div class="asep-pro-phrase">“That makes sense.”</div><div class="asep-pro-phrase">“That is a fair question.”</div><div class="asep-pro-phrase">“I can see why you would ask.”</div></div>
+        </article>
+        <article class="asep-pro-step">
+          <div class="asep-pro-step-top"><div class="asep-pro-step-num">E</div><div><div class="asep-pro-step-name">Explain</div><div class="asep-pro-step-purpose">Answer only the concern raised</div></div></div>
+          <div class="asep-pro-step-copy">Give the approved explanation in one or two clear sentences. Avoid guarantees, unnecessary details and unsupported claims.</div>
+          <div class="asep-pro-phrases"><div class="asep-pro-phrase">State the relevant fact.</div><div class="asep-pro-phrase">Keep the wording direct.</div><div class="asep-pro-phrase">Stop once the concern is answered.</div></div>
+        </article>
+        <article class="asep-pro-step">
+          <div class="asep-pro-step-top"><div class="asep-pro-step-num">P</div><div><div class="asep-pro-step-name">Pivot</div><div class="asep-pro-step-purpose">Resume the qualification flow</div></div></div>
+          <div class="asep-pro-step-copy">Move immediately to the next required question. Do not ask whether the customer is interested.</div>
+          <div class="asep-pro-phrases"><div class="asep-pro-phrase">“Approximately how much annual revenue does the business generate?”</div><div class="asep-pro-phrase">“May I have your full legal name?”</div><div class="asep-pro-phrase">“Please hold while I connect you with a senior advisor.”</div></div>
+        </article>
+      </section>
+
+      <div class="asep-pro-grid">
+        <section class="asep-pro-card">
+          <header class="asep-pro-card-head"><div><div class="asep-pro-card-title">Live Flow Example</div><div class="asep-pro-card-sub">One objection handled from start to pivot</div></div></header>
+          <div class="asep-pro-card-body">
+            <div class="asep-pro-objection"><strong>Customer:</strong> “I am not looking for funding right now.”</div>
+            <div class="asep-pro-flow">
+              <div class="asep-pro-flow-row"><div class="asep-pro-flow-letter">A</div><div class="asep-pro-flow-copy"><strong>Acknowledge:</strong> “I understand, [Name].”</div></div>
+              <div class="asep-pro-flow-row"><div class="asep-pro-flow-letter">S</div><div class="asep-pro-flow-copy"><strong>Soften:</strong> “That makes sense — you may not be actively applying today.”</div></div>
+              <div class="asep-pro-flow-row"><div class="asep-pro-flow-letter">E</div><div class="asep-pro-flow-copy"><strong>Explain:</strong> “I am only confirming the basic business details to determine whether the business meets the preliminary requirements.”</div></div>
+              <div class="asep-pro-flow-row"><div class="asep-pro-flow-letter">P</div><div class="asep-pro-flow-copy"><strong>Pivot:</strong> “Approximately how much annual revenue does the business generate?” <span class="coach-pause-mark">WAIT</span></div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="asep-pro-card">
+          <header class="asep-pro-card-head"><div><div class="asep-pro-card-title">Execution Standards</div><div class="asep-pro-card-sub">What professional objection handling looks like</div></div></header>
+          <div class="asep-pro-card-body">
+            <div class="asep-pro-do-list">
+              <div class="asep-pro-do is-do"><div class="asep-pro-do-mark">&#10003;</div><div><div class="asep-pro-do-title">Keep it brief</div><div class="asep-pro-do-copy">A.S.E.P. should sound like one smooth response, not a speech.</div></div></div>
+              <div class="asep-pro-do is-do"><div class="asep-pro-do-mark">&#10003;</div><div><div class="asep-pro-do-title">Use the customer’s name naturally</div><div class="asep-pro-do-copy">Use it once to personalize the response — not in every sentence.</div></div></div>
+              <div class="asep-pro-do is-do"><div class="asep-pro-do-mark">&#10003;</div><div><div class="asep-pro-do-title">Pivot with the required question</div><div class="asep-pro-do-copy">Return to revenue, legal name, business name or the transfer step.</div></div></div>
+              <div class="asep-pro-do is-dont"><div class="asep-pro-do-mark">&#10005;</div><div><div class="asep-pro-do-title">Do not argue or repeat yourself</div><div class="asep-pro-do-copy">If the objection remains unresolved, follow the approved escalation or call-ending process.</div></div></div>
+              <div class="asep-pro-do is-dont"><div class="asep-pro-do-mark">&#10005;</div><div><div class="asep-pro-do-title">Do not ask “Are you interested?”</div><div class="asep-pro-do-copy">That creates an unnecessary yes-or-no exit. Continue with the qualification flow instead.</div></div></div>
+            </div>
+          </div>
+        </section>
       </div>
-      <div class="tip"><strong>&#9889; RULE:</strong> Always end a rebuttal with a qualifying question to keep moving toward transfer.</div>
-      <div class="tip" style="margin-top:12px;background:rgba(34,211,238,0.07);border-color:rgba(34,211,238,0.4);color:#cbd5e1;">
-        <strong style="color:var(--cyan);">&#128260; FLOW EXAMPLE</strong><br>
-        Client: "I don't want to give my SSN."<br>
-        <strong>A</strong> &rarr; "Completely understand." &nbsp;|&nbsp; <strong>S</strong> &rarr; "Most people ask this." &nbsp;|&nbsp; <strong>E</strong> &rarr; "It's a soft pull, won't affect your score." &nbsp;|&nbsp; <strong>P</strong> &rarr; "Go ahead with your social whenever you're ready. [WAIT]"
-      </div>
+
+      <section class="asep-pro-footer"><div class="asep-pro-footer-copy"><strong>Agent checkpoint:</strong> Did I acknowledge the concern, answer only what was asked, and return to the next approved question?</div><div class="asep-pro-footer-tag">Acknowledge · Soften · Explain · Pivot</div></section>
     </div>
   </div>
+
 
   <!-- SPANISH -->
   <div class="tab-page" id="page-spanish">
-    <div class="spanish-view">
-      <div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.4);border-left:4px solid var(--red);border-radius:14px;padding:20px;margin-bottom:16px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-          <span style="font-size:2rem;">&#128680;</span>
+    <div class="spanish-pro-shell">
+
+      <section class="spanish-pro-hero" aria-labelledby="spanish-pro-title">
+        <div>
+          <div class="spanish-pro-eyebrow">🇪🇸 Language Support Protocol</div>
+          <h1 class="spanish-pro-title" id="spanish-pro-title">Spanish Transfer Guide</h1>
+          <p class="spanish-pro-subtitle">Use this workflow whenever a customer requests Spanish support. Protect the customer experience with a clear explanation, a warm transfer and a confirmed handoff.</p>
+        </div>
+        <div class="spanish-pro-line-card" aria-label="Dedicated Spanish support line">
+          <div class="spanish-pro-line-kicker">Dedicated Spanish-Speaking Line</div>
+          <div class="spanish-pro-number">951-480-7594</div>
+          <div class="spanish-pro-line-copy">Transfer only to this approved specialist line. Confirm the specialist has received the customer before disconnecting.</div>
+          <a class="spanish-pro-call" href="tel:9514807594">☎ Call Spanish Line</a>
+        </div>
+      </section>
+
+      <section class="spanish-pro-rule">
+        <div class="spanish-pro-rule-main">
+          <div class="spanish-pro-rule-mark">!</div>
           <div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;color:var(--red);letter-spacing:1px;">SPANISH TRANSFER &mdash; CRITICAL PROTOCOL</div>
-            <div style="font-size:0.72rem;color:var(--muted);font-weight:600;">Read before every Spanish call</div>
+            <div class="spanish-pro-rule-title">Do not handle the call in Spanish unless you speak Spanish</div>
+            <div class="spanish-pro-rule-copy">When Spanish support is requested, transfer to the <strong>designated Spanish-speaking line only</strong>. Never guess which queue to use.</div>
           </div>
         </div>
-        <div style="background:var(--card);border-radius:10px;padding:16px;border:1px solid rgba(248,113,113,0.3);margin-bottom:14px;">
-          <div style="font-size:0.58rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:8px;">&#9888;&#65039; RULE</div>
-          <div style="font-size:1rem;line-height:1.75;color:#cbd5e1;font-weight:600;">
-            If a customer asks for <strong style="color:var(--red);">Spanish support</strong>, do <strong style="color:var(--red);">NOT</strong> handle the call if you don't speak Spanish.<br>
-            Transfer <strong>ONLY</strong> to the designated Spanish-speaking line.
+        <div class="spanish-pro-rule-tag">Critical Protocol</div>
+      </section>
+
+      <section class="spanish-pro-step-grid" aria-label="Spanish transfer workflow">
+        <article class="spanish-pro-step">
+          <div class="spanish-pro-step-top"><div class="spanish-pro-step-num">01</div><div><div class="spanish-pro-step-name">Confirm</div><div class="spanish-pro-step-purpose">Identify the request</div></div></div>
+          <div class="spanish-pro-step-copy">Confirm that the customer is asking to speak with someone in Spanish. Do not assume based on accent or limited English.</div>
+          <div class="spanish-pro-step-cue">Ask: “Would you prefer a Spanish-speaking specialist?”</div>
+        </article>
+        <article class="spanish-pro-step">
+          <div class="spanish-pro-step-top"><div class="spanish-pro-step-num">02</div><div><div class="spanish-pro-step-name">Explain</div><div class="spanish-pro-step-purpose">Set up the handoff</div></div></div>
+          <div class="spanish-pro-step-copy">Tell the customer you are connecting them with a specialist who can assist clearly in Spanish.</div>
+          <div class="spanish-pro-step-cue">Use the approved handoff script below.</div>
+        </article>
+        <article class="spanish-pro-step">
+          <div class="spanish-pro-step-top"><div class="spanish-pro-step-num">03</div><div><div class="spanish-pro-step-name">Transfer</div><div class="spanish-pro-step-purpose">Make a warm connection</div></div></div>
+          <div class="spanish-pro-step-copy">Place the customer on hold, dial the approved line and introduce the customer using their name and reference number.</div>
+          <div class="spanish-pro-step-cue">Never send the customer into an unconfirmed queue.</div>
+        </article>
+        <article class="spanish-pro-step">
+          <div class="spanish-pro-step-top"><div class="spanish-pro-step-num">04</div><div><div class="spanish-pro-step-name">Confirm</div><div class="spanish-pro-step-purpose">Complete the handoff</div></div></div>
+          <div class="spanish-pro-step-copy">Verify that the Spanish-speaking specialist has accepted the call before you disconnect.</div>
+          <div class="spanish-pro-step-cue">If no specialist answers, ask a supervisor for direction.</div>
+        </article>
+      </section>
+
+      <section class="spanish-pro-grid">
+        <article class="spanish-pro-card">
+          <header class="spanish-pro-card-head">
+            <div class="spanish-pro-card-heading"><div class="spanish-pro-card-icon">💬</div><div><div class="spanish-pro-card-title">Approved Handoff Script</div><div class="spanish-pro-card-sub">Use this before placing the customer on hold</div></div></div>
+            <div class="spanish-pro-card-badge">Say It Clearly</div>
+          </header>
+          <div class="spanish-pro-card-body">
+            <div class="spanish-pro-script-label">English → Spanish Support</div>
+            <div class="spanish-pro-script">“I want to make sure you get the best help possible. Let me connect you with one of our <strong>Spanish-speaking specialists</strong> right now. They will be able to walk you through everything clearly.”</div>
+            <div class="spanish-pro-handoff" aria-label="Warm transfer sequence">
+              <span class="spanish-pro-handoff-step">Place on Hold</span><span class="spanish-pro-handoff-arrow">→</span>
+              <span class="spanish-pro-handoff-step">Dial 951-480-7594</span><span class="spanish-pro-handoff-arrow">→</span>
+              <span class="spanish-pro-handoff-step">Give Name + Reference</span><span class="spanish-pro-handoff-arrow">→</span>
+              <span class="spanish-pro-handoff-step">Confirm Handoff</span>
+            </div>
           </div>
+        </article>
+
+        <article class="spanish-pro-card">
+          <header class="spanish-pro-card-head">
+            <div class="spanish-pro-card-heading"><div class="spanish-pro-card-icon">✓</div><div><div class="spanish-pro-card-title">Transfer Checklist</div><div class="spanish-pro-card-sub">Complete every step before disconnecting</div></div></div>
+            <div class="spanish-pro-card-badge">5 Checks</div>
+          </header>
+          <div class="spanish-pro-card-body">
+            <div class="spanish-pro-checklist">
+              <label class="spanish-pro-check"><input type="checkbox"><span>Customer <strong>requested Spanish support</strong>.</span></label>
+              <label class="spanish-pro-check"><input type="checkbox"><span>You do not speak Spanish and will use the <strong>approved transfer line</strong>.</span></label>
+              <label class="spanish-pro-check"><input type="checkbox"><span>Customer was placed on hold before dialing <strong>951-480-7594</strong>.</span></label>
+              <label class="spanish-pro-check"><input type="checkbox"><span>Specialist received the customer’s <strong>name and reference number</strong>.</span></label>
+              <label class="spanish-pro-check"><input type="checkbox"><span>The handoff was <strong>confirmed before disconnecting</strong>.</span></label>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="spanish-pro-risk" aria-labelledby="spanish-pro-avoid">
+        <div class="spanish-pro-risk-title" id="spanish-pro-avoid">Avoid These Transfer Errors</div>
+        <div class="spanish-pro-risk-list">
+          <div class="spanish-pro-risk-item"><strong>Wrong Queue</strong>Use only the designated Spanish-speaking line.</div>
+          <div class="spanish-pro-risk-item"><strong>Cold Transfer</strong>Introduce the customer before leaving the call.</div>
+          <div class="spanish-pro-risk-item"><strong>Early Disconnect</strong>Wait until the specialist confirms receipt.</div>
+          <div class="spanish-pro-risk-item"><strong>Guessing</strong>Ask a supervisor whenever the correct action is unclear.</div>
         </div>
-        <div style="background:linear-gradient(135deg,#dc2626,#b91c1c);border-radius:12px;padding:22px;text-align:center;box-shadow:0 4px 20px rgba(220,38,38,0.3);margin-bottom:14px;">
-          <div style="font-size:0.55rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:8px;">&#127466;&#127480; SPANISH LINE &mdash; TRANSFER TO</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:#fff;letter-spacing:5px;line-height:1;">951-480-7594</div>
-          <div style="font-size:0.65rem;color:rgba(255,255,255,0.65);margin-top:6px;font-weight:700;">DEDICATED SPANISH-SPEAKING SPECIALIST LINE</div>
-          <a href="tel:9514807594" style="display:inline-block;margin-top:14px;background:rgba(255,255,255,0.18);border:2px solid rgba(255,255,255,0.45);color:#fff;text-decoration:none;padding:9px 28px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:0.95rem;font-weight:700;letter-spacing:1.5px;">&#128222; TAP TO CALL</a>
-        </div>
-        <div style="background:var(--card);border-radius:10px;padding:14px;border:1px solid rgba(248,113,113,0.3);">
-          <div style="font-size:0.58rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:8px;">&#9888;&#65039; WHY THIS MATTERS</div>
-          <div style="font-size:0.9rem;line-height:1.7;color:#cbd5e1;">We have had cases where clients were sent to the <strong style="color:var(--red);">wrong queue</strong>, which creates more issues. If you are <strong style="color:var(--text)">unsure</strong>, ask a <strong style="color:var(--accent);">supervisor</strong> before transferring. Do not guess.</div>
-        </div>
-      </div>
-      <div style="background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.3);border-radius:14px;padding:18px;margin-bottom:16px;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--orange);letter-spacing:1px;margin-bottom:10px;">&#128172; WHAT TO SAY TO THE CLIENT</div>
-        <div class="rb" style="margin-bottom:0;">
-          <div class="rblabel" style="color:var(--orange);">ENGLISH &rarr; SPANISH HANDOFF SCRIPT</div>
-          <div class="rbtext">"I want to make sure you get the best help possible. Let me connect you with one of our <span class="kw">Spanish-speaking specialists</span> right now &mdash; they'll be able to walk you through everything clearly."</div>
-          <div class="pivot" style="color:var(--orange);">&rarr; Place on hold &rarr; Dial 951-480-7594 &rarr; Introduce client with name + reference number</div>
-        </div>
-      </div>
-      <div class="rb">
-        <div class="rblabel">&#128203; TRANSFER CHECKLIST</div>
-        <div style="display:flex;flex-direction:column;gap:9px;margin-top:6px;">
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--green);cursor:pointer;"> Confirm client is requesting Spanish support</label>
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--green);cursor:pointer;"> You do NOT speak Spanish (if you do, handle the call)</label>
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--green);cursor:pointer;"> Dial Spanish line: <strong style="color:var(--red);margin-left:4px;">951-480-7594</strong></label>
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--green);cursor:pointer;"> Introduce client with name + reference number</label>
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--green);cursor:pointer;"> Confirm handoff complete before disconnecting</label>
-        </div>
-      </div>
+      </section>
+
+      <section class="spanish-pro-footer">
+        <div class="spanish-pro-footer-copy"><strong>Agent checkpoint:</strong> Did I use the approved line, provide the customer’s identifying information and confirm the specialist accepted the call?</div>
+        <div class="spanish-pro-footer-tag">Confirm · Explain · Transfer · Verify</div>
+      </section>
+
     </div>
   </div>
-
   <!-- SUNDAY -->
   <div class="tab-page" id="page-sunday">
-    <div class="sunday-view">
-      <div style="background:rgba(167,139,250,0.07);border:1px solid rgba(167,139,250,0.3);border-radius:16px;padding:20px;margin-bottom:16px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-          <span style="font-size:2rem;">&#128197;</span>
-          <div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;color:var(--purple);letter-spacing:1px;">SUNDAY PROTOCOL</div>
-            <div style="font-size:0.72rem;color:var(--muted);font-weight:600;">Special instructions for Sunday operations</div>
-          </div>
+    <div class="sunday-pro-shell">
+      <section class="sunday-pro-hero" aria-labelledby="sunday-pro-title">
+        <div>
+          <div class="sunday-pro-eyebrow">● Sunday Operations</div>
+          <h1 class="sunday-pro-title" id="sunday-pro-title">Sunday Protocol</h1>
+          <p class="sunday-pro-subtitle">Use this workflow when a closer cannot be reached on Sunday. Protect the customer experience, document the attempt, and secure a clear Monday follow-up before ending the call.</p>
         </div>
-        <div style="background:var(--card);border-radius:12px;padding:16px;border:1px solid rgba(167,139,250,0.25);margin-bottom:12px;">
-          <div style="font-size:0.58rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:10px;">&#128680; NO CLOSER AVAILABLE</div>
-          <div style="font-size:1rem;line-height:1.7;color:var(--text);">If you <strong style="color:var(--red);">cannot get a closer on the phone</strong>:</div>
-          <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px;">
-            <div style="display:flex;align-items:flex-start;gap:10px;background:rgba(167,139,250,0.08);border-radius:8px;padding:10px;">
-              <span style="font-size:1.1rem;">1&#65039;&#8419;</span>
-              <div style="font-size:0.9rem;color:#cbd5e1;line-height:1.5;"><strong style="color:var(--text)">Leave a note in the file</strong> &mdash; document the call attempt, client name, and reference number</div>
-            </div>
-            <div style="display:flex;align-items:flex-start;gap:10px;background:rgba(167,139,250,0.08);border-radius:8px;padding:10px;">
-              <span style="font-size:1.1rem;">2&#65039;&#8419;</span>
-              <div style="font-size:0.9rem;color:#cbd5e1;line-height:1.5;"><strong style="color:var(--text)">Schedule a callback</strong> for <strong style="color:var(--purple);">first thing Monday morning</strong></div>
-            </div>
-            <div style="display:flex;align-items:flex-start;gap:10px;background:rgba(167,139,250,0.08);border-radius:8px;padding:10px;">
-              <span style="font-size:1.1rem;">3&#65039;&#8419;</span>
-              <div style="font-size:0.9rem;color:#cbd5e1;line-height:1.5;"><strong style="color:var(--text)">Use the VIP script below</strong> with the client before ending the call</div>
-            </div>
-          </div>
+        <div class="sunday-pro-shift">
+          <div class="sunday-pro-shift-label">Sunday Shift Standard</div>
+          <div class="sunday-pro-shift-time">11:45 AM</div>
+          <div class="sunday-pro-shift-copy">All agents follow the Sunday shift protocol. Complete every step below whenever a closer is unavailable.</div>
         </div>
-      </div>
+      </section>
 
-      <div style="background:linear-gradient(135deg,#7c3aed,#a855f7);border-radius:14px;padding:22px;margin-bottom:16px;box-shadow:0 4px 20px rgba(124,58,237,0.3);">
-        <div style="font-size:0.55rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:10px;">&#127897;&#65039; SAY THIS TO THE CLIENT</div>
-        <div style="background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.25);border-radius:10px;padding:18px;">
-          <div style="font-size:1.1rem;line-height:1.9;color:#fff;font-weight:600;font-style:italic;">
-            "Our Sunday learning specialists are <strong style="color:#ffd700;">extremely busy</strong> today, but I will <strong style="color:#ffd700;">personally</strong> set you up with a <strong style="color:#ffd700;">VIP appointment</strong> first thing Monday morning so you receive the <strong style="color:#ffd700;">proper time and attention</strong>."
-          </div>
-        </div>
-        <div style="margin-top:10px;font-size:0.72rem;color:rgba(255,255,255,0.6);font-weight:600;">&#9888;&#65039; Deliver this confidently &mdash; it reframes the wait as a benefit, not a failure.</div>
-      </div>
+      <section class="sunday-pro-rule">
+        <div class="sunday-pro-rule-main"><div class="sunday-pro-rule-mark">!</div><div><div class="sunday-pro-rule-title">No closer available?</div><div class="sunday-pro-rule-copy">Do not leave the customer without a next step. <strong>Document, schedule and position the Monday follow-up as a VIP appointment.</strong></div></div></div>
+        <div class="sunday-pro-rule-tag">Required Workflow</div>
+      </section>
 
-      <div class="rb" style="border-left:4px solid var(--purple);">
-        <div class="rblabel" style="color:var(--purple);">&#128203; SUNDAY CHECKLIST</div>
-        <div style="display:flex;flex-direction:column;gap:9px;margin-top:6px;">
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--purple);cursor:pointer;"> Attempted to reach closer &mdash; confirmed unavailable</label>
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--purple);cursor:pointer;"> Left a detailed note in the client's file</label>
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--purple);cursor:pointer;"> Scheduled callback for <strong style="color:var(--purple);margin-left:4px;">Monday morning</strong></label>
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--purple);cursor:pointer;"> Delivered VIP script to client</label>
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--purple);cursor:pointer;"> Client confirmed appointment / callback time</label>
-        </div>
-      </div>
-      <div class="tip" style="margin-top:10px;background:rgba(167,139,250,0.08);border-color:rgba(167,139,250,0.4);color:#cbd5e1;">
-        <strong style="color:var(--purple);">&#128161; PRO TIP:</strong> When scheduling the Monday callback, get a specific time window. "Would Monday at 9AM or 10AM work better for you?" &mdash; two options, both move forward.
-      </div>
+      <section class="sunday-pro-step-grid" aria-label="Sunday no-closer workflow">
+        <article class="sunday-pro-step"><div class="sunday-pro-step-top"><div class="sunday-pro-step-num">01</div><div><div class="sunday-pro-step-title">Document the Attempt</div><div class="sunday-pro-step-sub">Leave a complete file note</div></div></div><div class="sunday-pro-step-copy">Record the call attempt, <strong>client name and reference number</strong> so Monday follow-up has full context.</div></article>
+        <article class="sunday-pro-step"><div class="sunday-pro-step-top"><div class="sunday-pro-step-num">02</div><div><div class="sunday-pro-step-title">Set Monday Callback</div><div class="sunday-pro-step-sub">Secure a specific time window</div></div></div><div class="sunday-pro-step-copy">Schedule the callback for <strong>first thing Monday morning</strong> and confirm the time with the customer.</div></article>
+        <article class="sunday-pro-step"><div class="sunday-pro-step-top"><div class="sunday-pro-step-num">03</div><div><div class="sunday-pro-step-title">Deliver the VIP Script</div><div class="sunday-pro-step-sub">Reframe the wait professionally</div></div></div><div class="sunday-pro-step-copy">Use the approved language below before ending the call so the customer understands the value of the scheduled follow-up.</div></article>
+      </section>
+
+      <section class="sunday-pro-grid">
+        <article class="sunday-pro-script-card">
+          <header class="sunday-pro-card-head"><div class="sunday-pro-card-heading"><div class="sunday-pro-card-icon">🎙</div><div><div class="sunday-pro-card-title">Approved VIP Script</div><div class="sunday-pro-card-sub">Deliver confidently and naturally</div></div></div><div class="sunday-pro-card-badge">Say This</div></header>
+          <div class="sunday-pro-card-body">
+            <div class="sunday-pro-script-label">Customer-facing language</div>
+            <div class="sunday-pro-script">“Our Sunday learning specialists are <strong>extremely busy</strong> today, but I will <strong>personally</strong> set you up with a <strong>VIP appointment</strong> first thing Monday morning so you receive the <strong>proper time and attention</strong>.”</div>
+            <div class="sunday-pro-script-note">Deliver this with certainty. The purpose is to position the wait as a scheduled service benefit, not a failed handoff.</div>
+          </div>
+        </article>
+
+        <article class="sunday-pro-check-card">
+          <header class="sunday-pro-card-head"><div class="sunday-pro-card-heading"><div class="sunday-pro-card-icon">✓</div><div><div class="sunday-pro-card-title">Sunday Checklist</div><div class="sunday-pro-card-sub">Complete all five before disconnecting</div></div></div><div class="sunday-pro-card-badge">5 Checks</div></header>
+          <div class="sunday-pro-progress-wrap"><div class="sunday-pro-progress-meta"><span>Completion</span><strong id="sunday-pro-progress-text">0 / 5</strong></div><div class="sunday-pro-progress-track"><div class="sunday-pro-progress-fill" id="sunday-pro-progress-fill"></div></div></div>
+          <div class="sunday-pro-card-body">
+            <div class="sunday-pro-checklist" id="sunday-pro-checklist">
+              <label class="sunday-pro-check"><input type="checkbox" onchange="updateSundayProtocolProgress()"><span>Attempted to reach the closer and <strong>confirmed unavailable</strong>.</span></label>
+              <label class="sunday-pro-check"><input type="checkbox" onchange="updateSundayProtocolProgress()"><span>Left a detailed note in the <strong>client's file</strong>.</span></label>
+              <label class="sunday-pro-check"><input type="checkbox" onchange="updateSundayProtocolProgress()"><span>Scheduled the callback for <strong>Monday morning</strong>.</span></label>
+              <label class="sunday-pro-check"><input type="checkbox" onchange="updateSundayProtocolProgress()"><span>Delivered the <strong>VIP script</strong> to the client.</span></label>
+              <label class="sunday-pro-check"><input type="checkbox" onchange="updateSundayProtocolProgress()"><span>Client confirmed the <strong>appointment / callback time</strong>.</span></label>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="sunday-pro-tip"><div class="sunday-pro-tip-copy"><strong>Scheduling tip:</strong> Get a specific time window instead of asking an open-ended question. Try: “Would Monday at 9AM or 10AM work better for you?” Both choices move the follow-up forward.</div><div class="sunday-pro-tip-tag">Confirm · Note · Schedule · Verify</div></section>
     </div>
   </div>
-
 
   <!-- ACCESS GUIDE -->
   <div class="tab-page" id="page-dbs">
-    <div style="padding:20px 22px;">
+    <div class="access-guide-shell">
 
-      <!-- States DNQ Banner -->
-      <div style="background:linear-gradient(135deg,rgba(248,113,113,0.15),rgba(248,113,113,0.08));border:2px solid var(--red);border-radius:14px;padding:18px 20px;margin-bottom:18px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-          <span style="font-size:1.8rem;">🚫</span>
+      <section class="access-guide-hero" aria-labelledby="access-guide-title">
+        <div>
+          <div class="access-guide-eyebrow">🔐 Agent Decision Reference</div>
+          <h1 class="access-guide-title" id="access-guide-title">Access Eligibility Guide</h1>
+          <p class="access-guide-subtitle">Use this page before granting access. Confirm the customer’s state first, review the current file status, and then verify any required waiting period.</p>
+        </div>
+        <div class="access-guide-steps" aria-label="Three-step eligibility check">
+          <div class="access-guide-step">
+            <span class="access-guide-step-num">01</span>
+            <span class="access-guide-step-label">Check State</span>
+            <span class="access-guide-step-copy">Stop immediately for a DNQ state.</span>
+          </div>
+          <div class="access-guide-step">
+            <span class="access-guide-step-num">02</span>
+            <span class="access-guide-step-label">Check Status</span>
+            <span class="access-guide-step-copy">Match the exact status shown in the file.</span>
+          </div>
+          <div class="access-guide-step">
+            <span class="access-guide-step-num">03</span>
+            <span class="access-guide-step-label">Check Date</span>
+            <span class="access-guide-step-copy">Apply the waiting-period rule where required.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="access-state-alert" aria-labelledby="dnq-states-title">
+        <div class="access-alert-heading">
+          <div class="access-alert-icon">🚫</div>
           <div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:800;color:var(--red);letter-spacing:2px;">STATES DO NOT QUALIFY (DNQ)</div>
-            <div style="font-size:0.72rem;color:var(--muted);font-weight:600;margin-top:2px;">If the customer is in one of these states, do not proceed</div>
+            <div class="access-alert-title" id="dnq-states-title">States Do Not Qualify</div>
+            <div class="access-alert-copy">Do not proceed when the customer resides in any state listed here.</div>
           </div>
         </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <div style="background:var(--red-light);border:1.5px solid var(--red);border-radius:10px;padding:10px 22px;font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;color:var(--red);letter-spacing:2px;">🧀 WISCONSIN</div>
-          <div style="background:var(--red-light);border:1.5px solid var(--red);border-radius:10px;padding:10px 22px;font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;color:var(--red);letter-spacing:2px;">❄️ MINNESOTA</div>
-          <div style="background:var(--red-light);border:1.5px solid var(--red);border-radius:10px;padding:10px 22px;font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;color:var(--red);letter-spacing:2px;">🌲 OREGON</div>
-          <div style="background:var(--red-light);border:1.5px solid var(--red);border-radius:10px;padding:10px 22px;font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;color:var(--red);letter-spacing:2px;">🏔️ COLORADO</div>
+        <div class="access-state-grid">
+          <div class="access-state-chip"><span class="access-state-code">WI</span><span class="access-state-name">Wisconsin</span></div>
+          <div class="access-state-chip"><span class="access-state-code">MN</span><span class="access-state-name">Minnesota</span></div>
+          <div class="access-state-chip"><span class="access-state-code">OR</span><span class="access-state-name">Oregon</span></div>
+          <div class="access-state-chip"><span class="access-state-code">CO</span><span class="access-state-name">Colorado</span></div>
         </div>
+      </section>
+
+      <div class="access-decision-grid">
+        <section class="access-decision-card is-yes" aria-labelledby="access-yes-title">
+          <header class="access-decision-header">
+            <div class="access-decision-heading">
+              <div class="access-decision-mark">✓</div>
+              <div>
+                <div class="access-decision-title" id="access-yes-title">Give Access</div>
+                <div class="access-decision-caption">Statuses approved to work</div>
+              </div>
+            </div>
+            <span class="access-decision-badge">Proceed</span>
+          </header>
+          <div class="access-status-list">
+            <div class="access-status-row">
+              <span class="access-status-index">01</span>
+              <div><div class="access-status-name">Shark Tank</div></div>
+              <span class="access-status-action">Give Access</span>
+            </div>
+            <div class="access-status-row">
+              <span class="access-status-index">02</span>
+              <div><div class="access-status-name">Pending Building File</div></div>
+              <span class="access-status-action">Give Access</span>
+            </div>
+            <div class="access-status-row">
+              <span class="access-status-index">03</span>
+              <div><div class="access-status-name">New App Pending</div></div>
+              <span class="access-status-action">Give Access</span>
+            </div>
+            <div class="access-status-row">
+              <span class="access-status-index">04</span>
+              <div><div class="access-status-name">Pending Credit</div></div>
+              <span class="access-status-action">Give Access</span>
+            </div>
+            <div class="access-status-row">
+              <span class="access-status-index">05</span>
+              <div><div class="access-status-name">ALV UW: Completed</div></div>
+              <span class="access-status-action">Give Access</span>
+            </div>
+            <div class="access-status-row">
+              <span class="access-status-index">06</span>
+              <div>
+                <div class="access-status-name">Staging <span style="color:#71829b;font-size:.68rem;">[Hidden]</span></div>
+                <div class="access-status-note"><strong>Check notes first.</strong> Access may be given only when the notes allow it.</div>
+              </div>
+              <span class="access-status-action">Conditional</span>
+            </div>
+            <div class="access-status-row">
+              <span class="access-status-index">07</span>
+              <div>
+                <div class="access-status-name">Anything Showing in Black</div>
+                <div class="access-status-note"><strong>Only after 90 days</strong> have passed.</div>
+              </div>
+              <span class="access-status-action">After 90 Days</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="access-decision-card is-no" aria-labelledby="access-no-title">
+          <header class="access-decision-header">
+            <div class="access-decision-heading">
+              <div class="access-decision-mark">×</div>
+              <div>
+                <div class="access-decision-title" id="access-no-title">Do Not Give Access</div>
+                <div class="access-decision-caption">Restricted statuses</div>
+              </div>
+            </div>
+            <span class="access-decision-badge">Stop</span>
+          </header>
+          <div class="access-status-list">
+            <div class="access-status-row">
+              <span class="access-status-index">01</span>
+              <div>
+                <div class="access-status-name">Enrollments</div>
+                <div class="access-status-note">Includes ALV.</div>
+              </div>
+              <span class="access-status-action">No Access</span>
+            </div>
+            <div class="access-status-row">
+              <span class="access-status-index">02</span>
+              <div>
+                <div class="access-status-name">Archive: Do Not Call</div>
+                <div class="access-status-note"><strong>Exception:</strong> Only when the customer calls in and is actively interested.</div>
+              </div>
+              <span class="access-status-action">Restricted</span>
+            </div>
+            <div class="access-status-row">
+              <span class="access-status-index">03</span>
+              <div><div class="access-status-name">Disposition | Not Interested | Cross-collateralization</div></div>
+              <span class="access-status-action">No Access</span>
+            </div>
+            <div class="access-status-row">
+              <span class="access-status-index">04</span>
+              <div>
+                <div class="access-status-name">Approved</div>
+                <div class="access-status-note"><strong>This is a NO.</strong> Do not give access to an Approved status.</div>
+              </div>
+              <span class="access-status-action">No Access</span>
+            </div>
+          </div>
+        </section>
       </div>
 
-      <!-- YES — Give Access -->
-      <div style="background:rgba(52,211,153,0.07);border:1.5px solid var(--green);border-radius:14px;padding:18px 20px;margin-bottom:14px;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--green);letter-spacing:2px;margin-bottom:12px;">✅ YES — GIVE ACCESS (These statuses are OK to work)</div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:9px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px;">
-            <span style="color:var(--green);font-weight:800;font-size:0.75rem;min-width:22px;">1.</span>
-            <div><span style="color:var(--text);font-weight:700;">Shark Tank</span></div>
+      <section class="access-timing-card" aria-labelledby="access-timing-title">
+        <div class="access-section-header">
+          <div>
+            <div class="access-section-title" id="access-timing-title">⏳ Time-Based Status Rules</div>
+            <div class="access-section-subtitle">Confirm the status date before taking action.</div>
           </div>
-          <div style="background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:9px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px;">
-            <span style="color:var(--green);font-weight:800;font-size:0.75rem;min-width:22px;">2.</span>
-            <div><span style="color:var(--text);font-weight:700;">Pending Building File</span></div>
+          <div class="access-guide-footer-tag">Date Check Required</div>
+        </div>
+        <div class="access-timing-grid">
+          <div class="access-timing-rule">
+            <div class="access-timing-status">UW Review: Declined</div>
+            <div class="access-timing-window">60–90 Days</div>
+            <div class="access-timing-result">Wait from the decline date. After the waiting window, <strong>give access.</strong></div>
           </div>
-          <div style="background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:9px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px;">
-            <span style="color:var(--green);font-weight:800;font-size:0.75rem;min-width:22px;">3.</span>
-            <div><span style="color:var(--text);font-weight:700;">New App Pending</span></div>
+          <div class="access-timing-rule">
+            <div class="access-timing-status">ALV Declined</div>
+            <div class="access-timing-window">60–90 Days</div>
+            <div class="access-timing-result">Apply the same waiting rule. After the waiting window, <strong>give access.</strong></div>
           </div>
-          <div style="background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:9px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px;">
-            <span style="color:var(--green);font-weight:800;font-size:0.75rem;min-width:22px;">4.</span>
-            <div><span style="color:var(--text);font-weight:700;">Pending Credit</span></div>
-          </div>
-          <div style="background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:9px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px;">
-            <span style="color:var(--green);font-weight:800;font-size:0.75rem;min-width:22px;">5.</span>
-            <div><span style="color:var(--text);font-weight:700;">ALV UW: Completed</span></div>
-          </div>
-          <div style="background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:9px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px;">
-            <span style="color:var(--green);font-weight:800;font-size:0.75rem;min-width:22px;">6.</span>
-            <div><span style="color:var(--text);font-weight:700;">Staging <span style="color:var(--muted);font-size:0.78rem;">[Hidden]</span></span> <span style="color:var(--gold);font-size:0.8rem;font-weight:600;"> — Check Notes first. Access can be given if notes allow it.</span></div>
-          </div>
-          <div style="background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:9px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px;">
-            <span style="color:var(--green);font-weight:800;font-size:0.75rem;min-width:22px;">7.</span>
-            <div><span style="color:#f8f8f8;font-weight:800;font-size:1rem;letter-spacing:1px;">Anything showing in BLACK</span> <span style="color:var(--gold);font-size:0.8rem;font-weight:600;"> — Only after 90 days have passed.</span></div>
+          <div class="access-timing-rule">
+            <div class="access-timing-status">UW Review: Approved</div>
+            <div class="access-timing-window">After 3 Days</div>
+            <div class="access-timing-result">Wait three full days from the approval date, then <strong>give access.</strong></div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- NO — Do Not Give Access -->
-      <div style="background:rgba(248,113,113,0.07);border:1.5px solid var(--red);border-radius:14px;padding:18px 20px;margin-bottom:14px;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--red);letter-spacing:2px;margin-bottom:12px;">🚫 NO — DO NOT GIVE ACCESS</div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="background:var(--red-light);border:1px solid rgba(248,113,113,0.3);border-radius:9px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px;">
-            <span style="color:var(--red);font-weight:800;font-size:0.75rem;min-width:22px;">1.</span>
-            <div><span style="color:var(--text);font-weight:700;">Enrollments</span> <span style="color:var(--muted);font-size:0.8rem;">| ALV</span></div>
-          </div>
-          <div style="background:var(--red-light);border:1px solid rgba(248,113,113,0.3);border-radius:9px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px;">
-            <span style="color:var(--red);font-weight:800;font-size:0.75rem;min-width:22px;">2.</span>
-            <div><span style="color:var(--text);font-weight:700;">Archive: Do Not Call</span> <span style="color:var(--gold);font-size:0.8rem;font-weight:600;"> — Exception: Only if the customer is calling in and is actively interested.</span></div>
-          </div>
-          <div style="background:var(--red-light);border:1px solid rgba(248,113,113,0.3);border-radius:9px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px;">
-            <span style="color:var(--red);font-weight:800;font-size:0.75rem;min-width:22px;">3.</span>
-            <div><span style="color:var(--text);font-weight:700;">Disposition | Not Interested | Cross-collateralization</span></div>
-          </div>
-          <div style="background:var(--red-light);border:1px solid rgba(248,113,113,0.3);border-radius:9px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px;">
-            <span style="color:var(--red);font-weight:800;font-size:0.75rem;min-width:22px;">4.</span>
-            <div><span style="color:var(--text);font-weight:700;">Approved</span> <span style="color:var(--red);font-weight:800;"> — This is a NO.</span> <span style="color:var(--muted);font-size:0.8rem;">Do not give access to Approved status.</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- DECLINED — Time-Based Rules -->
-      <div style="background:rgba(251,191,36,0.06);border:1.5px solid var(--gold);border-radius:14px;padding:18px 20px;margin-bottom:14px;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--gold);letter-spacing:2px;margin-bottom:6px;">⏳ DECLINED — TIME-BASED RULES</div>
-        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:12px;font-weight:600;">These depend on how much time has passed — check the date carefully.</div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="background:var(--gold-light);border:1px solid rgba(251,191,36,0.35);border-radius:9px;padding:12px 14px;">
-            <div style="font-weight:800;color:var(--text);margin-bottom:4px;">UW Review: Declined</div>
-            <div style="font-size:0.85rem;color:#cbd5e1;">Wait <strong style="color:var(--gold);">60 to 90 days</strong> from the decline date. After that window — <span style="color:var(--green);font-weight:700;">YES, give access.</span></div>
-          </div>
-          <div style="background:var(--gold-light);border:1px solid rgba(251,191,36,0.35);border-radius:9px;padding:12px 14px;">
-            <div style="font-weight:800;color:var(--text);margin-bottom:4px;">ALV Declined</div>
-            <div style="font-size:0.85rem;color:#cbd5e1;">Same rule — wait <strong style="color:var(--gold);">60 to 90 days</strong>. After that — <span style="color:var(--green);font-weight:700;">YES, give access.</span></div>
-          </div>
-          <div style="background:var(--gold-light);border:1px solid rgba(251,191,36,0.35);border-radius:9px;padding:12px 14px;">
-            <div style="font-weight:800;color:var(--text);margin-bottom:4px;">UW Review: Approved</div>
-            <div style="font-size:0.85rem;color:#cbd5e1;">Only a short wait — give access <strong style="color:var(--gold);">after 3 days</strong> from the approval date. <span style="color:var(--green);font-weight:700;">Then YES.</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tip" style="background:rgba(96,165,250,0.07);border-color:rgba(96,165,250,0.3);">
-
+      <div class="access-guide-footer">
+        <div class="access-guide-footer-copy"><strong>Final check:</strong> Never rely on color alone. Confirm the exact status wording, review all file notes, and verify the applicable date before proceeding.</div>
+        <div class="access-guide-footer-tag">When Unsure: Stop &amp; Confirm</div>
       </div>
 
     </div>
@@ -3500,6 +4239,14 @@ input, textarea, select { color-scheme: dark; }
         </div>
       </section>
 
+      <div id="lb-day-history" class="lb-day-history">
+        <div class="lb-day-history-label">
+          <div class="lb-day-history-icon">↩</div>
+          <div><div class="lb-day-history-title">Daily History</div><div class="lb-day-history-sub">Current day stays live · select an earlier day to look back</div></div>
+        </div>
+        <div id="lb-day-pills" class="lb-day-pills"></div>
+      </div>
+
       <div id="lb-week-subtabs" class="lb-week-subtabs">
         <div class="lb-week-toggle">
           <button onclick="lbSetWeekView('current')" id="lb-wv-current" class="lb-week-btn active" data-week="current">⚡ THIS WEEK</button>
@@ -3511,7 +4258,7 @@ input, textarea, select { color-scheme: dark; }
         <div class="lb-summary-card primary"><div class="lb-summary-kicker">Total Transfers</div><div class="lb-summary-value" id="lb-total-transfers">0</div><div class="lb-summary-note" id="lb-total-note">Current view</div></div>
         <div class="lb-summary-card"><div class="lb-summary-kicker">Agents Ranked</div><div class="lb-summary-value" id="lb-agent-count">0</div><div class="lb-summary-note" id="lb-agent-note">Active performance rows</div></div>
         <div class="lb-summary-card leader"><div class="lb-summary-kicker">Top Performer</div><div class="lb-summary-value" id="lb-top-name">—</div><div class="lb-summary-note" id="lb-top-note">Waiting for report data</div></div>
-        <div class="lb-summary-card"><div class="lb-summary-kicker">Average / Agent</div><div class="lb-summary-value" id="lb-average-xfer">0.0</div><div class="lb-summary-note" id="lb-average-note">Transfers per ranked agent</div></div>
+        <div class="lb-summary-card"><div class="lb-summary-kicker">Average</div><div class="lb-summary-value" id="lb-average-xfer">0.0</div><div class="lb-summary-note" id="lb-average-note">Total leads ÷ agents</div></div>
       </div>
 
       <div id="lb-no-data" class="lb-empty"><div class="lb-empty-icon">📊</div><div class="lb-empty-title">No leaderboard data yet</div><div class="lb-empty-note">Admin uploads the daily CSV and the performance board will update automatically.</div></div>
@@ -11407,6 +12154,10 @@ if(_origRenderStatsTable){
 let lbFilter   = 'all';
 let lbMode     = 'daily';   // 'daily' | 'weekly'
 let lbWeekView = 'current'; // 'current' | 'prev'
+let lbDailyDate = null;     // selected YYYY-MM-DD in Daily view; defaults to today
+let lbDailyReportCache = {};
+let lbDailyHistoryLoadedWeek = '';
+let lbDailyHistoryLoading = false;
 
 function lbEscape(value){
   return String(value ?? '')
@@ -11434,16 +12185,107 @@ function lbRosterInfo(agent){
   const nl=String(agent?.name||'').toLowerCase().trim();
   return Object.values(ROSTER).find(r=>String(r.name||'').toLowerCase().trim()===nl)||null;
 }
+function lbTodayKey(){
+  try{ return getTodayGY(); }catch(e){}
+  return new Date().toLocaleDateString('en-CA',{timeZone:'America/Guyana'});
+}
+function lbWeekDatesToToday(){
+  const today=lbTodayKey();
+  const nowGY=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Guyana'}));
+  const start=getWeekStartGY(nowGY);
+  const out=[];
+  const d=new Date(start+'T12:00:00');
+  const end=new Date(today+'T12:00:00');
+  while(d<=end){ out.push(d.toLocaleDateString('en-CA',{timeZone:'America/Guyana'})); d.setDate(d.getDate()+1); }
+  return out;
+}
+function lbParseReportRows(report){
+  if(!report) return [];
+  if(Array.isArray(report)) return report;
+  if(Array.isArray(report.stats)) return report.stats;
+  if(report.statsJSON){ try{ const rows=JSON.parse(report.statsJSON); return Array.isArray(rows)?rows:[]; }catch(e){} }
+  return [];
+}
+function lbDayTotal(date){
+  const today=lbTodayKey();
+  let rows=[];
+  if(date===today && typeof statsData!=='undefined' && statsData.length) rows=statsData;
+  else rows=lbParseReportRows(lbDailyReportCache[date]);
+  return rows.reduce((sum,r)=>sum+(Number(r?.xfer)||0),0);
+}
+function lbRenderDayHistory(){
+  const wrap=document.getElementById('lb-day-history');
+  const pills=document.getElementById('lb-day-pills');
+  if(!wrap||!pills) return;
+  wrap.classList.toggle('hidden',lbMode!=='daily');
+  if(lbMode!=='daily') return;
+  const today=lbTodayKey();
+  if(!lbDailyDate) lbDailyDate=today;
+  const dates=lbWeekDatesToToday();
+  const fmtDay=new Intl.DateTimeFormat('en-US',{weekday:'short',timeZone:'America/Guyana'});
+  const fmtDate=new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',timeZone:'America/Guyana'});
+  pills.innerHTML=dates.map(date=>{
+    const d=new Date(date+'T12:00:00');
+    const isToday=date===today, active=date===lbDailyDate;
+    const hasReport=isToday?(typeof statsData!=='undefined'&&statsData.length>0):!!lbDailyReportCache[date];
+    const total=lbDayTotal(date);
+    const cls=['lb-day-pill',isToday?'today':'',active?'active':'',!hasReport?'no-report':''].filter(Boolean).join(' ');
+    const tag=isToday?'<span class="lb-day-tag">TODAY</span>':(hasReport?'<span class="lb-day-tag" style="color:#71839d;">SAVED</span>':'');
+    const leadText=hasReport?`${total.toLocaleString()}<span>lead${total===1?'':'s'}</span>`:`—<span>no report</span>`;
+    return `<button class="${cls}" onclick="lbSelectDailyDate('${date}')" title="${isToday?'Live performance':hasReport?'Open saved report for '+fmtDate.format(d):'No saved report for '+fmtDate.format(d)}"><div class="lb-day-pill-top"><span class="lb-day-name">${fmtDay.format(d)}</span>${tag}</div><div class="lb-day-leads">${leadText}</div><div class="lb-day-date">${fmtDate.format(d)}</div></button>`;
+  }).join('');
+}
+async function lbSelectDailyDate(date){
+  lbMode='daily';
+  lbDailyDate=date||lbTodayKey();
+  lbSyncControls();
+  const today=lbTodayKey();
+  if(lbDailyDate!==today && !lbDailyReportCache[lbDailyDate]){
+    try{
+      const snap=await db.collection('reports').doc(lbDailyDate).get();
+      if(snap.exists) lbDailyReportCache[lbDailyDate]={date:lbDailyDate,...snap.data()};
+      else lbDailyReportCache[lbDailyDate]=null;
+    }catch(e){ console.warn('Could not load leaderboard day',lbDailyDate,e); }
+  }
+  renderLeaderboard();
+}
+async function lbLoadDailyHistory(force=false){
+  const today=lbTodayKey();
+  const nowGY=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Guyana'}));
+  const weekStart=getWeekStartGY(nowGY);
+  if(lbDailyHistoryLoading) return;
+  if(!force && lbDailyHistoryLoadedWeek===weekStart){ lbRenderDayHistory(); return; }
+  lbDailyHistoryLoading=true;
+  try{
+    if(typeof reportHistory!=='undefined' && Array.isArray(reportHistory)){
+      reportHistory.forEach(r=>{ if(r&&r.date) lbDailyReportCache[r.date]=r; });
+    }
+    const dates=lbWeekDatesToToday().filter(d=>d!==today && !(d in lbDailyReportCache));
+    await Promise.all(dates.map(async date=>{
+      try{ const snap=await db.collection('reports').doc(date).get(); lbDailyReportCache[date]=snap.exists?{date,...snap.data()}:null; }
+      catch(e){ console.warn('Daily history load failed for',date,e); }
+    }));
+    lbDailyHistoryLoadedWeek=weekStart;
+  }finally{
+    lbDailyHistoryLoading=false;
+    lbRenderDayHistory();
+    const page=document.getElementById('page-leaderboard');
+    if(page&&page.classList.contains('active')&&lbMode==='daily') renderLeaderboard();
+  }
+}
 function lbSyncControls(){
   document.querySelectorAll('#page-leaderboard [data-mode]').forEach(el=>el.classList.toggle('active',el.dataset.mode===lbMode));
   document.querySelectorAll('#page-leaderboard [data-filter]').forEach(el=>el.classList.toggle('active',el.dataset.filter===lbFilter));
   document.querySelectorAll('#page-leaderboard [data-week]').forEach(el=>el.classList.toggle('active',el.dataset.week===lbWeekView));
   const subtabs=document.getElementById('lb-week-subtabs');
   if(subtabs) subtabs.classList.toggle('show',lbMode==='weekly');
+  const dayHistory=document.getElementById('lb-day-history');
+  if(dayHistory) dayHistory.classList.toggle('hidden',lbMode!=='daily');
 }
 function lbSetMode(mode){
   lbMode=mode==='weekly'?'weekly':'daily';
   if(lbMode==='weekly') lbWeekView='current';
+  else { lbDailyDate=lbTodayKey(); lbLoadDailyHistory(); }
   lbSyncControls(); renderLeaderboard();
 }
 function lbSetWeekView(view){ lbWeekView=view==='prev'?'prev':'current'; lbSyncControls(); renderLeaderboard(); }
@@ -11462,6 +12304,10 @@ function renderLeaderboard(){
   const list=document.getElementById('lb-list');
   const isWeekly=lbMode==='weekly';
   const isPrevWeek=isWeekly&&lbWeekView==='prev';
+  const todayKey=lbTodayKey();
+  if(!lbDailyDate) lbDailyDate=todayKey;
+  const selectedDailyDate=lbDailyDate||todayKey;
+  const viewingToday=!isWeekly&&selectedDailyDate===todayKey;
 
   const nowGY=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Guyana'}));
   const curWkStart=getWeekStartGY(nowGY);
@@ -11479,10 +12325,12 @@ function renderLeaderboard(){
     const from=new Date(curWkStart+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
     periodText=`Current week · Since ${from}`;
   }else{
-    periodText=nowGY.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+    const dailyObj=new Date(selectedDailyDate+'T12:00:00');
+    periodText=dailyObj.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
   }
   if(dateLbl) dateLbl.textContent=periodText+' · Ranked by transfers';
-  if(liveLbl) liveLbl.textContent=isWeekly?'FIREBASE REPORT HISTORY':'LIVE DAILY PERFORMANCE';
+  if(liveLbl) liveLbl.textContent=isWeekly?'FIREBASE REPORT HISTORY':viewingToday?'LIVE DAILY PERFORMANCE':'SAVED DAILY REPORT';
+  lbRenderDayHistory();
 
   let data=[];
   let reportCount=0;
@@ -11506,10 +12354,13 @@ function renderLeaderboard(){
     });
     data=Object.values(agentMap).map(a=>{ const conv=a.calls>0?(a.xfer/a.calls*100):0; delete a._days; return {...a,conv}; });
   }else{
-    data=typeof statsData!=='undefined'?statsData.map(r=>({
+    const sourceRows=viewingToday
+      ?(typeof statsData!=='undefined'?statsData:[])
+      :lbParseReportRows(lbDailyReportCache[selectedDailyDate]);
+    data=sourceRows.map(r=>({
       ...r,team:lbCurrentTeam(r),calls:Number(r.calls)||0,xfer:Number(r.xfer)||0,
       conv:Number(r.conv)||((Number(r.calls)||0)>0?(Number(r.xfer)||0)/(Number(r.calls)||1)*100:0),days:1
-    })):[];
+    }));
   }
 
   data=data.filter(r=>r&&r.name);
@@ -11517,7 +12368,7 @@ function renderLeaderboard(){
   data.sort((a,b)=>(b.xfer-a.xfer)||((b.conv||0)-(a.conv||0))||((b.calls||0)-(a.calls||0))||String(a.name).localeCompare(String(b.name)));
 
   if(!data.length){
-    if(noData){ noData.classList.add('show'); const note=noData.querySelector('.lb-empty-note'); if(note) note.textContent=isPrevWeek?'No saved reports were found for the previous week.':isWeekly?'No saved reports are available for this week yet.':'Admin uploads the daily CSV and the performance board will update automatically.'; }
+    if(noData){ noData.classList.add('show'); const note=noData.querySelector('.lb-empty-note'); if(note) note.textContent=isPrevWeek?'No saved reports were found for the previous week.':isWeekly?'No saved reports are available for this week yet.':viewingToday?'Admin uploads the daily CSV and the performance board will update automatically.':`No saved leaderboard report was found for ${new Date(selectedDailyDate+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})}.`; }
     if(summary) summary.style.display='none'; if(podiumSec) podiumSec.style.display='none'; if(listPanel) listPanel.style.display='none';
     if(list) list.innerHTML=''; if(podium) podium.innerHTML=''; return;
   }
@@ -11530,15 +12381,15 @@ function renderLeaderboard(){
   const withXfers=data.filter(r=>(Number(r.xfer)||0)>0).length;
 
   const totalEl=document.getElementById('lb-total-transfers'); if(totalEl) totalEl.textContent=totalXfer.toLocaleString();
-  const totalNote=document.getElementById('lb-total-note'); if(totalNote) totalNote.textContent=isWeekly?`${reportCount} report${reportCount===1?'':'s'} · ${filterLabel}`:`Today · ${filterLabel}`;
+  const totalNote=document.getElementById('lb-total-note'); if(totalNote) totalNote.textContent=isWeekly?`${reportCount} report${reportCount===1?'':'s'} · ${filterLabel}`:`${viewingToday?'Today':new Date(selectedDailyDate+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} · ${filterLabel}`;
   const countEl=document.getElementById('lb-agent-count'); if(countEl) countEl.textContent=data.length.toLocaleString();
   const countNote=document.getElementById('lb-agent-note'); if(countNote) countNote.textContent=`${withXfers} with 1+ transfer${withXfers===1?'':'s'}`;
   const topName=document.getElementById('lb-top-name'); if(topName) topName.textContent=top?.name||'—';
   const topNote=document.getElementById('lb-top-note'); if(topNote) topNote.textContent=`${top?.xfer||0} transfers · ${top?.team==='PR'?'Providence':'Berbice'}`;
   const avgEl=document.getElementById('lb-average-xfer'); if(avgEl) avgEl.textContent=avgXfer.toFixed(1);
-  const avgNote=document.getElementById('lb-average-note'); if(avgNote) avgNote.textContent=isWeekly?'Average for selected week':'Average for today';
+  const avgNote=document.getElementById('lb-average-note'); if(avgNote) avgNote.textContent=`${totalXfer.toLocaleString()} lead${totalXfer===1?'':'s'} ÷ ${data.length.toLocaleString()} agent${data.length===1?'':'s'}`;
   const rankingCount=document.getElementById('lb-ranking-count'); if(rankingCount) rankingCount.textContent=`${data.length} agent${data.length===1?'':'s'} · ${filterLabel}`;
-  const podiumMeta=document.getElementById('lb-podium-meta'); if(podiumMeta) podiumMeta.textContent=`Top ${Math.min(3,data.length)} · ${isWeekly?'weekly':'daily'} performance`;
+  const podiumMeta=document.getElementById('lb-podium-meta'); if(podiumMeta) podiumMeta.textContent=`Top ${Math.min(3,data.length)} · ${isWeekly?'weekly':viewingToday?'today':new Date(selectedDailyDate+'T12:00:00').toLocaleDateString('en-US',{weekday:'long'})} performance`;
 
   const myName=currentUser&&!currentUser.isAdmin?String(currentUser.name||'').toLowerCase().trim():'';
   const maxXfer=Math.max(...data.map(r=>Number(r.xfer)||0),1);
@@ -11551,7 +12402,7 @@ function renderLeaderboard(){
       const rank=rankFor(agent),medal=rank===1?'🥇':rank===2?'🥈':'🥉';
       const teamClass=agent.team==='PR'?'lb-team-pr':'lb-team-bb';
       const teamText=agent.team==='PR'?'🌴 Providence':'🏠 Berbice';
-      return `<div class="lb-podium-card rank-${rank}"><div class="lb-podium-rank">${rank}</div><div class="lb-podium-medal">${medal}</div><div class="lb-podium-avatar">${lbEscape(lbInitials(agent.name))}</div><div style="min-width:0;width:100%;"><div class="lb-podium-name" title="${lbEscape(agent.name)}">${lbEscape(agent.name)}</div><div class="lb-podium-team"><span class="lb-team-badge ${teamClass}">${teamText}</span></div></div><div class="lb-podium-score">${Number(agent.xfer)||0}<span>${isWeekly?'Week Transfers':'Transfers Today'}</span></div><div class="lb-podium-meta"><span>${(Number(agent.calls)||0).toLocaleString()} calls</span><span>${lbFormatConv(agent.conv)} conv.</span></div></div>`;
+      return `<div class="lb-podium-card rank-${rank}"><div class="lb-podium-rank">${rank}</div><div class="lb-podium-medal">${medal}</div><div class="lb-podium-avatar">${lbEscape(lbInitials(agent.name))}</div><div style="min-width:0;width:100%;"><div class="lb-podium-name" title="${lbEscape(agent.name)}">${lbEscape(agent.name)}</div><div class="lb-podium-team"><span class="lb-team-badge ${teamClass}">${teamText}</span></div></div><div class="lb-podium-score">${Number(agent.xfer)||0}<span>${isWeekly?'Week Transfers':viewingToday?'Transfers Today':'Day Transfers'}</span></div><div class="lb-podium-meta"><span>${(Number(agent.calls)||0).toLocaleString()} calls</span><span>${lbFormatConv(agent.conv)} conv.</span></div></div>`;
     }).join('');
   }
 
@@ -11574,6 +12425,9 @@ function renderLeaderboard(){
   switchTab = function(tab){
     _origSwitch(tab);
     if(tab === 'leaderboard'){
+      // Daily view always opens on the current Guyana day. Older days remain available in the compact history strip.
+      if(lbMode==='daily') lbDailyDate=lbTodayKey();
+      lbLoadDailyHistory();
       // Render from cached data
       renderLeaderboard();
       // Also try to load from Firebase if no data is cached
@@ -12258,5 +13112,19 @@ auth.onAuthStateChanged(user => {
 });
 </script>
 <input type="file" id="stats-csv-upload" accept=".csv" style="display:none;" onchange="handleStatsCSV(this)">
+
+<script>
+function updateSundayProtocolProgress(){
+  const list=document.getElementById('sunday-pro-checklist');
+  if(!list) return;
+  const checks=[...list.querySelectorAll('input[type="checkbox"]')];
+  const done=checks.filter(c=>c.checked).length;
+  checks.forEach(c=>{ const row=c.closest('.sunday-pro-check'); if(row) row.classList.toggle('done',c.checked); });
+  const text=document.getElementById('sunday-pro-progress-text');
+  const fill=document.getElementById('sunday-pro-progress-fill');
+  if(text) text.textContent=done+' / '+checks.length;
+  if(fill) fill.style.width=(checks.length?(done/checks.length)*100:0)+'%';
+}
+</script>
 </body>
 </html>
