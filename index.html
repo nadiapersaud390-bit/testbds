@@ -885,7 +885,7 @@ body.is-admin #page-admin.admin-page-active{display:flex !important;flex-directi
 .access-compose-user strong{color:#dbeafe;}
 .access-input,.access-select{width:100%;background:#080f1d;color:var(--text);border:1px solid #2a4163;border-radius:8px;padding:10px;font:700 .78rem 'Barlow Condensed',sans-serif;outline:none;}
 .access-input:focus,.access-select:focus{border-color:#38bdf8;}
-.access-composer-row{display:grid;grid-template-columns:190px minmax(0,1fr) 180px;gap:8px;align-items:end;}
+.access-composer-row{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:8px;align-items:end;}
 .access-textarea{min-height:42px;height:42px;resize:none;letter-spacing:.2px;}
 .access-send-btn{width:100%;border:0;border-radius:8px;padding:12px;margin:0;background:linear-gradient(90deg,#2563eb,#38bdf8);color:#03111f;font:900 .76rem 'Barlow Condensed',sans-serif;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;height:42px;}
 .access-send-btn:disabled{opacity:.55;cursor:not-allowed;}
@@ -2496,7 +2496,7 @@ input, textarea, select { color-scheme: dark; }
             <div>
             <div class="access-chat-kicker">Team support channel</div>
             <div class="access-chat-title">Access Needed</div>
-            <div class="access-chat-sub">Agents can ask for access here. Admins are alerted with the agent name, team, and exact request.</div>
+            <div class="access-chat-sub">Team members can communicate here. Messages are synced live through Firebase.</div>
             </div>
           </div>
           <div class="access-chat-tools">
@@ -2507,20 +2507,13 @@ input, textarea, select { color-scheme: dark; }
         <div class="access-chat-body">
           <div class="access-messages" id="access-chat-messages"><div class="access-empty">Loading the access group chat…</div></div>
           <div class="access-compose">
-            <div class="access-compose-title">Group chat · Send an access request</div>
+            <div class="access-compose-title">Group chat · Send a message</div>
             <div class="access-compose-user">Sending as <strong id="access-compose-user">Signed-in agent</strong></div>
             <div class="access-composer-row">
-              <select class="access-select" id="access-request-type" aria-label="Access type">
-                <option value="Website / link">Website / link</option>
-                <option value="CRM / account">CRM / account</option>
-                <option value="Dialer / phone system">Dialer / phone system</option>
-                <option value="Tool / software">Tool / software</option>
-                <option value="Other">Other</option>
-              </select>
-              <textarea class="access-input access-textarea" id="access-request-text" placeholder="Type your message here..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();accessSendRequest();}"></textarea>
+              <textarea class="access-input access-textarea" id="access-request-text" placeholder="Type a message..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();accessSendRequest();}"></textarea>
               <button class="access-send-btn" id="access-send-btn" onclick="accessSendRequest()">SEND MESSAGE</button>
             </div>
-            <div class="access-compose-note">Your name and team are automatically shown to everyone in the chat. Press Enter to send.</div>
+            <div class="access-compose-note">Your name and team are shown to everyone in the chat. Press Enter to send.</div>
             <div id="access-compose-status" style="font-size:.65rem;color:var(--muted);min-height:18px;margin-top:5px;"></div>
           </div>
         </div>
@@ -5340,7 +5333,7 @@ function accessUpdateChatIdentity(){
 function accessRenderMessages(){
   const el=document.getElementById('access-chat-messages'); if(!el) return;
   accessUpdateChatIdentity();
-  if(!accessChatMessages.length){el.innerHTML='<div class="access-empty">No messages yet.<br>Use the form to tell the admins what access you need.</div>';return;}
+  if(!accessChatMessages.length){el.innerHTML='<div class="access-empty">No messages yet.<br>Start the conversation with your team.</div>';return;}
   const ordered=accessChatMessages.slice().sort(function(a,b){
     const at=accessServerMillis(a.createdAt), bt=accessServerMillis(b.createdAt);
     if(at===null && bt===null) return String(a.id||'').localeCompare(String(b.id||''));
@@ -5351,12 +5344,10 @@ function accessRenderMessages(){
   el.innerHTML=ordered.map(function(m){
     const mine=currentUser && !currentUser.isAdmin && String(m.senderId||'')===String(currentUser.id||'');
     const admin=!!m.senderIsAdmin;
-    const tag=m.isAccessRequest?'<span class="access-request-tag">Access request</span>':'';
     return '<div class="access-msg '+(mine?'mine ':'')+(admin?'admin':'')+'">'+
       '<div class="access-msg-avatar">'+accessEscape(accessInitials(m.senderName))+'</div>'+
-      '<div class="access-msg-meta">'+accessEscape(m.senderName||'Team member')+' · '+accessEscape(m.team||'')+' '+tag+'</div>'+
+      '<div class="access-msg-meta">'+accessEscape(m.senderName||'Team member')+' · '+accessEscape(m.team||'')+'</div>'+
       '<div class="access-msg-text">'+accessEscape(m.text||'')+'</div>'+
-      (m.accessType?'<div style="font-size:.62rem;color:#fbbf24;margin-top:5px;">Needed: '+accessEscape(m.accessType)+'</div>':'')+
       '<div class="access-msg-time">'+accessFormatTime(m.createdAt)+(m.status==='resolved'?' · Resolved':'')+'</div></div>';
   }).join('');
   el.scrollTop=el.scrollHeight;
@@ -5403,15 +5394,15 @@ async function accessStartChat(){
 }
 async function accessSendRequest(){
   if(!currentUser) return;
-  const textEl=document.getElementById('access-request-text'), typeEl=document.getElementById('access-request-type'), btn=document.getElementById('access-send-btn'), status=document.getElementById('access-compose-status');
-  const text=String(textEl && textEl.value||'').trim(), accessType=String(typeEl && typeEl.value||'Other');
+  const textEl=document.getElementById('access-request-text'), btn=document.getElementById('access-send-btn'), status=document.getElementById('access-compose-status');
+  const text=String(textEl && textEl.value||'').trim();
   const senderName=currentUser.name||currentUser.username||'Admin';
   if(!text){if(status){status.textContent='Please explain what access you need.';status.style.color='var(--red)';}return;}
   btn.disabled=true;btn.textContent='SENDING...';if(status) status.textContent='';
   try{
     await ensureFirebaseAuth();
     await db.collection('access_group_chat').add({
-      text:text,accessType:accessType,isAccessRequest:true,status:'open',
+      text:text,accessType:'Access needed',isAccessRequest:true,status:'open',
       senderId:String(currentUser.id||''),senderName:senderName,team:currentUser.team||'',
       senderIsAdmin:!!currentUser.isAdmin,
       createdAt:firebase.firestore.FieldValue.serverTimestamp(),
