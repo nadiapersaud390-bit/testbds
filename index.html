@@ -2525,12 +2525,12 @@ input, textarea, select { color-scheme: dark; }
             <div>
             <div class="access-chat-kicker">Team support channel</div>
             <div class="access-chat-title">Access Needed</div>
-            <div class="access-chat-sub">Agents can ask for access here. Admins are alerted with the agent name, team, and exact request.</div>
+          <div class="access-chat-sub">Team messages sync live through Firebase. Everyone can see the sender name and team.</div>
             </div>
           </div>
           <div class="access-chat-tools">
             <div class="access-live-pill">● FIREBASE LIVE</div>
-            <div class="access-open-pill">OPEN REQUESTS: <span id="access-open-count">0</span></div>
+            <div class="access-open-pill">LIVE CHAT</div>
           </div>
         </div>
         <div class="access-chat-body">
@@ -5446,17 +5446,15 @@ function accessRenderMessages(){
     return at-bt || String(a.id||'').localeCompare(String(b.id||''));
   });
   el.innerHTML=ordered.map(function(m){
-    const mine=currentUser && !currentUser.isAdmin && String(m.senderId||'')===String(currentUser.id||'');
+    const mine=currentUser && String(m.senderId||'')===String(currentUser.id||'');
     const admin=!!m.senderIsAdmin;
-    const tag=m.isAccessRequest?'<span class="access-request-tag">Access request</span>':'';
     const numbers=accessExtractNumbers(m.text);
     const canDelete=currentUser && (currentUser.isAdmin || String(m.senderId||'')===String(currentUser.id||''));
     const actions=(numbers.length||canDelete)?'<div class="access-msg-actions">'+(numbers.length?'<button class="access-copy-btn" type="button" data-copy-numbers="'+accessEscape(numbers.join('\n'))+'" onclick="accessCopyNumbers(this)">COPY NUMBERS</button>':'')+(canDelete?'<button class="access-delete-btn" type="button" data-message-id="'+accessEscape(m.id)+'" onclick="accessDeleteMessage(this)">DELETE</button>':'')+'</div>':'';
     return '<div class="access-msg '+(mine?'mine ':'')+(admin?'admin':'')+'">'+
       '<div class="access-msg-avatar">'+accessEscape(accessInitials(m.senderName))+'</div>'+
-      '<div class="access-msg-meta">'+accessEscape(m.senderName||'Team member')+' · '+accessEscape(m.team||'')+' '+tag+'</div>'+
+      '<div class="access-msg-meta">'+accessEscape(m.senderName||'Team member')+(m.team?' · '+accessEscape(m.team):'')+'</div>'+
       '<div class="access-msg-text">'+accessEscape(m.text||'')+'</div>'+
-      (m.accessType?'<div style="font-size:.62rem;color:#fbbf24;margin-top:5px;">Needed: '+accessEscape(m.accessType)+'</div>':'')+
       '<div class="access-msg-time">'+accessFormatTime(m.createdAt)+(m.status==='resolved'?' · Resolved':'')+'</div>'+actions+'</div>';
   }).join('');
   el.scrollTop=el.scrollHeight;
