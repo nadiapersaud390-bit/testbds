@@ -876,6 +876,9 @@ body.is-admin #page-admin.admin-page-active{display:flex !important;flex-directi
 .access-live-pill,.access-open-pill{font-size:.6rem;border-radius:20px;padding:7px 10px;font-weight:900;white-space:nowrap;letter-spacing:.4px;}
 .access-live-pill{color:var(--green);border:1px solid rgba(52,211,153,.35);background:rgba(52,211,153,.08);}
 .access-open-pill{color:#fbbf24;border:1px solid rgba(251,191,36,.35);background:rgba(251,191,36,.08);}
+.access-voice-pill{display:none;align-items:center;gap:5px;border:1px solid rgba(167,139,250,.45);border-radius:20px;padding:7px 10px;background:rgba(167,139,250,.1);color:#c4b5fd;font:900 .6rem 'Barlow Condensed',sans-serif;letter-spacing:.5px;white-space:nowrap;cursor:pointer;}
+.access-voice-pill:hover{background:rgba(167,139,250,.2);border-color:#a78bfa;}
+.access-voice-pill.ready{color:#34d399;border-color:rgba(52,211,153,.5);background:rgba(52,211,153,.1);}
 .access-chat-body{padding:16px;background:rgba(4,10,20,.22);}
 .access-messages{height:455px;overflow:auto;padding:16px 14px;display:flex;flex-direction:column;gap:14px;background:#070f1d;border:1px solid #1b304e;border-radius:14px;}
 .access-empty{height:100%;display:grid;place-items:center;text-align:center;color:var(--muted);font-size:.75rem;padding:30px;}
@@ -2533,6 +2536,7 @@ input, textarea, select { color-scheme: dark; }
           <div class="access-chat-tools">
             <div class="access-live-pill">● FIREBASE LIVE</div>
             <div class="access-open-pill">LIVE CHAT</div>
+            <button class="access-voice-pill" id="access-voice-pill" type="button" onpointerdown="event.stopPropagation()" onclick="accessEnableVoiceAlerts(true)">🔊 ENABLE VOICE</button>
           </div>
         </div>
         <div class="access-chat-body">
@@ -5345,6 +5349,8 @@ let accessUnreadMessageCount = 0;
 let accessTitleTimer = null;
 let accessTitleBeforeNotify = '';
 let accessNotificationAudioContext = null;
+let accessVoiceAlertsReady = false;
+let accessVoiceUnlockBound = false;
 
 function accessEscape(value){
   return String(value == null ? '' : value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
@@ -5376,6 +5382,18 @@ function accessUpdateChatIdentity(){
   el.textContent=displayName+' · '+role;
   const quick=document.getElementById('access-admin-quick-replies');
   if(quick) quick.style.display=currentUser.isAdmin?'flex':'none';
+  accessUpdateVoiceControl();
+}
+function accessUpdateVoiceControl(){
+  const button=document.getElementById('access-voice-pill');
+  if(!button) return;
+  const admin=!!(currentUser&&currentUser.isAdmin);
+  button.style.display=admin?'inline-flex':'none';
+  if(!admin) return;
+  const supported=('speechSynthesis' in window)&&('SpeechSynthesisUtterance' in window);
+  button.disabled=!supported;
+  button.classList.toggle('ready',supported&&accessVoiceAlertsReady);
+  button.textContent=!supported?'🔇 VOICE UNSUPPORTED':(accessVoiceAlertsReady?'🔊 VOICE ON · TEST':'🔊 ENABLE VOICE');
 }
 function accessMarkNewMessageTab(senderName){
   const button=document.getElementById('tab-access-chat');
@@ -5409,6 +5427,38 @@ function accessPrimeNotificationAudio(){
     if(accessNotificationAudioContext.state==='suspended') accessNotificationAudioContext.resume().catch(function(){});
   }catch(e){}
 }
+function accessBindVoiceUnlock(){
+  if(accessVoiceUnlockBound || !currentUser || !currentUser.isAdmin) return;
+  accessVoiceUnlockBound=true;
+  document.addEventListener('pointerdown',function(){
+    accessVoiceUnlockBound=false;
+    if(!accessVoiceAlertsReady) accessEnableVoiceAlerts(false);
+  },{once:true});
+}
+function accessSpeakText(text){
+  if(!currentUser || !currentUser.isAdmin || !('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
+  try{
+    const synth=window.speechSynthesis;
+    const utterance=new window.SpeechSynthesisUtterance(String(text||''));
+    const voices=synth.getVoices();
+    utterance.voice=voices.find(function(voice){return /^en/i.test(voice.lang)&&/Google|Microsoft|Samantha|English/i.test(voice.name);})||voices.find(function(voice){return /^en/i.test(voice.lang);})||null;
+    utterance.lang='en-US';
+    utterance.rate=0.92;
+    utterance.pitch=1;
+    utterance.volume=1;
+    utterance.onstart=function(){accessVoiceAlertsReady=true;accessUpdateVoiceControl();};
+    utterance.onerror=function(){accessVoiceAlertsReady=false;accessUpdateVoiceControl();accessBindVoiceUnlock();};
+    synth.cancel();
+    synth.resume();
+    setTimeout(function(){synth.resume();synth.speak(utterance);},140);
+  }catch(e){accessVoiceAlertsReady=false;accessUpdateVoiceControl();accessBindVoiceUnlock();}
+}
+function accessEnableVoiceAlerts(testVoice){
+  if(!currentUser || !currentUser.isAdmin) return;
+  accessPrimeNotificationAudio();
+  if(accessVoiceAlertsReady && !testVoice){accessUpdateVoiceControl();return;}
+  accessSpeakText(testVoice?'Voice alerts are working.':'Voice alerts enabled.');
+}
 function accessPlayNotificationSound(){
   if(!currentUser || !currentUser.isAdmin) return;
   try{
@@ -5435,16 +5485,8 @@ function accessPlayNotificationSound(){
   }catch(e){}
 }
 function accessSpeakNotification(senderName){
-  if(!currentUser || !currentUser.isAdmin || !('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
   const sender=String(senderName||'the agent').replace(/[\r\n<>]/g,' ').trim().slice(0,80)||'the agent';
-  try{
-    window.speechSynthesis.cancel();
-    const utterance=new SpeechSynthesisUtterance('Access is needed for '+sender+'.');
-    utterance.rate=0.95;
-    utterance.pitch=1;
-    utterance.volume=1;
-    window.speechSynthesis.speak(utterance);
-  }catch(e){}
+  accessSpeakText('Access is needed for '+sender+'.');
 }
 function accessSetChatBubbleVisible(visible){
   const bubble=document.getElementById('access-chat-bubble');
@@ -5968,6 +6010,8 @@ function showDashboard(){
   accessInitChatBubble();
   accessSetChatBubbleVisible(true);
   accessPrimeNotificationAudio();
+  accessUpdateVoiceControl();
+  accessBindVoiceUnlock();
   accessStartChat();
   const firstName = u.name.split(' ')[0];
 
