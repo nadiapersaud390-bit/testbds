@@ -466,6 +466,8 @@ body.lead-alert-open{overflow:hidden;}
 .tab-btn.t-leaderboard{background:#0d1a2e;border-color:rgba(251,191,36,0.4);color:var(--gold);}
 .tab-btn.t-leads.active{background:#0a1a10;border-color:#34d399;color:#34d399;box-shadow:0 0 14px rgba(52,211,153,0.25);}
 .tab-btn.t-leads{background:#0d1a2e;border-color:rgba(52,211,153,0.3);color:var(--green);}
+.tab-btn.access-tab-new-message{animation:accessTabPulse 1.1s ease-in-out infinite;border-color:#fbbf24;color:#fbbf24;box-shadow:0 0 16px rgba(251,191,36,.35);}
+@keyframes accessTabPulse{0%,100%{box-shadow:0 0 8px rgba(251,191,36,.12)}50%{box-shadow:0 0 22px rgba(251,191,36,.52)}}
 .access-chat-bubble{position:fixed;right:24px;bottom:24px;z-index:8400;display:none;align-items:center;gap:8px;border:1px solid rgba(56,189,248,.7);border-radius:999px;padding:10px 15px;background:linear-gradient(135deg,#0b2842,#12345a);color:#dff7ff;box-shadow:0 10px 30px rgba(0,0,0,.38),0 0 18px rgba(56,189,248,.2);font:900 .7rem 'Barlow Condensed',sans-serif;letter-spacing:1.2px;text-transform:uppercase;cursor:grab;touch-action:none;user-select:none;}
 .access-chat-bubble.show{display:inline-flex;animation:accessBubbleIn .25s ease-out;}
 .access-chat-bubble.dragging{cursor:grabbing;box-shadow:0 16px 38px rgba(0,0,0,.48),0 0 22px rgba(56,189,248,.3);}
@@ -5339,6 +5341,10 @@ let accessChatAdminBaselineReady = false;
 let accessChatLastAdminRequestCount = 0;
 let accessChatMessageBaselineReady = false;
 let accessMessageToastTimer = null;
+let accessUnreadMessageCount = 0;
+let accessTitleTimer = null;
+let accessTitleBeforeNotify = '';
+let accessNotificationAudioContext = null;
 
 function accessEscape(value){
   return String(value == null ? '' : value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
@@ -5370,6 +5376,75 @@ function accessUpdateChatIdentity(){
   el.textContent=displayName+' · '+role;
   const quick=document.getElementById('access-admin-quick-replies');
   if(quick) quick.style.display=currentUser.isAdmin?'flex':'none';
+}
+function accessMarkNewMessageTab(senderName){
+  const button=document.getElementById('tab-access-chat');
+  const badge=document.getElementById('access-unread-badge');
+  const sender=String(senderName||'Agent');
+  accessUnreadMessageCount++;
+  if(badge){badge.textContent='NEW · '+sender;badge.style.display='inline-block';badge.title='Access Needed from '+sender;}
+  if(button){button.classList.add('access-tab-new-message');button.title='Access Needed from '+sender;}
+  if(!accessTitleBeforeNotify) accessTitleBeforeNotify=document.title;
+  document.title='🔔 Access Needed · '+sender;
+  if(accessTitleTimer) clearTimeout(accessTitleTimer);
+  accessTitleTimer=setTimeout(function(){
+    if(document.title.indexOf('Access Needed · ')>=0) document.title=accessTitleBeforeNotify;
+    accessTitleBeforeNotify='';accessTitleTimer=null;
+  },8000);
+}
+function accessClearNewMessageTab(){
+  accessUnreadMessageCount=0;
+  const button=document.getElementById('tab-access-chat');
+  const badge=document.getElementById('access-unread-badge');
+  if(button){button.classList.remove('access-tab-new-message');button.removeAttribute('title');}
+  if(badge){badge.textContent='';badge.style.display='none';badge.removeAttribute('title');}
+  if(accessTitleTimer){clearTimeout(accessTitleTimer);accessTitleTimer=null;}
+  if(accessTitleBeforeNotify){document.title=accessTitleBeforeNotify;accessTitleBeforeNotify='';}
+}
+function accessPrimeNotificationAudio(){
+  try{
+    const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+    if(!AudioContextClass) return;
+    if(!accessNotificationAudioContext) accessNotificationAudioContext=new AudioContextClass();
+    if(accessNotificationAudioContext.state==='suspended') accessNotificationAudioContext.resume().catch(function(){});
+  }catch(e){}
+}
+function accessPlayNotificationSound(){
+  if(!currentUser || !currentUser.isAdmin) return;
+  try{
+    const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+    if(!AudioContextClass) return;
+    if(!accessNotificationAudioContext) accessNotificationAudioContext=new AudioContextClass();
+    const ctx=accessNotificationAudioContext;
+    const play=function(){
+      const now=ctx.currentTime;
+      const gain=ctx.createGain();
+      gain.gain.setValueAtTime(0.0001,now);
+      gain.gain.exponentialRampToValueAtTime(0.16,now+0.025);
+      gain.gain.exponentialRampToValueAtTime(0.0001,now+0.48);
+      gain.connect(ctx.destination);
+      const first=ctx.createOscillator();
+      first.type='sine';first.frequency.setValueAtTime(880,now);
+      first.connect(gain);first.start(now);first.stop(now+0.2);
+      const second=ctx.createOscillator();
+      second.type='sine';second.frequency.setValueAtTime(1175,now+0.17);
+      second.connect(gain);second.start(now+0.17);second.stop(now+0.48);
+    };
+    if(ctx.state==='suspended') ctx.resume().then(play).catch(function(){});
+    else play();
+  }catch(e){}
+}
+function accessSpeakNotification(senderName){
+  if(!currentUser || !currentUser.isAdmin || !('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
+  const sender=String(senderName||'the agent').replace(/[\r\n<>]/g,' ').trim().slice(0,80)||'the agent';
+  try{
+    window.speechSynthesis.cancel();
+    const utterance=new SpeechSynthesisUtterance('Access is needed for '+sender+'.');
+    utterance.rate=0.95;
+    utterance.pitch=1;
+    utterance.volume=1;
+    window.speechSynthesis.speak(utterance);
+  }catch(e){}
 }
 function accessSetChatBubbleVisible(visible){
   const bubble=document.getElementById('access-chat-bubble');
@@ -5479,12 +5554,10 @@ function accessShowAdminAlert(requests){
     '<div class="access-admin-alert-copy"><strong>'+accessEscape(latest.senderName||'An agent')+'</strong> ('+accessEscape(latest.team||'')+') needs <strong>'+accessEscape(latest.accessType||'access')+'</strong>.<br>'+accessEscape(latest.text||'')+'</div>'+
     '<div class="access-admin-alert-actions"><button onclick="switchTab(&quot;access-chat&quot;);accessDismissAdminAlert()">OPEN GROUP CHAT</button><button onclick="accessDismissAdminAlert()">DISMISS</button></div>';
   alert.classList.add('show');
-  const badge=document.getElementById('access-unread-badge');
-  if(badge){badge.textContent=String(requests.length);badge.style.display='inline-block';}
 }
 function accessDismissAdminAlert(){
   const alert=document.getElementById('access-admin-alert'); if(alert) alert.classList.remove('show');
-  const badge=document.getElementById('access-unread-badge'); if(badge){badge.textContent='';badge.style.display='none';}
+  accessClearNewMessageTab();
   if(currentUser && currentUser.isAdmin) localStorage.setItem('bds_access_seen_'+getTodayGY(),String(accessChatLastAdminRequestCount));
 }
 function accessDismissMessageToast(){
@@ -5494,9 +5567,12 @@ function accessDismissMessageToast(){
 function accessShowNewMessageNotification(message){
   if(!currentUser || !currentUser.isAdmin) return;
   const chatOpen=document.getElementById('page-access-chat') && document.getElementById('page-access-chat').classList.contains('active');
+  accessPlayNotificationSound();
+  accessSpeakNotification(message.senderName||'the agent');
   if(chatOpen) return;
   const sender=message.senderName||'Agent';
   const body=sender+(message.team?' · '+message.team:'')+'\n'+String(message.text||'');
+  accessMarkNewMessageTab(sender);
   let toast=document.getElementById('access-message-toast');
   if(!toast){toast=document.createElement('div');toast.id='access-message-toast';toast.className='access-message-toast';document.body.appendChild(toast);}
   toast.innerHTML='<div class="access-message-toast-title">💬 New group chat message</div><div class="access-message-toast-copy">'+accessEscape(body)+'</div><div class="access-message-toast-actions"><button onclick="switchTab(&quot;access-chat&quot;);accessDismissMessageToast()">OPEN CHAT</button><button onclick="accessDismissMessageToast()">DISMISS</button></div>';
@@ -5504,7 +5580,7 @@ function accessShowNewMessageNotification(message){
   if(accessMessageToastTimer) clearTimeout(accessMessageToastTimer);
   accessMessageToastTimer=setTimeout(accessDismissMessageToast,9000);
   if(typeof Notification!=='undefined' && Notification.permission==='granted'){
-    try{const notice=new Notification('New team chat message',{body:body,tag:'bds-access-chat'});notice.onclick=function(){window.focus();switchTab('access-chat');notice.close();};}catch(e){}
+    try{const notice=new Notification('Access Needed · '+sender,{body:body,tag:'bds-access-chat'});notice.onclick=function(){window.focus();switchTab('access-chat');notice.close();};}catch(e){}
   }
 }
 async function accessStartChat(){
@@ -5891,6 +5967,7 @@ function showDashboard(){
   const u = currentUser;
   accessInitChatBubble();
   accessSetChatBubbleVisible(true);
+  accessPrimeNotificationAudio();
   accessStartChat();
   const firstName = u.name.split(' ')[0];
 
@@ -7880,7 +7957,7 @@ function switchTab(tab){
   const btn=document.getElementById('tab-'+tab);
   if(page) page.classList.add('active');
   if(btn) btn.classList.add('active');
-  if(tab==='access-chat') accessRenderMessages();
+  if(tab==='access-chat'){accessRenderMessages();accessClearNewMessageTab();}
   accessUpdateChatBubbleVisibility();
 }
 
