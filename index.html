@@ -30,7 +30,7 @@ const auth = firebase.auth();
 // Update this string every time you deploy a new version.
 // The Firestore doc settings/app_version { v: "..." } must match.
 // When they differ, a reload banner appears for all logged-in users.
-const APP_VERSION = '2026-08-05-access-guide-r14';
+const APP_VERSION = '2026-09-25-access-chat-live-r15';
 
 // Dark theme only.
 document.documentElement.setAttribute('data-theme', 'dark');
@@ -875,6 +875,8 @@ body.is-admin #page-admin.admin-page-active{display:flex !important;flex-directi
 .access-chat-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .access-live-pill,.access-open-pill{font-size:.6rem;border-radius:20px;padding:7px 10px;font-weight:900;white-space:nowrap;letter-spacing:.4px;}
 .access-live-pill{color:var(--green);border:1px solid rgba(52,211,153,.35);background:rgba(52,211,153,.08);}
+.access-live-pill.connecting{color:var(--gold);border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.08);}
+.access-live-pill.offline{color:var(--red);border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.08);}
 .access-open-pill{color:#fbbf24;border:1px solid rgba(251,191,36,.35);background:rgba(251,191,36,.08);}
 .access-voice-pill{display:none;align-items:center;gap:5px;border:1px solid rgba(167,139,250,.45);border-radius:20px;padding:7px 10px;background:rgba(167,139,250,.1);color:#c4b5fd;font:900 .6rem 'Barlow Condensed',sans-serif;letter-spacing:.5px;white-space:nowrap;cursor:pointer;}
 .access-voice-pill:hover{background:rgba(167,139,250,.2);border-color:#a78bfa;}
@@ -2534,7 +2536,7 @@ input, textarea, select { color-scheme: dark; }
             </div>
           </div>
           <div class="access-chat-tools">
-            <div class="access-live-pill">● FIREBASE LIVE</div>
+            <div class="access-live-pill connecting" id="access-live-pill" role="status" aria-live="polite">● CONNECTING</div>
             <div class="access-open-pill">LIVE CHAT</div>
             <button class="access-voice-pill" id="access-voice-pill" type="button" onpointerdown="event.stopPropagation()" onclick="accessEnableVoiceAlerts(true)">🔊 ENABLE VOICE</button>
           </div>
@@ -5344,6 +5346,12 @@ let accessChatMessages = [];
 let accessChatAdminBaselineReady = false;
 let accessChatLastAdminRequestCount = 0;
 let accessChatMessageBaselineReady = false;
+let accessChatKnownMessageIds = new Set();
+let accessChatSubscriberKey = '';
+let accessChatListenerGeneration = 0;
+let accessChatReconnectTimer = null;
+let accessChatConnectionState = 'connecting';
+let accessChatConnectionBound = false;
 let accessMessageToastTimer = null;
 let accessUnreadMessageCount = 0;
 let accessTitleTimer = null;
@@ -5370,6 +5378,19 @@ function accessServerMillis(value){
   const parsed=Date.parse(value);
   return isNaN(parsed)?null:parsed;
 }
+function accessMessageMillis(message){
+  const committed=accessServerMillis(message&&message.createdAt);
+  if(committed!==null) return committed;
+  const fallback=Number(message&&message.firebaseClockAtSendMs);
+  return Number.isFinite(fallback)?fallback:null;
+}
+function accessCompareMessages(a,b){
+  const at=accessMessageMillis(a),bt=accessMessageMillis(b);
+  if(at===null&&bt===null) return String(a.id||'').localeCompare(String(b.id||''));
+  if(at===null) return 1;
+  if(bt===null) return -1;
+  return at-bt||String(a.id||'').localeCompare(String(b.id||''));
+}
 function accessInitials(name){
   const parts=String(name||'Agent').trim().split(/\s+/).filter(Boolean);
   return (parts.slice(0,2).map(function(part){return part.charAt(0);}).join('')||'A').toUpperCase();
@@ -5383,6 +5404,37 @@ function accessUpdateChatIdentity(){
   const quick=document.getElementById('access-admin-quick-replies');
   if(quick) quick.style.display=currentUser.isAdmin?'flex':'none';
   accessUpdateVoiceControl();
+}
+function accessSetChatLiveStatus(state,label){
+  accessChatConnectionState=state;
+  const pill=document.getElementById('access-live-pill');
+  if(!pill) return;
+  pill.classList.remove('connecting','offline');
+  if(state==='connecting') pill.classList.add('connecting');
+  if(state==='offline') pill.classList.add('offline');
+  pill.textContent=label||(state==='live'?'● FIREBASE LIVE':state==='offline'?'● OFFLINE':'● CONNECTING');
+}
+function accessScheduleChatReconnect(){
+  if(accessChatReconnectTimer||!currentUser) return;
+  accessChatReconnectTimer=setTimeout(function(){
+    accessChatReconnectTimer=null;
+    if(currentUser) accessStartChat({reason:'reconnect'});
+  },3000);
+}
+function accessBindChatConnectionRecovery(){
+  if(accessChatConnectionBound) return;
+  accessChatConnectionBound=true;
+  window.addEventListener('online',function(){
+    if(currentUser) accessStartChat({reason:'online'});
+  });
+  window.addEventListener('offline',function(){
+    if(currentUser) accessSetChatLiveStatus('offline','● WAITING FOR INTERNET');
+  });
+  document.addEventListener('visibilitychange',function(){
+    if(document.visibilityState==='visible'&&currentUser&&accessChatConnectionState!=='live'){
+      accessStartChat({reason:'visible'});
+    }
+  });
 }
 function accessUpdateVoiceControl(){
   const button=document.getElementById('access-voice-pill');
@@ -5555,13 +5607,7 @@ function accessRenderMessages(){
   const el=document.getElementById('access-chat-messages'); if(!el) return;
   accessUpdateChatIdentity();
   if(!accessChatMessages.length){el.innerHTML='<div class="access-empty">No messages yet.<br>Use the form to tell the admins what access you need.</div>';return;}
-  const ordered=accessChatMessages.slice().sort(function(a,b){
-    const at=accessServerMillis(a.createdAt), bt=accessServerMillis(b.createdAt);
-    if(at===null && bt===null) return String(a.id||'').localeCompare(String(b.id||''));
-    if(at===null) return 1;
-    if(bt===null) return -1;
-    return at-bt || String(a.id||'').localeCompare(String(b.id||''));
-  });
+  const ordered=accessChatMessages.slice().sort(accessCompareMessages);
   el.innerHTML=ordered.map(function(m){
     const mine=currentUser && String(m.senderId||'')===String(currentUser.id||'');
     const admin=!!m.senderIsAdmin;
@@ -5572,7 +5618,7 @@ function accessRenderMessages(){
       '<div class="access-msg-avatar">'+accessEscape(accessInitials(m.senderName))+'</div>'+
       '<div class="access-msg-meta">'+accessEscape(m.senderName||'Team member')+(m.team?' · '+accessEscape(m.team):'')+'</div>'+
       '<div class="access-msg-text">'+accessEscape(m.text||'')+'</div>'+
-      '<div class="access-msg-time">'+accessFormatTime(m.createdAt)+(m.status==='resolved'?' · Resolved':'')+'</div>'+actions+'</div>';
+      '<div class="access-msg-time">'+accessFormatTime(m.createdAt||m.firebaseClockAtSendMs)+(m.status==='resolved'?' · Resolved':'')+'</div>'+actions+'</div>';
   }).join('');
   el.scrollTop=el.scrollHeight;
 }
@@ -5625,41 +5671,72 @@ function accessShowNewMessageNotification(message){
     try{const notice=new Notification('Access Needed · '+sender,{body:body,tag:'bds-access-chat'});notice.onclick=function(){window.focus();switchTab('access-chat');notice.close();};}catch(e){}
   }
 }
-async function accessStartChat(){
+async function accessStartChat(options){
+  options=options||{};
   if(!currentUser) return;
-  try{ await ensureFirebaseAuth(); }catch(e){ console.warn('Access chat Firebase auth failed:',e); return; }
-  try{ await syncFirebaseClock(); }catch(e){ console.warn('Access chat Firebase clock sync failed:',e); }
-  if(accessChatUnsubscribe) accessChatUnsubscribe();
-  accessChatAdminBaselineReady=false; accessChatMessageBaselineReady=false; accessChatLastAdminRequestCount=0;
+  accessBindChatConnectionRecovery();
+  const subscriberKey=(currentUser.isAdmin?'admin:':'agent:')+String(currentUser.id||currentUser.username||'');
+  if(accessChatSubscriberKey!==subscriberKey){
+    accessChatSubscriberKey=subscriberKey;
+    accessChatKnownMessageIds.clear();
+    accessChatAdminBaselineReady=false;
+    accessChatMessageBaselineReady=false;
+    accessChatLastAdminRequestCount=0;
+  }
+  const generation=++accessChatListenerGeneration;
+  if(accessChatReconnectTimer){clearTimeout(accessChatReconnectTimer);accessChatReconnectTimer=null;}
+  if(accessChatUnsubscribe){accessChatUnsubscribe();accessChatUnsubscribe=null;}
+  accessSetChatLiveStatus('connecting',options.reason==='reconnect'?'● RECONNECTING':'● CONNECTING');
+  try{await ensureFirebaseAuth();}
+  catch(e){
+    if(generation!==accessChatListenerGeneration) return;
+    console.warn('Access chat Firebase auth failed:',e);
+    accessSetChatLiveStatus('offline',navigator.onLine?'● RECONNECTING':'● WAITING FOR INTERNET');
+    accessScheduleChatReconnect();
+    return;
+  }
+  if(generation!==accessChatListenerGeneration||!currentUser) return;
+  syncFirebaseClock().catch(function(e){console.warn('Access chat Firebase clock sync failed:',e);});
   if(currentUser.isAdmin && typeof Notification!=='undefined' && Notification.permission==='default'){
     try{Notification.requestPermission().catch(function(){});}catch(e){}
   }
-  accessChatUnsubscribe=db.collection('access_group_chat').orderBy('createdAt','asc').limitToLast(100).onSnapshot(function(snap){
+  accessChatUnsubscribe=db.collection('access_group_chat').onSnapshot({includeMetadataChanges:true},function(snap){
+    if(generation!==accessChatListenerGeneration||!currentUser) return;
+    const allMessages=[];
+    snap.forEach(function(doc){allMessages.push(Object.assign({id:doc.id},doc.data()));});
+    allMessages.sort(accessCompareMessages);
     const incoming=[];
     if(accessChatMessageBaselineReady && currentUser && currentUser.isAdmin){
-      snap.docChanges().forEach(function(change){
-        if(change.type==='added'){
-          const data=Object.assign({id:change.doc.id},change.doc.data());
-          if(!data.senderIsAdmin) incoming.push(data);
-        }
+      allMessages.forEach(function(message){
+        if(!accessChatKnownMessageIds.has(String(message.id))&&!message.senderIsAdmin) incoming.push(message);
       });
     }
-    accessChatMessages=[]; snap.forEach(function(doc){accessChatMessages.push(Object.assign({id:doc.id},doc.data()));});
+    allMessages.forEach(function(message){accessChatKnownMessageIds.add(String(message.id));});
+    accessChatMessages=allMessages.slice(-100);
     accessRenderMessages();
-    accessChatMessageBaselineReady=true;
     incoming.forEach(accessShowNewMessageNotification);
-    const openCount=accessChatMessages.filter(function(m){return m.isAccessRequest && m.status!=='resolved';}).length;
+    const openCount=allMessages.filter(function(m){return m.isAccessRequest && m.status!=='resolved';}).length;
     const openEl=document.getElementById('access-open-count'); if(openEl) openEl.textContent=String(openCount);
     if(currentUser && currentUser.isAdmin){
-      const openRequests=accessChatMessages.filter(function(m){return m.isAccessRequest && m.status!=='resolved';});
-      const seen=Number(localStorage.getItem('bds_access_seen_'+getTodayGY())||0);
+      const openRequests=allMessages.filter(function(m){return m.isAccessRequest && m.status!=='resolved';});
       accessChatLastAdminRequestCount=openRequests.length;
-      if(accessChatAdminBaselineReady && openRequests.length>seen) accessShowAdminAlert(openRequests);
+      if(accessChatAdminBaselineReady&&incoming.length) accessShowAdminAlert(openRequests);
+    }
+    if(!snap.metadata||!snap.metadata.fromCache){
+      accessChatMessageBaselineReady=true;
       accessChatAdminBaselineReady=true;
+      accessSetChatLiveStatus('live','● FIREBASE LIVE');
+    }else if(!accessChatMessageBaselineReady){
+      accessSetChatLiveStatus('connecting','● SYNCING');
     }
   },function(error){
+    if(generation!==accessChatListenerGeneration) return;
+    accessChatUnsubscribe=null;
     console.warn('Access group chat listener failed:',error);
-    const el=document.getElementById('access-chat-messages'); if(el) el.innerHTML='<div class="access-empty">Unable to load the access chat right now. Please check Firebase connection.</div>';
+    accessSetChatLiveStatus('offline',navigator.onLine?'● RECONNECTING':'● WAITING FOR INTERNET');
+    const el=document.getElementById('access-chat-messages');
+    if(el&&!accessChatMessages.length) el.innerHTML='<div class="access-empty">Reconnecting to the access chat…</div>';
+    accessScheduleChatReconnect();
   });
 }
 async function accessSendRequest(prefilledText){
@@ -6344,7 +6421,15 @@ function scheduleMidnightLogout(){
 // ── LOGOUT ──
 function doLogout(auto=false){
   clearTimeout(midnightTimer);
+  accessChatListenerGeneration++;
+  if(accessChatReconnectTimer){clearTimeout(accessChatReconnectTimer);accessChatReconnectTimer=null;}
   if(accessChatUnsubscribe){accessChatUnsubscribe();accessChatUnsubscribe=null;}
+  accessChatMessages=[];
+  accessChatKnownMessageIds.clear();
+  accessChatSubscriberKey='';
+  accessChatMessageBaselineReady=false;
+  accessChatAdminBaselineReady=false;
+  accessChatConnectionState='connecting';
   stopRosterPolling(); // stop background sync on logout
   stopRebuttalSync();
   stopRoseUnusedWatch();
