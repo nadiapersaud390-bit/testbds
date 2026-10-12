@@ -95,3 +95,9 @@ Then add the sub-tab button in `tabs/tab-objections.html`.
 
 ## Deploying to GitHub Pages
 Push the entire folder to your repo. In Settings → Pages, set source to your branch / root.
+
+## October 2026 additions
+
+This single-file build adds an agent **Request Time Off / My Requests** tab, an admin **Time-off Calendar** approval screen, and a Rose-only **User Management** screen. Firestore collections: `time_off_requests`, `app_settings/time_off_access`, and existing `admin_accounts`. Approvals, agent responses, and request calendars update using Firestore listeners. Admin reminders display in the Time-off Calendar on the preceding and approved dates while the dashboard is open; dismissals are browser-session only. They are not background or push notifications.
+
+**Security/deployment warning:** This project uses client-side administrator credentials (a legacy hardcoded administrator and a browser SHA-256 password check), and agent identity originates in the browser. UI role checks do **not** implement server-side authorization. Before publishing or using sensitive records, replace the authentication scheme with Firebase Auth identities and enforce agent ownership, Rose-only account creation, and admin-only approval in Firestore Security Rules or trusted backend functions. Do not create permissive Firestore rules to make this feature work. The "Show password" checkbox displays only a password while Rose is typing it; stored hashes cannot be revealed. Also, the current SHA-256 hashing is not an appropriate password-storage construction for a production system.
