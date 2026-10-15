@@ -30,7 +30,7 @@ const auth = firebase.auth();
 // Update this string every time you deploy a new version.
 // The Firestore doc settings/app_version { v: "..." } must match.
 // When they differ, a reload banner appears for all logged-in users.
-const APP_VERSION = '2026-10-15-admin-main-tab-access-r7';
+const APP_VERSION = '2026-10-15-calendar-timeoff-birthdays-us-holidays-r9';
 
 // Dark theme only.
 document.documentElement.setAttribute('data-theme', 'dark');
@@ -1877,6 +1877,30 @@ input, textarea, select { color-scheme: dark; }
 @media(max-width:480px){.dispo-pro-reminder-tag,.sunday-pro-card-badge,.sunday-pro-rule-tag{display:none}.dispo-pro-card-head,.sunday-pro-card-head{align-items:flex-start}}
 
 
+/* R9: Consolidated administrator scheduling calendar */
+.cal-actions{display:flex;gap:9px;flex-wrap:wrap;margin:13px 0;align-items:center}
+.cal-btn{border:1px solid #355374;background:#142840;color:#e6f2ff;padding:10px 14px;border-radius:9px;cursor:pointer;font-weight:800;font-size:.78rem}
+.cal-btn:hover,.cal-btn:focus-visible{border-color:#60a5fa;background:#203c58}
+.cal-btn-primary{background:#174d46;border-color:#267b6c;color:#a4f9dc}
+.cal-btn[disabled]{opacity:.5;cursor:wait}
+.cal-panel{border:1px solid #344763;border-radius:12px;background:linear-gradient(145deg,#0e1b2e,#0b1323);padding:16px;margin:14px 0}
+.cal-panel[hidden],.cal-panel [hidden]{display:none!important}
+.cal-panel h3{color:#e8f1ff;margin:0 0 9px}
+.cal-help{color:#a3b5cc;font-size:.76rem;line-height:1.6;margin:4px 0 12px}
+.cal-team-switches{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:9px;margin:12px 0}
+.cal-team-switch{display:flex;align-items:center;gap:10px;border:1px solid #2e4864;background:#13243b;padding:12px;border-radius:9px;font-size:.8rem;color:#e6eeff}
+.cal-team-switch input{accent-color:#34d399;width:18px;height:18px}
+.cal-team-switch.off{opacity:.7}
+.cal-legend{display:flex;flex-wrap:wrap;gap:12px;margin:9px 0;font-size:.7rem;color:#bbcbde}
+.cal-pill{display:inline-block;padding:3px 7px;border-radius:5px;background:#172b44}
+.to-event.cal-birthday{background:rgba(244,114,182,.17);border-left:2px solid #f472b6;color:#ffd9ec}
+.to-event.cal-holiday{background:rgba(250,204,21,.1);border-left:2px solid #facc15;color:#ffedb0}
+.to-event.cal-holiday.observed{background:rgba(250,204,21,.07);color:#d9d0a1}
+.cal-day-notes{font-size:.65rem;color:#91a7c2;line-height:1.3}
+.cal-birthday-list .to-entry{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.cal-reminder-pending{border-left:3px solid #fbbf24}
+.cal-mobile-hint{display:none;color:#a2b7cc;font-size:.7rem;margin:6px 0}
+@media(max-width:650px){.cal-actions .cal-btn{flex:1}.cal-panel{padding:12px}.cal-team-switches{grid-template-columns:1fr}.cal-mobile-hint{display:block}}
 /* Time-off and Rose user management */
 .to-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:13px;margin:12px 0}
 .to-grid label{display:flex;flex-direction:column;gap:6px;font-size:.78rem;font-weight:700;color:var(--text)}
@@ -2758,10 +2782,37 @@ input, textarea, select { color-scheme: dark; }
     </div>
 
     <div id="admin-timeoff" class="admin-section" style="display:none"><div class="admin-card">
-      <h2>📅 Time-off Calendar &amp; Approvals</h2>
+      <h2>📅 Team Calendar &amp; Time-off Approvals</h2>
+      <p class="cal-help">Review requests, enter time off for an agent, track birthdays, and view U.S. federal holidays. Dates follow Guyana time. Calendar-access administrators receive in-dashboard reminders.</p>
       <div class="to-grid"><label>Filter team<select id="to-admin-team" class="rose-control" onchange="toRenderAdmin()"><option value="ALL">All teams</option><option value="BB">Berbice</option><option value="PR">Providence</option><option value="REMOTE">Remote</option></select></label>
       <label>Calendar month<input id="to-admin-month" type="month" class="rose-control" onchange="toRenderAdmin()"></label></div>
-      <div id="to-admin-status" class="to-message" role="status" aria-live="polite"></div><div id="to-reminder-list"></div><div class="to-calendar-scroll"><div id="to-calendar" class="to-calendar"></div></div><h3>Requests and Decisions</h3><div id="to-admin-list"></div>
+      <div class="cal-actions"><button class="cal-btn cal-btn-primary" type="button" onclick="calTogglePanel('cal-timeoff-form')">＋ ADD TIME-OFF REQUEST</button><button class="cal-btn" type="button" onclick="calTogglePanel('cal-birthday-form')">🎂 ADD BIRTHDAY</button><button class="cal-btn" type="button" onclick="calTogglePanel('cal-team-access-panel')">⚙️ TEAM REQUEST ACCESS</button></div>
+      <section id="cal-team-access-panel" class="cal-panel" hidden><h3>Which teams can request time off?</h3><p class="cal-help">Rose controls which agents see the Request Time Off button. Turning a team off stops new requests, but does not delete earlier requests or approved calendar entries.</p><div id="cal-team-switches" class="cal-team-switches"></div></section>
+      <section id="cal-timeoff-form" class="cal-panel" hidden><h3>Add time off for an agent</h3><p class="cal-help">Calendar-access admins can add a request to an agent's record or approve it immediately. Overlapping approved or pending requests are not allowed.</p>
+        <form id="cal-manual-form" onsubmit="calSubmitTimeOff(event)"><div class="to-grid">
+          <label>Agent<select id="cal-manual-agent" class="rose-control" required><option value="">Select an agent</option></select></label>
+          <label>Type<select id="cal-manual-type" class="rose-control" onchange="calManualTypeChanged()"><option value="day_off">Day off</option><option value="late_arrival">Late arrival</option><option value="early_departure">Early departure</option><option value="appointment">Appointment</option><option value="other">Other</option></select></label>
+          <label>Date<input id="cal-manual-date" type="date" class="rose-control" required></label>
+          <label id="cal-manual-time-wrap" hidden>Expected arrival / departure<input id="cal-manual-time" type="time" class="rose-control"></label>
+          <label id="cal-manual-start-wrap" hidden>Start time<input id="cal-manual-start" type="time" class="rose-control"></label>
+          <label id="cal-manual-end-wrap" hidden>End time<input id="cal-manual-end" type="time" class="rose-control"></label>
+          <label id="cal-manual-all-wrap" hidden><input type="checkbox" id="cal-manual-all" onchange="calManualTypeChanged()"> All day</label>
+          <label>Save as<select class="rose-control" id="cal-manual-status"><option value="pending">Pending review</option><option value="approved">Approved time off</option></select></label>
+        </div><label>Reason / notes<textarea class="rose-control" id="cal-manual-reason" maxlength="1000" required rows="2" placeholder="Reason for the time-off entry" style="width:100%;box-sizing:border-box"></textarea></label>
+        <div class="cal-actions"><button class="cal-btn cal-btn-primary" type="submit">SAVE TIME OFF TO FIRESTORE</button><button class="cal-btn" type="button" onclick="calTogglePanel('cal-timeoff-form',false)">CANCEL</button></div><div class="to-message" id="cal-manual-status-message" role="status"></div></form>
+      </section>
+      <section id="cal-birthday-form" class="cal-panel" hidden><h3 id="cal-birthday-form-title">🎂 Add a recurring birthday</h3><p class="cal-help">Birthdays repeat on the same month and day every year. They appear to admins with Calendar access, with a reminder the day before and on the date.</p>
+        <form id="cal-birthday-save-form" onsubmit="calSaveBirthday(event)"><input type="hidden" id="cal-birthday-id"><div class="to-grid">
+          <label>Person's name<input class="rose-control" id="cal-birthday-name" maxlength="90" required placeholder="Name"></label>
+          <label>Birthday<input class="rose-control" id="cal-birthday-date" type="date" required></label>
+          <label>Team<select class="rose-control" id="cal-birthday-team"><option value="ALL">Everyone / General</option><option value="BB">Berbice</option><option value="PR">Providence</option><option value="REMOTE">Remote</option></select></label>
+        </div><div class="cal-actions"><button type="submit" class="cal-btn cal-btn-primary">SAVE BIRTHDAY</button><button type="button" class="cal-btn" onclick="calResetBirthdayForm();calTogglePanel('cal-birthday-form',false)">CANCEL</button></div><span class="to-message" role="status" id="cal-birthday-status"></span></form>
+      </section>
+      <div id="to-admin-status" class="to-message" role="status" aria-live="polite"></div>
+      <div class="cal-legend"><span>🟡 Pending request</span><span>🟢 Approved time off</span><span>🎂 Birthday</span><span>🇺🇸 U.S. federal holiday / observed day</span></div>
+      <div id="to-reminder-list"></div><p class="cal-mobile-hint">Swipe the calendar sideways to view all seven days →</p><div class="to-calendar-scroll"><div id="to-calendar" class="to-calendar"></div></div>
+      <h3>Requests and Decisions</h3><div id="to-admin-list"></div>
+      <h3>🎂 Saved Birthdays</h3><div id="cal-birthday-list" class="cal-birthday-list" aria-live="polite">Loading birthdays…</div>
     </div></div>
     <div id="admin-users" class="admin-section" style="display:none"><div class="admin-card">
       <h2>🌹 User Management</h2><p>Rose-only administration. Create administrators, set tab permissions, reset credentials, and manage team access.</p>
@@ -5558,6 +5609,10 @@ let accessTitleBeforeNotify = '';
 let accessNotificationAudioContext = null;
 let accessVoiceAlertsReady = false;
 let accessVoiceUnlockBound = false;
+let accessVoiceUnlockHandler = null;
+let accessVoiceSpeakTimer = null;
+let accessVoiceGeneration = 0;
+const accessDesktopNotifications = new Set();
 // Group chat team permissions, independent of the time-off team switches.
 // Missing settings preserve Berbice and Providence access, but exclude Remote.
 let accessChatTeamEnabled = {BB:true, PR:true, REMOTE:false};
@@ -5646,15 +5701,17 @@ function accessBindChatConnectionRecovery(){
 function accessUpdateVoiceControl(){
   const button=document.getElementById('access-voice-pill');
   if(!button) return;
-  const admin=!!(currentUser&&currentUser.isAdmin);
-  button.style.display=admin?'inline-flex':'none';
-  if(!admin) return;
+  const permitted=accessCanReceiveChatNotifications();
+  button.style.display=permitted?'inline-flex':'none';
+  button.disabled=!permitted;
+  if(!permitted){button.classList.remove('ready');return;}
   const supported=('speechSynthesis' in window)&&('SpeechSynthesisUtterance' in window);
   button.disabled=!supported;
   button.classList.toggle('ready',supported&&accessVoiceAlertsReady);
   button.textContent=!supported?'🔇 VOICE UNSUPPORTED':(accessVoiceAlertsReady?'🔊 VOICE ON · TEST':'🔊 ENABLE VOICE');
 }
 function accessMarkNewMessageTab(senderName){
+  if(!accessCanReceiveChatNotifications())return;
   const button=document.getElementById('tab-access-chat');
   const badge=document.getElementById('access-unread-badge');
   const sender=String(senderName||'Agent');
@@ -5678,7 +5735,30 @@ function accessClearNewMessageTab(){
   if(accessTitleTimer){clearTimeout(accessTitleTimer);accessTitleTimer=null;}
   if(accessTitleBeforeNotify){document.title=accessTitleBeforeNotify;accessTitleBeforeNotify='';}
 }
+// All access-chat announcements are subject to the SAME live per-admin
+// permission check as the chat button and message subscription.
+function accessCanReceiveChatNotifications(){
+  return !!(currentUser && currentUser.isAdmin && accessCanUseChat());
+}
+function accessDisableChatNotifications(){
+  // Revoke in-flight utterances and pending unlock callbacks immediately.
+  accessVoiceGeneration++;
+  if(accessVoiceSpeakTimer!==null){clearTimeout(accessVoiceSpeakTimer);accessVoiceSpeakTimer=null;}
+  if(accessVoiceUnlockHandler){document.removeEventListener('pointerdown',accessVoiceUnlockHandler);accessVoiceUnlockHandler=null;}
+  accessVoiceUnlockBound=false;
+  accessVoiceAlertsReady=false;
+  try{if('speechSynthesis' in window) window.speechSynthesis.cancel();}catch(e){}
+  // Suspend already-scheduled chimes as well as future chimes. This audio
+  // context is used only for access-chat sounds, not unrelated dashboard audio.
+  try{if(accessNotificationAudioContext && accessNotificationAudioContext.state==='running'){
+    accessNotificationAudioContext.suspend().catch(function(){});
+  }}catch(e){}
+  accessDesktopNotifications.forEach(function(note){try{note.close();}catch(e){}});
+  accessDesktopNotifications.clear();
+  accessUpdateVoiceControl();
+}
 function accessPrimeNotificationAudio(){
+  if(!accessCanReceiveChatNotifications())return;
   try{
     const AudioContextClass=window.AudioContext||window.webkitAudioContext;
     if(!AudioContextClass) return;
@@ -5687,15 +5767,18 @@ function accessPrimeNotificationAudio(){
   }catch(e){}
 }
 function accessBindVoiceUnlock(){
-  if(accessVoiceUnlockBound || !currentUser || !currentUser.isAdmin) return;
+  if(accessVoiceUnlockBound || !accessCanReceiveChatNotifications()) return;
   accessVoiceUnlockBound=true;
-  document.addEventListener('pointerdown',function(){
+  accessVoiceUnlockHandler=function(){
     accessVoiceUnlockBound=false;
-    if(!accessVoiceAlertsReady) accessEnableVoiceAlerts(false);
-  },{once:true});
+    accessVoiceUnlockHandler=null;
+    if(accessCanReceiveChatNotifications()&&!accessVoiceAlertsReady) accessEnableVoiceAlerts(false);
+  };
+  document.addEventListener('pointerdown',accessVoiceUnlockHandler,{once:true});
 }
 function accessSpeakText(text){
-  if(!currentUser || !currentUser.isAdmin || !('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
+  if(!accessCanReceiveChatNotifications() || !('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
+  const generation=accessVoiceGeneration;
   try{
     const synth=window.speechSynthesis;
     const utterance=new window.SpeechSynthesisUtterance(String(text||''));
@@ -5705,27 +5788,33 @@ function accessSpeakText(text){
     utterance.rate=0.92;
     utterance.pitch=1;
     utterance.volume=1;
-    utterance.onstart=function(){accessVoiceAlertsReady=true;accessUpdateVoiceControl();};
-    utterance.onerror=function(){accessVoiceAlertsReady=false;accessUpdateVoiceControl();accessBindVoiceUnlock();};
+    utterance.onstart=function(){if(generation!==accessVoiceGeneration||!accessCanReceiveChatNotifications()){synth.cancel();return;}accessVoiceAlertsReady=true;accessUpdateVoiceControl();};
+    utterance.onerror=function(){if(generation!==accessVoiceGeneration||!accessCanReceiveChatNotifications())return;accessVoiceAlertsReady=false;accessUpdateVoiceControl();accessBindVoiceUnlock();};
+    if(accessVoiceSpeakTimer!==null){clearTimeout(accessVoiceSpeakTimer);accessVoiceSpeakTimer=null;}
     synth.cancel();
     synth.resume();
-    setTimeout(function(){synth.resume();synth.speak(utterance);},140);
-  }catch(e){accessVoiceAlertsReady=false;accessUpdateVoiceControl();accessBindVoiceUnlock();}
+    accessVoiceSpeakTimer=setTimeout(function(){
+      accessVoiceSpeakTimer=null;
+      if(generation!==accessVoiceGeneration||!accessCanReceiveChatNotifications())return;
+      synth.resume();synth.speak(utterance);
+    },140);
+  }catch(e){if(generation!==accessVoiceGeneration||!accessCanReceiveChatNotifications())return;accessVoiceAlertsReady=false;accessUpdateVoiceControl();accessBindVoiceUnlock();}
 }
 function accessEnableVoiceAlerts(testVoice){
-  if(!currentUser || !currentUser.isAdmin) return;
+  if(!accessCanReceiveChatNotifications())return;
   accessPrimeNotificationAudio();
   if(accessVoiceAlertsReady && !testVoice){accessUpdateVoiceControl();return;}
   accessSpeakText(testVoice?'Voice alerts are working.':'Voice alerts enabled.');
 }
 function accessPlayNotificationSound(){
-  if(!currentUser || !currentUser.isAdmin) return;
+  if(!accessCanReceiveChatNotifications())return;
   try{
     const AudioContextClass=window.AudioContext||window.webkitAudioContext;
     if(!AudioContextClass) return;
     if(!accessNotificationAudioContext) accessNotificationAudioContext=new AudioContextClass();
     const ctx=accessNotificationAudioContext;
     const play=function(){
+      if(!accessCanReceiveChatNotifications())return;
       const now=ctx.currentTime;
       const gain=ctx.createGain();
       gain.gain.setValueAtTime(0.0001,now);
@@ -5744,6 +5833,7 @@ function accessPlayNotificationSound(){
   }catch(e){}
 }
 function accessSpeakNotification(senderName){
+  if(!accessCanReceiveChatNotifications())return;
   const sender=String(senderName||'the agent').replace(/[\r\n<>]/g,' ').trim().slice(0,80)||'the agent';
   accessSpeakText('Access is needed for '+sender+'.');
 }
@@ -5754,6 +5844,7 @@ function accessCanUseChat(){
   return accessChatSettingsReady && accessChatTeamEnabled[team]===true;
 }
 function accessStopChatSession(){
+  accessDisableChatNotifications();
   accessChatListenerGeneration++;
   if(accessChatReconnectTimer){clearTimeout(accessChatReconnectTimer);accessChatReconnectTimer=null;}
   if(accessChatUnsubscribe){accessChatUnsubscribe();accessChatUnsubscribe=null;}
@@ -5774,13 +5865,17 @@ function accessApplyChatTeamAccess(){
   accessSetChatBubbleVisible(allowed);
   const page=document.getElementById('page-access-chat');
   if(!allowed){
+    // Even with no active listener, a queued/on-going voice utterance may remain.
+    accessDisableChatNotifications();
     if(accessChatUnsubscribe||accessChatReconnectTimer||accessChatMessages.length||accessChatSubscriberKey){accessStopChatSession();}
     if(page?.classList.contains('active')){
       if(currentUser?.isAdmin)roseSwitchToFirstDashboardTab();else switchTab('script');
     }
-  }else if(!accessChatUnsubscribe && currentUser){
-    accessStartChat({reason:'team-access'});
+  }else{
+    accessBindVoiceUnlock(); // Re-arm only after access is restored; never for a denied admin.
+    if(!accessChatUnsubscribe && currentUser) accessStartChat({reason:'team-access'});
   }
+  accessUpdateVoiceControl();
   if(isRoseAdmin())roseRenderChatTeams();
 }
 function accessStopChatSettings(){
@@ -5908,7 +6003,7 @@ async function accessDeleteMessage(button){
   catch(e){button.disabled=false;button.textContent='DELETE';window.alert('Could not delete message: '+(e.message||'Firebase error'));}
 }
 function accessShowAdminAlert(requests){
-  if(!currentUser || !currentUser.isAdmin || !requests.length) return;
+  if(!accessCanReceiveChatNotifications() || !requests.length)return;
   let alert=document.getElementById('access-admin-alert');
   if(!alert){alert=document.createElement('div');alert.id='access-admin-alert';alert.className='access-admin-alert';document.body.appendChild(alert);}
   const latest=requests[requests.length-1];
@@ -5927,7 +6022,7 @@ function accessDismissMessageToast(){
   if(accessMessageToastTimer){clearTimeout(accessMessageToastTimer);accessMessageToastTimer=null;}
 }
 function accessShowNewMessageNotification(message){
-  if(!currentUser || !currentUser.isAdmin) return;
+  if(!accessCanReceiveChatNotifications())return;
   const chatOpen=document.getElementById('page-access-chat') && document.getElementById('page-access-chat').classList.contains('active');
   accessPlayNotificationSound();
   accessSpeakNotification(message.senderName||'the agent');
@@ -5942,7 +6037,13 @@ function accessShowNewMessageNotification(message){
   if(accessMessageToastTimer) clearTimeout(accessMessageToastTimer);
   accessMessageToastTimer=setTimeout(accessDismissMessageToast,9000);
   if(typeof Notification!=='undefined' && Notification.permission==='granted'){
-    try{const notice=new Notification('Access Needed · '+sender,{body:body,tag:'bds-access-chat'});notice.onclick=function(){window.focus();switchTab('access-chat');notice.close();};}catch(e){}
+    try{
+      if(!accessCanReceiveChatNotifications())return;
+      const notice=new Notification('Access Needed · '+sender,{body:body,tag:'bds-access-chat'});
+      accessDesktopNotifications.add(notice);
+      notice.onclose=function(){accessDesktopNotifications.delete(notice);};
+      notice.onclick=function(){if(accessCanReceiveChatNotifications()){window.focus();switchTab('access-chat');}notice.close();};
+    }catch(e){}
   }
 }
 async function accessStartChat(options){
@@ -13994,7 +14095,7 @@ function toTeamLabel(t){return ({BB:'Berbice',PR:'Providence',REMOTE:'Remote'})[
 function toEsc(v){return roseEscape(v);}
 function toTypeLabel(t){return ({day_off:'Day off',late_arrival:'Late arrival',early_departure:'Early departure',appointment:'Appointment',other:'Other request'})[t]||t;}
 function toToday(){return getTodayGY();}
-function toCanCalendar(){return !!(currentUser?.isAdmin&&roseAllowedTab('timeoff'));}
+function toCanCalendar(){return !!(currentUser?.isAdmin&&roseAllowedDashboardTab('admin')&&roseAllowedTab('timeoff'));}
 function toError(error){return /permission|denied/i.test(error?.message||'')?'Firebase denied access. The site owner needs to check the database rules for this feature.':error?.message||String(error);}
 function toMinute(v){if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(v||''))throw Error('Select a valid time.');const [h,m]=v.split(':').map(Number);return h*60+m;}
 function toInterval(r){if(r.allDay||r.type==='day_off')return [0,1440];if(r.type==='late_arrival')return [0,toMinute(r.time)];if(r.type==='early_departure')return [toMinute(r.time),1440];return [toMinute(r.startTime),toMinute(r.endTime)];}
@@ -14012,12 +14113,14 @@ function toTypeChanged(){const type=document.getElementById('to-type').value,par
  document.getElementById('to-time').required=single;document.getElementById('to-start').required=timed;document.getElementById('to-end').required=timed;
 }
 function toStop(){
+ calStopCalendar();
  toGeneration++;toRequestEpoch++;[toRequestsUnsub,toSettingsUnsub,toAdminsUnsub,toRosterUnsub].forEach(fn=>{if(fn)fn();});toRequestsUnsub=toSettingsUnsub=toAdminsUnsub=toRosterUnsub=null;
  clearInterval(toReminderTimer);toReminderTimer=null;toSessionKey='';toScope='';toRequests=[];toSettingsReady=toDataReady=toRosterReady=false;toTeamEnabled={BB:true,PR:true,REMOTE:true};toRemindersDismissed.clear();
  ['to-my-list','to-admin-list','to-calendar','to-reminder-list','to-reminder-popup','ru-admin-list','ru-team-list'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});
  document.getElementById('tab-timeoff').style.display='none';document.getElementById('to-request-form').reset();document.getElementById('ru-password').value='';document.getElementById('ru-password').type='password';document.getElementById('ru-show-password').checked=false;document.getElementById('to-submit-status').textContent='';document.getElementById('to-admin-status').textContent='';document.getElementById('to-sync-status').textContent='';document.getElementById('to-reminder-popup').hidden=true;
 }
 function toRefreshRequestAccess(){
+ calSyncCalendar();
  if(!currentUser)return;const allowed=!currentUser.isAdmin||toCanCalendar();const key=allowed?String(currentUser.id)+(currentUser.isAdmin?':admin':':agent'):'';if(toScope===key&&toRequestsUnsub)return;
  if(toRequestsUnsub)toRequestsUnsub();toRequestsUnsub=null;toScope=key;toRequests=[];toDataReady=false;const epoch=++toRequestEpoch,gen=toGeneration;
  if(!allowed){document.getElementById('to-admin-list').innerHTML='';document.getElementById('to-calendar').innerHTML='';document.getElementById('admin-timeoff').style.display='none';toRenderReminders();return;}
@@ -14026,7 +14129,7 @@ function toRefreshRequestAccess(){
 }
 function toListen(){
  if(!currentUser)return;if(toSessionKey===String(currentUser.id)){toRefreshRequestAccess();return;}toStop();toSessionKey=String(currentUser.id);const gen=toGeneration;
- toSettingsUnsub=db.collection('app_settings').doc('time_off_access').onSnapshot(s=>{if(gen!==toGeneration)return;const d=s.data()||{};toTeamEnabled={BB:d.BB!==false,PR:d.PR!==false,REMOTE:d.REMOTE!==false};toSettingsReady=true;toRenderMine();if(isRoseAdmin())roseRenderTeams();},error=>{if(gen!==toGeneration)return;toSettingsReady=false;toRenderMine();document.getElementById('to-sync-status').textContent=toError(error);document.getElementById('ru-team-list').textContent=toError(error);});
+ toSettingsUnsub=db.collection('app_settings').doc('time_off_access').onSnapshot(s=>{if(gen!==toGeneration)return;const d=s.data()||{};toTeamEnabled={BB:d.BB!==false,PR:d.PR!==false,REMOTE:d.REMOTE!==false};toSettingsReady=true;toRenderMine();calRenderTeamAccess();if(isRoseAdmin())roseRenderTeams();},error=>{if(gen!==toGeneration)return;toSettingsReady=false;toRenderMine();document.getElementById('to-sync-status').textContent=toError(error);document.getElementById('ru-team-list').textContent=toError(error);});
  if(!currentUser.isAdmin)toRosterUnsub=db.collection('roster').doc(String(currentUser.id)).onSnapshot(s=>{if(gen!==toGeneration)return;const profile=s.exists?rosterAgentFromDoc(s):null;toRosterReady=!!profile;if(profile)currentUser.team=profile.team;accessApplyChatTeamAccess();toRenderMine();},e=>{toRosterReady=false;toRenderMine();document.getElementById('to-sync-status').textContent=toError(e);});
  toRefreshRequestAccess();toReminderTimer=setInterval(()=>{document.getElementById('to-date').min=toToday();toRenderReminders();},30000);toRenderMine();
 }
@@ -14045,7 +14148,7 @@ async function toVerifyAdmin(tx,manage=false){
  const snap=await tx.get(db.collection('admin_accounts').doc(user.username||'')),a=snap.data()||{};
  if(!snap.exists||a.active===false||!['admin','superadmin'].includes(a.role)||(Number(a.sessionVersion)||0)!==(Number(user.sessionVersion)||0))throw Error('This administrator session has changed. Please sign in again.');
  if(manage&&user.username!=='rose')throw Error('Rose superadmin access is required.');
- if(!manage&&user.username!=='rose'&&Array.isArray(a.adminTabPermissions)&&!a.adminTabPermissions.includes('timeoff'))throw Error('Calendar access is required.');
+ if(!manage&&user.username!=='rose'&&((Array.isArray(a.adminTabPermissions)&&!a.adminTabPermissions.includes('timeoff'))||(Array.isArray(a.dashboardTabPermissions)&&!a.dashboardTabPermissions.includes('admin'))))throw Error('Calendar access is required.');
  if(currentUser?.id!==user.id)throw Error('Your session changed. Please try again.');
 }
 async function toSubmit(e){
@@ -14086,26 +14189,199 @@ async function toChangeStatus(id,status,reason=''){
 async function toCancel(id){if(!currentUser||currentUser.isAdmin)return;if(!confirm('Cancel this pending request?'))return;try{await toChangeStatus(id,'cancelled');}catch(e){alert(toError(e));}}
 async function toReply(id){if(!currentUser||currentUser.isAdmin)return;const reply=prompt('Reply to the admin decision:','');if(reply===null)return;if(!reply.trim()||reply.length>1000)return alert('Write a reply of 1 to 1,000 characters.');const gen=toGeneration;
  try{await db.runTransaction(async tx=>{const ref=db.collection('time_off_requests').doc(id),snap=await tx.get(ref),r=snap.data();if(gen!==toGeneration||!r||r.agentId!==String(currentUser?.id)||!['approved','declined'].includes(r.status))throw Error('This request is not available for your reply.');tx.update(ref,{agentReply:reply.trim(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()});});}catch(e){alert(toError(e));}}
-function toOpenAdmin(){if(!toCanCalendar())return;document.getElementById('to-admin-month').value||=toToday().slice(0,7);toListen();toRenderAdmin();}
+function toOpenAdmin(){if(!toCanCalendar())return;document.getElementById('to-admin-month').value||=toToday().slice(0,7);toListen();calRenderTeamAccess();toRenderAdmin();}
 function toRenderAdmin(){
- if(!toCanCalendar())return;const out=document.getElementById('to-admin-list'),cal=document.getElementById('to-calendar'),team=document.getElementById('to-admin-team').value,month=document.getElementById('to-admin-month').value||toToday().slice(0,7);if(!/^\d{4}-\d{2}$/.test(month))return;
+ if(!toCanCalendar())return;
+ const out=document.getElementById('to-admin-list'),cal=document.getElementById('to-calendar'),team=document.getElementById('to-admin-team').value,month=document.getElementById('to-admin-month').value||toToday().slice(0,7);
+ if(!/^\d{4}-\d{2}$/.test(month))return;
  const list=toRequests.filter(r=>(team==='ALL'||r.team===team)&&r.date.startsWith(month)).sort((a,b)=>a.date.localeCompare(b.date));
  out.innerHTML=!toDataReady?'Loading requests…':list.length?list.map(r=>toRequestMarkup(r,true)).join(''):'No requests for this month and team.';
  const [yr,mo]=month.split('-').map(Number),days=new Date(Date.UTC(yr,mo,0)).getUTCDate(),offset=new Date(Date.UTC(yr,mo-1,1)).getUTCDay();
- cal.innerHTML=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>'<b style="text-align:center">'+d+'</b>').join('')+'<div></div>'.repeat(offset)+Array.from({length:days},(_,i)=>{const day=month+'-'+String(i+1).padStart(2,'0'),events=list.filter(r=>r.date===day&&['approved','pending'].includes(r.status));return `<div class="to-day ${day===toToday()?'today':''}"><b>${i+1}</b>${events.map(r=>`<div class="to-event ${r.status==='approved'?'approved':''}" title="${toEsc(toTiming(r))}">${toEsc(r.agentName)} · ${toEsc(toTypeLabel(r.type))} (${r.status})</div>`).join('')}</div>`;}).join('');toRenderReminders();
+ const holidays=calFederalHolidays(yr),birthdays=calBirthdays.filter(b=>team==='ALL'||b.team==='ALL'||b.team===team);
+ cal.innerHTML=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>'<b style="text-align:center">'+d+'</b>').join('')+'<div></div>'.repeat(offset)+Array.from({length:days},(_,i)=>{
+  const day=month+'-'+String(i+1).padStart(2,'0'),requests=list.filter(r=>r.date===day&&['approved','pending'].includes(r.status));
+  const bdays=birthdays.filter(b=>calBirthdayOccurs(b,day));
+  const hdays=holidays.filter(h=>h.date===day);
+  return `<div class="to-day ${day===toToday()?'today':''}"><b>${i+1}</b>`+
+   requests.map(r=>`<div class="to-event ${r.status==='approved'?'approved':''}" title="${toEsc(toTiming(r))}">${r.status==='approved'?'✅':'⏳'} ${toEsc(r.agentName)} · ${toEsc(toTypeLabel(r.type))}</div>`).join('')+
+   bdays.map(b=>`<div class="to-event cal-birthday" title="Annual birthday · ${toEsc(toTeamLabel(b.team))}">🎂 ${toEsc(b.name)}</div>`).join('')+
+   hdays.map(h=>`<div class="to-event cal-holiday${h.observed?' observed':''}" title="${toEsc(h.name)}">🇺🇸 ${toEsc(h.name)}</div>`).join('')+'</div>';
+ }).join('');
+ calRenderBirthdays();calRenderTeamAccess();toRenderReminders();
 }
+// ---- R9: Calendar birthdays, federal holidays and administrator entry tools ----
+let calBirthdays=[],calBirthdayUnsub=null,calBirthdayReady=false,calCalendarScope='',calBirthdayError='';
+function calStopCalendar(){
+ if(calBirthdayUnsub)calBirthdayUnsub();calBirthdayUnsub=null;calBirthdays=[];calCalendarScope='';calBirthdayReady=false;calBirthdayError='';
+ const el=document.getElementById('cal-birthday-list');if(el)el.textContent='';
+ for(const id of ['cal-timeoff-form','cal-birthday-form','cal-team-access-panel']){const panel=document.getElementById(id);if(panel)panel.hidden=true;}
+}
+function calSyncCalendar(){
+ const scope=toCanCalendar()?String(currentUser.id)+'#'+String(currentUser.username):'';
+ if(!scope){if(calBirthdayUnsub||calCalendarScope)calStopCalendar();return;}
+ if(calCalendarScope===scope&&calBirthdayUnsub)return;
+ calStopCalendar();calCalendarScope=scope;const gen=toGeneration;
+ calBirthdayUnsub=db.collection('calendar_birthdays').onSnapshot(s=>{
+  if(!toCanCalendar()||calCalendarScope!==scope||gen!==toGeneration)return;
+  calBirthdays=s.docs.map(doc=>({...doc.data(),id:doc.id})).filter(b=>calValidBirthday(b.date)&&typeof b.name==='string'&&b.name.trim());
+  calBirthdayReady=true;calBirthdayError='';calRenderBirthdays();toRenderAdmin();toRenderReminders();
+ },e=>{if(calCalendarScope!==scope||gen!==toGeneration)return;calBirthdayReady=false;calBirthdayError=toError(e);calRenderBirthdays();});
+}
+function calTogglePanel(id,force){
+ if(!toCanCalendar())return;
+ const panel=document.getElementById(id);if(!panel)return;
+ const opening=typeof force==='boolean'?force:panel.hidden;
+ for(const name of ['cal-timeoff-form','cal-birthday-form','cal-team-access-panel']){document.getElementById(name).hidden=true;}
+ panel.hidden=!opening;
+ if(opening&&id==='cal-timeoff-form'){calRenderAgentOptions();document.getElementById('cal-manual-date').min=toToday();calManualTypeChanged();}
+ if(opening&&id==='cal-team-access-panel')calRenderTeamAccess();
+}
+function calRenderTeamAccess(){
+ const dest=document.getElementById('cal-team-switches');if(!dest||!toCanCalendar())return;
+ if(!toSettingsReady){dest.textContent='Checking team settings…';return;}
+ const rose=isRoseAdmin();
+ dest.innerHTML=toTeams.map(team=>{
+  const on=toTeamEnabled[team]===true;
+  return `<label class="cal-team-switch ${on?'':'off'}"><input type="checkbox" ${on?'checked':''} ${rose?`onchange="roseSetTeam('${team}',this.checked)"`:'disabled'}><span><b>${toEsc(toTeamLabel(team))}</b><br><small>${on?'Can submit time-off requests':'New requests disabled'}</small></span></label>`;
+ }).join('')+(rose?'':'<p class="cal-help">Only Rose can change team access.</p>');
+}
+function calRenderAgentOptions(){
+ const select=document.getElementById('cal-manual-agent'),previous=select.value;
+ const agents=Object.entries(ROSTER).filter(([id,a])=>a&&String(a.status||'').toLowerCase()!=='inactive'&&toTeams.includes(toTeam(a.team)))
+  .sort((a,b)=>String(a[1].name||'').localeCompare(String(b[1].name||'')));
+ select.innerHTML='<option value="">Select an agent</option>'+agents.map(([id,a])=>`<option value="${toEsc(id)}">${toEsc(a.name||id)} (${toEsc(toTeamLabel(toTeam(a.team)))}) · ${toEsc(id)}</option>`).join('');
+ if(agents.some(([id])=>id===previous))select.value=previous;
+}
+function calManualTypeChanged(){
+ const type=document.getElementById('cal-manual-type').value,single=['late_arrival','early_departure'].includes(type),partial=['appointment','other'].includes(type),timed=partial&&!document.getElementById('cal-manual-all').checked;
+ for(const [id,show] of [['cal-manual-time-wrap',single],['cal-manual-start-wrap',timed],['cal-manual-end-wrap',timed],['cal-manual-all-wrap',partial]])document.getElementById(id).hidden=!show;
+ for(const [id,required] of [['cal-manual-time',single],['cal-manual-start',timed],['cal-manual-end',timed]])document.getElementById(id).required=required;
+}
+async function calSubmitTimeOff(event){
+ event.preventDefault();if(!toCanCalendar())return;
+ const form=event.target,btn=form.querySelector('[type=submit]'),msg=document.getElementById('cal-manual-status-message'),gen=toGeneration;
+ const agentId=document.getElementById('cal-manual-agent').value,status=document.getElementById('cal-manual-status').value,type=document.getElementById('cal-manual-type').value;
+ try{
+  if(!ROSTER[agentId])throw Error('Select an active roster agent.');
+  if(!['pending','approved'].includes(status))throw Error('Invalid approval state.');
+  const allDay=type==='day_off'||(['appointment','other'].includes(type)&&document.getElementById('cal-manual-all').checked);
+  const r=toValidate({type,date:document.getElementById('cal-manual-date').value,reason:document.getElementById('cal-manual-reason').value,allDay,
+   time:['late_arrival','early_departure'].includes(type)?document.getElementById('cal-manual-time').value:'',
+   startTime:!allDay&&['appointment','other'].includes(type)?document.getElementById('cal-manual-start').value:'',
+   endTime:!allDay&&['appointment','other'].includes(type)?document.getElementById('cal-manual-end').value:''});
+  btn.disabled=true;msg.textContent='Saving…';await ensureFirebaseAuth();
+  const profileRef=db.collection('roster').doc(agentId),dayRef=db.collection('time_off_days').doc(agentId+'_'+r.date),newRef=db.collection('time_off_requests').doc();
+  const prior=await db.collection('time_off_requests').where('agentId','==',agentId).get();
+  const known=prior.docs.filter(d=>d.data().date===r.date&&['pending','approved'].includes(d.data().status)).map(d=>d.id);
+  await db.runTransaction(async tx=>{
+   await toVerifyAdmin(tx);const profileSnap=await tx.get(profileRef),day=await tx.get(dayRef);
+   if(!profileSnap.exists)throw Error('Agent profile not found in Firestore.');
+   const profile=rosterAgentFromDoc(profileSnap),team=toTeam(profile?.team);
+   if(!toTeams.includes(team)||String(profile.status||'').toLowerCase()==='inactive')throw Error('Agent is inactive or has an invalid team.');
+   const existing=[...new Set([...(day.data()?.requestIds||[]),...known])],active=[];
+   for(const id of existing){const snap=await tx.get(db.collection('time_off_requests').doc(id));if(!snap.exists)continue;const v=snap.data();if(v.agentId===agentId&&v.date===r.date&&['pending','approved'].includes(v.status)){if(toOverlaps(r,v))throw Error('This overlaps a pending or approved request.');active.push(id);}}
+   if(gen!==toGeneration||!toCanCalendar())throw Error('Calendar access has changed.');
+   const ts=firebase.firestore.FieldValue.serverTimestamp();
+   tx.set(newRef,{...r,agentId,agentName:profile.name,team,status,decisionReason:status==='approved'?'Added by administrator':'',decidedBy:status==='approved'?(currentUser.name||currentUser.username):'',decidedAt:status==='approved'?ts:null,
+    agentReply:'',createdByAdmin:currentUser.username,createdAt:ts,updatedAt:ts});
+   tx.set(dayRef,{agentId,date:r.date,requestIds:[...active,newRef.id],updatedAt:ts},{merge:true});
+  });
+  msg.textContent='Time-off entry saved to Firestore.';form.reset();calManualTypeChanged();
+ }catch(e){msg.textContent='Could not save: '+toError(e);}finally{btn.disabled=false;}
+}
+function calValidBirthday(date){
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(date||''))return false;
+ const d=new Date(date+'T12:00:00Z');return !isNaN(d)&&d.toISOString().slice(0,10)===date;
+}
+function calBirthdayOccurs(b,day){
+ return calValidBirthday(b.date)&&b.date.slice(5)===day.slice(5); // Feb 29 appears only in leap years
+}
+function calResetBirthdayForm(){
+ const form=document.getElementById('cal-birthday-save-form');form.reset();document.getElementById('cal-birthday-id').value='';document.getElementById('cal-birthday-form-title').textContent='🎂 Add a recurring birthday';document.getElementById('cal-birthday-status').textContent='';
+}
+async function calSaveBirthday(event){
+ event.preventDefault();if(!toCanCalendar())return;
+ const name=document.getElementById('cal-birthday-name').value.trim(),date=document.getElementById('cal-birthday-date').value,team=document.getElementById('cal-birthday-team').value,id=document.getElementById('cal-birthday-id').value;
+ const msg=document.getElementById('cal-birthday-status'),btn=event.target.querySelector('[type=submit]');
+ if(!name||name.length>90||!calValidBirthday(date)||!['ALL',...toTeams].includes(team)){msg.textContent='Enter a name, valid birth date and team.';return;}
+ btn.disabled=true;msg.textContent='Saving…';
+ try{
+  await ensureFirebaseAuth();await db.runTransaction(async tx=>{
+   await toVerifyAdmin(tx);
+   const collection=db.collection('calendar_birthdays'),ref=id?collection.doc(id):collection.doc();const existing=id?await tx.get(ref):null;
+   if(id&&!existing.exists)throw Error('Birthday no longer exists.');
+   tx.set(ref,{name,date,team,updatedBy:currentUser.username,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),...(id?{}:{createdBy:currentUser.username,createdAt:firebase.firestore.FieldValue.serverTimestamp()})},{merge:true});
+  });
+  calResetBirthdayForm();calTogglePanel('cal-birthday-form',false);
+ }catch(e){msg.textContent='Could not save: '+toError(e);}finally{btn.disabled=false;}
+}
+function calEditBirthday(id){if(!toCanCalendar())return;const b=calBirthdays.find(b=>b.id===id);if(!b)return;
+ calTogglePanel('cal-birthday-form',true);document.getElementById('cal-birthday-form-title').textContent='✏️ Edit recurring birthday';
+ document.getElementById('cal-birthday-id').value=id;document.getElementById('cal-birthday-name').value=b.name;
+ document.getElementById('cal-birthday-date').value=b.date;document.getElementById('cal-birthday-team').value=b.team||'ALL';
+ document.getElementById('cal-birthday-form').scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+async function calDeleteBirthday(id){if(!toCanCalendar())return;const b=calBirthdays.find(b=>b.id===id);if(!b||!confirm('Remove '+b.name+' from the birthday calendar?'))return;
+ try{await db.runTransaction(async tx=>{await toVerifyAdmin(tx);const ref=db.collection('calendar_birthdays').doc(id),snap=await tx.get(ref);if(!snap.exists)throw Error('Birthday no longer exists.');tx.delete(ref);});}
+ catch(e){alert('Could not delete birthday: '+toError(e));}
+}
+function calRenderBirthdays(){
+ const out=document.getElementById('cal-birthday-list');if(!out||!toCanCalendar())return;
+ if(calBirthdayError){out.textContent='Unable to load birthdays: '+calBirthdayError;return;}
+ if(!calBirthdayReady){out.textContent='Loading birthdays…';return;}
+ const team=document.getElementById('to-admin-team').value;
+ const entries=calBirthdays.filter(b=>team==='ALL'||b.team==='ALL'||b.team===team).sort((a,b)=>a.date.slice(5).localeCompare(b.date.slice(5))||a.name.localeCompare(b.name));
+ out.innerHTML=entries.length?entries.map(b=>`<div class="to-entry"><div><b>🎂 ${toEsc(b.name)}</b><div class="to-detail">Every ${toEsc(b.date.slice(5))} · ${toEsc(b.team==='ALL'?'All teams':toTeamLabel(b.team))}${b.date.slice(5)==='02-29'?' · Leap years only':''}</div></div><div class="to-row-actions"><button type="button" data-cal-edit="${toEsc(b.id)}">Edit</button><button type="button" data-cal-delete="${toEsc(b.id)}">Delete</button></div></div>`).join(''):'No birthdays saved for this team.';
+}
+document.addEventListener('click',e=>{const btn=e.target.closest('[data-cal-edit],[data-cal-delete]');if(!btn)return;if(btn.dataset.calEdit)calEditBirthday(btn.dataset.calEdit);else calDeleteBirthday(btn.dataset.calDelete);});
+// Federal holiday generator: original dates and OPM-style weekday observances. No external API required.
+function calDateUTC(y,m,d){return new Date(Date.UTC(y,m-1,d));}
+function calDateString(d){return d.toISOString().slice(0,10);}
+function calNthWeekday(y,m,weekday,n){const first=calDateUTC(y,m,1).getUTCDay();return 1+(weekday-first+7)%7+(n-1)*7;}
+function calLastWeekday(y,m,weekday){const last=calDateUTC(y,m+1,0),delta=(last.getUTCDay()-weekday+7)%7;return last.getUTCDate()-delta;}
+function calFederalHolidays(year){
+ const result=[],named=(month,day,name)=>{const actual=calDateUTC(year,month,day),date=calDateString(actual);result.push({date,name,observed:false});
+  if(actual.getUTCDay()===0||actual.getUTCDay()===6){const observed=new Date(actual.getTime()+(actual.getUTCDay()===6?-86400000:86400000));result.push({date:calDateString(observed),name:name+' (observed)',observed:true});}};
+ named(1,1,"New Year's Day");named(6,19,'Juneteenth');named(7,4,'Independence Day');named(11,11,'Veterans Day');named(12,25,'Christmas Day');
+ // When next year's January 1 falls on Saturday, its Friday observation is in this December.
+ if(calDateUTC(year+1,1,1).getUTCDay()===6)result.push({date:year+'-12-31',name:"New Year's Day (observed)",observed:true});
+ const floating=[ [1,calNthWeekday(year,1,1,3),'Martin Luther King Jr. Day'],[2,calNthWeekday(year,2,1,3),"Washington's Birthday"],
+  [5,calLastWeekday(year,5,1),'Memorial Day'],[9,calNthWeekday(year,9,1,1),'Labor Day'],
+  [10,calNthWeekday(year,10,1,2),'Columbus Day'],[11,calNthWeekday(year,11,4,4),'Thanksgiving Day'] ];
+ floating.forEach(([m,d,name])=>result.push({date:calDateString(calDateUTC(year,m,d)),name,observed:false}));
+ return result.filter(h=>h.date.startsWith(String(year)+'-')).sort((a,b)=>a.date.localeCompare(b.date));
+}
+
 async function toDecide(id,status){if(!toCanCalendar())return;const reason=prompt(status==='declined'?'Reason for declining (required):':'Optional approval message:');if(reason===null)return;try{await toChangeStatus(id,status,reason);}catch(e){alert(toError(e));}}
 function toReminderKey(id){return String(currentUser?.id)+'_'+id+'_'+toToday();}
 function toReminderWasDismissed(id){const key=toReminderKey(id);try{const saved=JSON.parse(localStorage.getItem('bds_timeoff_dismissals')||'{}');return toRemindersDismissed.has(key)||saved[key]===true;}catch(e){return toRemindersDismissed.has(key);}}
 function toRenderReminders(){
  const dest=document.getElementById('to-reminder-list'),popup=document.getElementById('to-reminder-popup');if(!popup)return;
- if(!toCanCalendar()||!toDataReady){dest.innerHTML='';popup.innerHTML='';popup.hidden=true;return;}
- const today=toToday(),tomorrow=new Date(today+'T12:00:00Z');tomorrow.setUTCDate(tomorrow.getUTCDate()+1);const next=tomorrow.toISOString().slice(0,10);
- const due=toRequests.filter(r=>r.status==='approved'&&(r.date===today||r.date===next)&&!toReminderWasDismissed(r.id));
- const content=due.map(r=>`<div class="to-entry"><b>${r.date===today?'Today':'Tomorrow'}: ${toEsc(r.agentName)}</b><div>${toEsc(toTeamLabel(r.team))} · ${toEsc(toTypeLabel(r.type))}<br>${toEsc(r.date)} · ${toEsc(toTiming(r))}</div><div class="to-row-actions">${toActionButton('view',r.id,'View calendar')}${toActionButton('dismiss',r.id,'Dismiss today')}</div></div>`).join('');
- dest.innerHTML=due.length?'<h3>Approved time-off reminders</h3>'+content:'';
- const calendarOpen=document.getElementById('page-admin').classList.contains('admin-page-active')&&document.getElementById('admin-timeoff').style.display!=='none';popup.hidden=!due.length||calendarOpen;popup.innerHTML=due.length?'<strong>📅 Approved time off</strong>'+content:'';
+ if(!toCanCalendar()){dest.innerHTML='';popup.innerHTML='';popup.hidden=true;return;}
+ const today=toToday(),nextDate=new Date(today+'T12:00:00Z');nextDate.setUTCDate(nextDate.getUTCDate()+1);
+ const next=nextDate.toISOString().slice(0,10),events=[];
+ if(toDataReady){
+  toRequests.filter(r=>r.status==='pending').forEach(r=>events.push({id:'pending:'+r.id,when:'Needs review',title:r.agentName+' · Time-off request',detail:toTeamLabel(r.team)+' · '+toTypeLabel(r.type)+' · '+r.date,viewDate:r.date,pending:true}));
+  toRequests.filter(r=>r.status==='approved'&&(r.date===today||r.date===next)).forEach(r=>events.push({id:'approved:'+r.id,when:r.date===today?'Today':'Tomorrow',title:r.agentName+' · Approved time off',detail:toTeamLabel(r.team)+' · '+toTypeLabel(r.type)+' · '+toTiming(r),viewDate:r.date}));
+ }
+ if(calBirthdayReady)calBirthdays.forEach(b=>{
+  const day=calBirthdayOccurs(b,today)?today:calBirthdayOccurs(b,next)?next:'';
+  if(day)events.push({id:'birthday:'+b.id,when:day===today?'Today':'Tomorrow',title:'🎂 '+b.name+' · Birthday',detail:b.team==='ALL'?'All teams':toTeamLabel(b.team),viewDate:day});
+ });
+ const holidaySet=[...calFederalHolidays(Number(today.slice(0,4))),...calFederalHolidays(Number(next.slice(0,4)))];
+ holidaySet.filter((h,i)=>holidaySet.findIndex(other=>other.date===h.date&&other.name===h.name)===i&&(h.date===today||h.date===next)).forEach(h=>events.push({id:'holiday:'+h.date+':'+h.name,when:h.date===today?'Today':'Tomorrow',title:'🇺🇸 '+h.name,detail:'U.S. federal holiday'+(h.observed?' · Observed date':''),viewDate:h.date}));
+ const due=events.filter(r=>!toReminderWasDismissed(r.id));
+ const content=due.map(r=>`<div class="to-entry ${r.pending?'cal-reminder-pending':''}"><b>${toEsc(r.when)}: ${toEsc(r.title)}</b><div class="to-detail">${toEsc(r.detail)}</div><div class="to-row-actions"><button type="button" data-calendar-view-date="${toEsc(r.viewDate)}">View date</button>${toActionButton('dismiss',r.id,'Dismiss today')}</div></div>`).join('');
+ dest.innerHTML=due.length?'<h3>🔔 Calendar reminders</h3>'+content:'<p class="cal-help">No calendar reminders due.</p>';
+ const calendarOpen=document.getElementById('page-admin').classList.contains('admin-page-active')&&document.getElementById('admin-timeoff').style.display!=='none';
+ popup.hidden=!due.length||calendarOpen;popup.innerHTML=due.length?'<strong>🔔 Calendar reminders</strong>'+content:'';
 }
+document.addEventListener('click',event=>{
+ const button=event.target.closest('[data-calendar-view-date]');if(!button||!toCanCalendar())return;
+ const date=button.dataset.calendarViewDate;if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return;
+ document.getElementById('to-admin-month').value=date.slice(0,7);document.getElementById('to-admin-team').value='ALL';
+ roseOpenAdminPanel();switchAdminTab('timeoff');toRenderAdmin();
+});
 function toDismissReminder(id){const key=toReminderKey(id);toRemindersDismissed.add(key);try{const saved=JSON.parse(localStorage.getItem('bds_timeoff_dismissals')||'{}'),today=toToday();const clean=Object.fromEntries(Object.entries(saved).filter(([k])=>k.endsWith('_'+today)));clean[key]=true;localStorage.setItem('bds_timeoff_dismissals',JSON.stringify(clean));}catch(e){}toRenderReminders();}
 document.addEventListener('click',event=>{const button=event.target.closest('[data-timeoff-action]');if(!button)return;const id=button.dataset.id,action=button.dataset.timeoffAction;if(action==='cancel')toCancel(id);else if(action==='reply')toReply(id);else if(action==='dismiss')toDismissReminder(id);else if(action==='view'){const r=toRequests.find(r=>r.id===id);if(r&&toCanCalendar()){document.getElementById('to-admin-month').value=r.date.slice(0,7);document.getElementById('to-admin-team').value='ALL';switchAdminTab('timeoff');}}else toDecide(id,action);});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&currentUser){document.getElementById('to-date').min=toToday();toRenderReminders();}});
@@ -14437,7 +14713,7 @@ function roseOpenUsers(){
   roseRenderAdminRows();
  },e=>{const el=document.getElementById('ru-admin-list');if(el&&isRoseAdmin())el.textContent='Could not load administrators: '+toError(e);});
 }
-function roseRenderTeams(){const el=document.getElementById('ru-team-list');if(!el||!isRoseAdmin())return;
+function roseRenderTeams(){calRenderTeamAccess();const el=document.getElementById('ru-team-list');if(!el||!isRoseAdmin())return;
  if(!toSettingsReady){el.textContent='Loading team access…';return;}
  el.innerHTML=toTeams.map(t=>`<div class="to-entry"><label><input type="checkbox" ${toTeamEnabled[t]?'checked':''} onchange="roseSetTeam('${t}',this.checked)"> ${toTeamLabel(t)}: Allow agents to submit new requests</label></div>`).join('');}
 function roseRenderChatTeams(){

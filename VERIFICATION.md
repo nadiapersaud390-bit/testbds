@@ -1,74 +1,15 @@
-# R7 local verification — main navigation permissions
+# R9 Verification Notes
 
-The following tests passed using headless Chromium and a locally mocked Firebase/Firestore context:
+Checked on 15 October 2026 using headless Chromium with mocked Firestore transactions and collections, without accessing production.
 
-- Rose's Manage Access dialog renders **13** MAIN DASHBOARD tabs with independent selected states.
-- The existing Admin Panel section still renders **16** sub-tabs, **14** assignable and two Rose-only.
-- Changing and saving a non-Rose admin's checkboxes submits independent `dashboardTabPermissions` and `adminTabPermissions` arrays in one account update.
-- The Create New Admin form renders 13 main buttons (all enabled by default) and the existing 14 assignable admin sub-tabs.
-- Rose's own main-tab and Admin Panel permissions are shown as permanently allowed, with disabled checkboxes.
-- For a logged-in managed administrator, disallowed main buttons are hidden and `switchTab` refuses opening those views.
-- Live removal of the currently active tab navigates to an allowed view. No assigned dashboard tabs produces a clear access message with no active page.
-- Admin-specific chat permission controls the chat button independently of agent team settings.
-- Desktop (1200×900) and mobile (390×844) popup layouts were inspected.
-- All inline JavaScript syntax checked with Node.js; no page runtime errors in the isolated Chromium fixture.
+- All inline JavaScript blocks pass `node --check`.
+- U.S. federal holidays for October 2026, observed Christmas date in 2027, including computed floating holidays.
+- Birthdays recur annually, render on calendar, filter by team, and issue day-before/day-of reminders.
+- Approved time-off reminders, pending-request attention items, and admin-only reminder access.
+- Rose's team availability settings remain on the existing `app_settings/time_off_access` path.
+- Manual time-off creation form shows the correct fields for different request types and writes approved request records to mocked Firestore in one transaction with the day ledger.
+- Birthday create and delete actions write to mocked Firestore transactions; edit form loads the current birthday.
+- Calendar permission revocation cleans up birthday listener and closes reminder popups and lists.
+- Desktop and narrow mobile layout screenshots inspected; mobile calendar can be swiped horizontally.
 
-**Not tested:** production Firestore permissions, live authentication, real account data propagation, or server-side enforcement. The existing authentication architecture remains client-side; server access controls are a separate security task.
-
----
-
-# r6 test notes: custom administrator passwords
-
-Browser tests passed using mocked Firestore and isolated Chromium:
-
-- A new admin was successfully created with `admin` (5 characters), confirming that the browser field accepted it and the Firestore admin record contained the expected password hash and no plaintext password.
-- The existing Manage Access popup reset an administrator password to `x` (1 character), saved the hash, and showed the new password once.
-- The `@0000` conversion accepted the password `1234` and saved the managed admin record.
-- A password containing leading/trailing spaces was saved and shown unchanged. The login function passed it to the verifier unchanged.
-- The password generator still generated 20-character passwords and the existing administrator popup still showed the full 16 sub-tabs.
-- Node syntax checks passed for all inline JavaScript blocks, and the browser reported no unexpected page errors beyond known mock-context errors.
-
-**Scope:** These are local browser tests with a Firestore mock. No writes were made to the user's production database or deployment. Actual server-side Firebase Security Rules, live authentication, and production behavior still require verification.
-
----
-
-# r5 User Management verification
-
-- JS syntax: checked with `node --check` after extracting all inline scripts.
-- Browser UI tested in a headless Chromium harness with **mock Firestore** and fake password-hash implementation. Neither production Firebase accounts nor live data were touched.
-- `@0000` unconverted placeholder displays a **Convert @0000 to Managed Admin** button.
-- Conversion form locks the account name to `0000` and records the selected 14 assignable sub-tabs in the mock Firestore document.
-- Successful conversion displays the initial password in a one-time modal and clears its value after closing.
-- An ordinary username can be created using **Create New Admin**. The generator returns a 20-character password, and the saved mock Firestore record does not contain a plaintext password property.
-- Converted `0000` account appears as a normal account after the mock snapshot is refreshed; **Manage Access** opens its 16-sub-tab popup.
-- Password reset shows the newly saved value once; a session-version increment invalidates old managed sessions on the next live update (code path inspected, not proven against a real Firebase server).
-- Real Firebase permission rules, Firebase Auth security, backend password hashing, live transaction authorization, and propagation to live sessions remain unverified and are outside this ZIP.
-
----
-
-# Verification · 15 October 2026 · r4
-
-## Chatroom Team Access update: passed in isolated Chromium
-
-- All three inline JavaScript blocks passed Node.js `--check`.
-- Rose's User Management panel displays three independently configurable checkbox options: Berbice, Providence (PR), and Remote.
-- Initial configured mock state gives BB and PR chatroom access, with Remote not allowed.
-- Changing PR in the Rose controls wrote the expected `PR:false` to the mocked Firestore transaction, leaving other team flags unaffected.
-- Disabled PR or Remote users did not see the Access Needed tab or floating Chat button; `switchTab('access-chat')` did not open the chatroom.
-- A currently allowed Berbice agent could enter the chat; a subsequent live team disable hid the controls, changed back to Script, unsubscribed the chat listener, and cleared cached chat messages.
-- Team changes and a subsequent permission enable refreshed visibility without restarting the dashboard.
-- A simulated settings read error prevented agent chat access while retaining administrator access and surfacing an error on Rose's management screen.
-- The real `accessStartChat()` implementation short-circuited before touching Firestore when the account was not allowed to use chat.
-- At a 390px viewport there was no horizontal document overflow.
-
-## Administrator permissions popup: regression passed
-
-- Existing administrator search and list, 16-tab popup, 14 selectable permissions, Rose-only protections, Allow All/Hide All, per-admin Save Access update payload, and 390px layout checks passed again.
-- The time-off workflow's earlier integration tests were not rerun as part of this chat access change.
-
-## Verification limitations
-
-- Tests used mocked Firestore results, not the user's production database or deployed Security Rules.
-- Inline Firestore permission checks rely on the inherited client-side authentication and are **not server-enforced data access controls**.
-- Real authentication, cross-client synchronization in production, live data access, and write permissions for `app_settings/chatroom_access` still need testing after deployment.
-- No live deployment, Firestore Security Rules changes, or Firebase database mutations were performed.
+**Not tested:** Live production Firestore access rules, live authentication, real browser push background notifications, or production deployment. Those require verification by the site owner in their Firebase project.
