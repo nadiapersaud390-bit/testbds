@@ -1,103 +1,79 @@
-# BDS LOAN CR DASHBOARD — File Structure
+# BDS Dashboard · Time-off requests and Rose administration
 
-## Folder Structure
+Updated: 15 October 2026
 
-```
-bds-dashboard/
-├── index.html              ← Shell: head, CSS/JS imports, nav, modals, tab containers
-├── css/
-│   └── styles.css          ← All CSS
-├── js/
-│   ├── firebase-config.js  ← Firebase init
-│   ├── data-script.js      ← S{} object — SCRIPT tab step content
-│   ├── data-objections.js  ← OBJ{} object — REBUTTALS tab content
-│   ├── app-core.js         ← Login, auth, clocks, roster sync, showDashboard
-│   ├── tabs.js             ← switchTab, loadScript, loadObjection
-│   ├── admin.js            ← Admin panel logic + admin sub-tab loader
-│   ├── stats.js            ← CSV import, stats table
-│   ├── rep-profile.js      ← Agent profile panel + agent sub-tab loader
-│   └── rebuttal-insights.js ← RI analytics, fraud detection, signals
-├── tabs/                   ← One HTML file per main tab
-│   ├── tab-admin.html      ← Admin nav bar only (sub-tabs load from admin/)
-│   ├── tab-script.html
-│   ├── tab-objections.html
-│   ├── tab-dispo.html
-│   ├── tab-tips.html
-│   ├── tab-asep.html
-│   ├── tab-spanish.html
-│   ├── tab-sunday.html
-│   ├── tab-dbs.html
-│   └── tab-lenders.html
-├── admin/                  ← One HTML file per Admin Panel sub-tab
-│   ├── overview.html       ← ⚡ Daily Overview
-│   ├── attendance.html     ← 📅 Daily Attendance
-│   ├── weekly.html         ← 📋 Weekly Attendance
-│   ├── monthly.html        ← 📆 Monthly Attendance
-│   ├── stats.html          ← 📊 Agent Stats
-│   ├── profiles.html       ← 👤 Agent Profiles
-│   ├── coaching.html       ← 📝 Coaching Notes
-│   ├── monitoring.html     ← 🎧 Live Monitoring
-│   ├── rebuttal.html       ← 🧠 Rebuttal Intel
-│   └── weekperf.html       ← 🏆 Weekly Performance
-└── agent/                  ← One HTML file per Agent Profile sub-tab
-    ├── overview.html       ← 📊 Overview
-    ├── attendance.html     ← 📅 Attendance
-    ├── coaching.html       ← 📝 Coaching
-    ├── monitoring.html     ← 🎧 Monitoring
-    ├── schedule.html       ← ⏰ Schedule
-    ├── audit.html          ← 🔍 Login History
-    ├── stats.html          ← 📈 Stats History
-    └── rebuttal.html       ← 🧠 Rebuttal Usage
-```
+This package contains the complete existing dashboard in `index.html`. Its styles and application scripts are included in that file. There is no build step. It uses the existing Firebase project configured in the page.
 
-## How Loading Works
+## Agent requests
 
-### Main tabs (tabs/)
-`switchTab(name)` in `js/tabs.js` calls `window.loadTab(name)` which fetches
-`tabs/tab-{name}.html` once on first click and injects it into `<div id="page-{name}">`.
+The dashboard shows **Request Time Off / My Requests** for enabled teams.
 
-### Admin sub-tabs (admin/)
-`switchAdminTab(name)` in `js/admin.js` calls `loadAdminSection(name)` which fetches
-`admin/{name}.html` once on first click and injects it into `<div id="admin-{name}">`.
+- **Day off:** date only.
+- **Late arrival:** date and expected arrival time.
+- **Early departure:** date and leaving time.
+- **Appointment / Other:** date and a time range, or all day.
+- A reason is required. Dates and times use Guyana time.
+- Requests start as pending. Agents can see approvals, decline explanations, and send a reply to an admin decision.
+- Agents can cancel their own pending requests. Approved requests cannot be cancelled by an agent.
+- Missing reasons, invalid or past dates, invalid time ranges and overlapping pending/approved requests are rejected. Non-overlapping late-arrival and early-departure requests can coexist on one date.
+- Same-agent/day transactions prevent simultaneous overlapping submissions from this updated build. Previously saved requests are included when checking for conflicts.
 
-### Agent profile sub-tabs (agent/)
-`apTab(name)` in `js/rep-profile.js` calls `loadAgentSection(name)` which fetches
-`agent/{name}.html` once on first click and injects it into `<div id="ap-{name}">`.
+Submitting a request does not grant permission to change a work schedule. Agents should wait for an approval.
 
-> **Important:** All loading uses `fetch()` — files must be served from a web server.
-> GitHub Pages works perfectly. To test locally: run `npx serve .` in this folder.
+## Admin calendar
 
-## Adding a New Main Tab
-1. Add button in `index.html` nav
-2. Add empty container: `<div class="tab-page" id="page-{name}"></div>`
-3. Add entry to `TAB_FILES` map in `index.html`
-4. Create `tabs/tab-{name}.html`
-5. Add button styling in `css/styles.css` if needed
+Admins with **Time-off Calendar** access can review all three teams: Berbice, Providence and Remote. The team and month filters apply to the calendar and request list. Pending and approved requests appear on their dates; approved entries remain visible in past months.
 
-## Adding a New Admin Sub-tab
-1. Add button in `tabs/tab-admin.html` nav
-2. Add empty container: `<div id="admin-{name}" class="admin-section" style="display:none;"></div>`
-3. Create `admin/{name}.html`
-4. Add the tab name to the list in `switchAdminTab()` inside `js/admin.js`
+Approvals and declines check the current request status inside a transaction. Declining requires an explanation. Requests, decisions, replies and team-access changes update through Firebase listeners.
 
-## Adding a New Agent Profile Sub-tab
-1. Add button in `index.html` agent panel nav
-2. Add empty container: `<div id="ap-{name}" style="display:none;"></div>`
-3. Create `agent/{name}.html`
-4. Add the tab name to the list in `_activateAgentTab()` inside `js/rep-profile.js`
+Approved-request reminders appear the day before and again on the approved date. They are visible throughout the signed-in dashboard, or within the Calendar when it is open. Dismissal affects only that administrator's alerts for that date in that browser. Dismissal does not edit or delete the request or calendar entry. A dismissal the day before does not suppress the approved-date reminder.
 
-## Adding New Script Steps
-Edit `js/data-script.js` — add a new key to the `S` object.
+Reminders require the dashboard to be open and connected. They are not email, push or background notifications. The date is checked every 30 seconds and when returning to the tab.
 
-## Adding New Rebuttals
-Edit `js/data-objections.js` — add a new key to the `OBJ` object.
-Then add the sub-tab button in `tabs/tab-objections.html`.
+## Rose → Admin Panel → User Management
 
-## Deploying to GitHub Pages
-Push the entire folder to your repo. In Settings → Pages, set source to your branch / root.
+Rose has superadmin controls in the dashboard:
 
-## October 2026 additions
+- Create an administrator with a username, display name and password.
+- Select which Admin Panel tabs the administrator can see, including Calendar access.
+- Review existing Firebase administrator accounts and update their tab access.
+- Enable or disable an administrator. Disabling signs out an active session when the live update arrives.
+- Set a replacement password. Resetting a password invalidates the administrator's older sessions.
+- Show or hide a password while entering or resetting it. Saved passwords cannot be displayed because the existing application stores only hashes.
+- Allow or hide new time-off requests separately for Berbice, Providence and Remote.
 
-This single-file build adds an agent **Request Time Off / My Requests** tab, an admin **Time-off Calendar** approval screen, and a Rose-only **User Management** screen. Firestore collections: `time_off_requests`, `app_settings/time_off_access`, and existing `admin_accounts`. Approvals, agent responses, and request calendars update using Firestore listeners. Admin reminders display in the Time-off Calendar on the preceding and approved dates while the dashboard is open; dismissals are browser-session only. They are not background or push notifications.
+Turning a team off blocks new submissions and hides the request form. Agents with earlier requests retain **My Requests**. Existing requests, approvals and administrator reminders remain intact.
 
-**Security/deployment warning:** This project uses client-side administrator credentials (a legacy hardcoded administrator and a browser SHA-256 password check), and agent identity originates in the browser. UI role checks do **not** implement server-side authorization. Before publishing or using sensitive records, replace the authentication scheme with Firebase Auth identities and enforce agent ownership, Rose-only account creation, and admin-only approval in Firestore Security Rules or trusted backend functions. Do not create permissive Firestore rules to make this feature work. The "Show password" checkbox displays only a password while Rose is typing it; stored hashes cannot be revealed. Also, the current SHA-256 hashing is not an appropriate password-storage construction for a production system.
+Passwords must contain 10–128 characters, with no leading or trailing spaces. Usernames begin with a letter, contain 3–32 characters, and may include letters, numbers, periods, underscores and hyphens. Duplicate usernames are rejected. Rose's account is protected from these enable/disable and reset controls. The pre-existing legacy administrator login is not listed as a Firestore account.
+
+## Uploading this update
+
+1. Keep your current deployed file as a backup.
+2. Upload this `index.html` in place of the existing dashboard's `index.html`.
+3. In the existing Firebase version document, set `settings/app_version.v` to `2026-10-15-timeoff-admin-r2` so the dashboard's version check matches the deployed file.
+4. Refresh the dashboard. Log in as Rose to review administrator access and the team switches.
+5. Verify one test request and decision against your actual Firebase project.
+
+No live deployment or production database changes were made while preparing this ZIP.
+
+## Firebase data and access requirements
+
+Existing records and settings remain compatible:
+
+- `roster/{agentId}`: agent identity and current team.
+- `admin_accounts/{username}`: existing admin login records, `adminTabPermissions`, and the new `sessionVersion` field. Missing session versions default to 0.
+- `app_settings/time_off_access`: Boolean `BB`, `PR`, `REMOTE` switches; existing defaults are enabled.
+- `time_off_requests/{requestId}`: requests and decisions.
+- **New:** `time_off_days/{agentId}_{date}`: a transaction ledger of active request IDs for overlap checks.
+
+Agent subscriptions query only their own requests. Admin request subscriptions run only when the account has Calendar access. Settings and roster subscriptions continue independently so access changes update live. No composite index is needed by the added queries.
+
+The upload did not include the project's deployed Firestore rules or a trusted backend. The inherited authentication uses anonymous Firebase sessions, browser-side administrator checks and SHA-256 password hashes. Application checks and hidden tabs are not server-side authorization. The inherited password hashing is not a production-grade password storage design. Firebase Auth identities with trusted roles and restrictive rules/backend validation are required to enforce administrator privileges and agent ownership against direct database requests. Do not open database rules merely to resolve a permission error. These backend controls were not changed or verified in this update.
+
+## Verification
+
+- All inline JavaScript syntax checked.
+- 34 local integration checks passed using an in-memory Firestore adapter, including overlaps, simultaneous submissions, cancellation, approvals, decline reasons, replies, all teams, access switches, reminder dates and dismissal, historical entries, admin creation, duplicate usernames, password reset session versions and live disablement.
+- Browser validation status is recorded in `VERIFICATION.md`.
+
+Tests used isolated mock data and never connected to the production Firebase project. Live connectivity, real Firestore Security Rules and cross-client server transaction behavior require verification in the deployed environment.
