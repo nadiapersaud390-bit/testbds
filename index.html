@@ -2218,6 +2218,71 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
 @media(max-width:730px){.bds-layout-cards{grid-template-columns:repeat(min(2,var(--preview-cols,3)),minmax(0,1fr));}.bds-layout-panel{padding:11px;}.bds-layout-role-tabs button{min-width:90px;}}
 @media(max-width:480px){.bds-layout-cards{grid-template-columns:1fr;}.bds-layout-row-header{align-items:flex-start;}.bds-layout-card-actions select{max-width:100%;}}
 
+
+/* R15: removed redundant Access Needed banner; compact controls live in the existing chat panes. */
+#page-access-chat .access-chat-shell{border-radius:15px;}
+#page-access-chat .access-chat-body{padding-top:12px;}
+#page-access-chat .access-stream-head,
+#page-access-chat .access-compose-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;min-height:48px;padding:9px 13px;
+}
+#page-access-chat .access-stream-title,
+#page-access-chat .access-compose-title{
+  margin:0;font-size:.95rem;letter-spacing:.65px;
+}
+#page-access-chat .access-compose-heading{flex:1;min-width:0;}
+#page-access-chat .access-compose-user{margin-top:3px;}
+#page-access-chat .access-live-pill{padding:5px 8px;white-space:nowrap;font-size:.56rem;}
+#page-access-chat .access-voice-pill{padding:6px 8px;font-size:.57rem;line-height:1.1;flex-shrink:0;}
+@media(max-width:760px){
+  #page-access-chat .access-chat-body{padding-top:7px;}
+  #page-access-chat .access-stream-head,
+  #page-access-chat .access-compose-head{min-height:41px;padding:7px 9px;}
+  #page-access-chat .access-voice-pill{font-size:.54rem;padding:6px 7px;}
+}
+
+/* R16: What-you-see-is-what-you-arrange visual dashboard layout editor. */
+.bds-layout-preview-intro{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 13px 4px;font:800 .66rem 'Barlow Condensed',sans-serif;letter-spacing:1px;color:#91d8e9;}
+.bds-layout-preview-intro span:last-child{color:#8da3ba;font-weight:650;letter-spacing:.2px;}
+#bds-layout-rows.bds-layout-stage.top-tabs{display:flex!important;flex-direction:column!important;gap:5px!important;max-width:none!important;width:100%!important;margin:0!important;padding:12px!important;border:1px solid #29405e;border-radius:14px;background:#060c19!important;}
+.bds-layout-preview-group{width:100%;min-width:0;padding:4px 4px 7px;border:1px solid transparent;border-radius:11px;}
+.bds-layout-preview-group:hover,.bds-layout-preview-group:focus-within{border-color:rgba(56,189,248,.24);}
+.bds-layout-row-tools{display:flex;align-items:center;justify-content:space-between;padding:0 3px 5px;min-height:22px;}
+.bds-layout-row-caption{font:800 .61rem 'Barlow Condensed',sans-serif;letter-spacing:1.2px;color:#5c7e9e;}
+.bds-layout-row-options{position:relative;z-index:1;font-size:.62rem;color:#86adc6;}
+.bds-layout-row-options summary{cursor:pointer;list-style:none;user-select:none;border-radius:5px;padding:4px 8px;}
+.bds-layout-row-options summary:hover,.bds-layout-row-options[open] summary{color:#c9ebff;background:#193047;}
+.bds-layout-row-options summary::-webkit-details-marker{display:none;}
+.bds-layout-row-options .bds-layout-row-controls{position:absolute;right:0;top:100%;min-width:255px;z-index:6;display:flex;padding:9px;background:#14243a;border:1px solid #395d7d;border-radius:10px;box-shadow:0 9px 25px #0009;}
+#bds-layout-rows .bds-layout-preview-strip{display:flex;flex-wrap:wrap;gap:8px!important;min-height:48px;align-items:stretch;width:100%;padding:0;}
+#bds-layout-rows .bds-layout-preview-btn{flex:1 1 calc((100% - (var(--bds-cols,3) - 1)*8px)/var(--bds-cols,3))!important;min-height:46px;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;cursor:grab!important;touch-action:none;position:relative;user-select:none;line-height:1.35;transition:box-shadow .1s,border-color .1s,background .1s;}
+#bds-layout-rows .bds-layout-preview-btn:active{cursor:grabbing!important;}
+#bds-layout-rows .bds-layout-preview-btn.is-selected{outline:2px solid #8be8f8;outline-offset:2px;}
+#bds-layout-rows .bds-layout-preview-btn.is-dragging{opacity:.35;}
+#bds-layout-rows .bds-layout-preview-btn.is-drop-before{box-shadow:inset 5px 0 0 #2dd4bf,0 0 0 1px #2dd4bf!important;}
+#bds-layout-rows .bds-layout-preview-btn.is-drop-after{box-shadow:inset -5px 0 0 #2dd4bf,0 0 0 1px #2dd4bf!important;}
+#bds-layout-rows .bds-layout-preview-strip.is-drop-target{outline:2px dashed #2dd4bf;outline-offset:2px;border-radius:8px;}
+#bds-layout-rows .bds-layout-newrow-target{margin:5px 4px 0;border:1px dashed #3b5d7a;border-radius:10px;padding:12px;text-align:center;color:#90adca;font:.7rem 'Barlow Condensed',sans-serif;letter-spacing:.8px;transition:.15s;}
+#bds-layout-rows .bds-layout-newrow-target.is-drop-target{border:2px dashed #2dd4bf;background:#0d343a;color:#9bfff0;}
+#bds-layout-rows .bds-layout-empty{flex:1;text-align:center;min-height:45px;display:grid;place-items:center;}
+.bds-layout-touch-ghost{position:fixed!important;z-index:999999!important;width:min(260px,58vw)!important;min-height:45px!important;opacity:.93;pointer-events:none!important;box-shadow:0 18px 40px #000a!important;transform:translateZ(0);}
+.bds-layout-selection-panel:not([hidden]){display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:11px 13px;margin:10px 0;border:1px solid #356283;border-radius:10px;background:#10253c;}
+.bds-layout-selection-panel strong{font-size:.76rem;margin-right:auto;color:#dbf4ff;}
+.bds-layout-selection-panel button,.bds-layout-selection-panel select{background:#19354f;color:#e7f7ff;border:1px solid #39739c;border-radius:7px;padding:7px 10px;font-size:.73rem;cursor:pointer;}
+.bds-layout-subcards{display:flex;flex-wrap:wrap;gap:6px;}
+.bds-layout-subcards .bds-layout-preview-subtab{flex:0 1 auto;cursor:grab;font:800 .7rem 'Barlow Condensed',sans-serif;}
+.bds-layout-preview-subtab.is-drop-target{border-color:#2dd4bf!important;background:#17484c!important;}
+.bds-layout-preview-subtab.is-selected{outline:2px solid #7dd3fc;outline-offset:1px;}
+#bds-layout-rows .bds-layout-preview-btn[data-key="admin"]{background:linear-gradient(90deg,#1d1d1b,#282015);color:#fbbf24;border-color:#c49109;}
+#bds-layout-rows .bds-layout-preview-btn[data-key="access-chat"]{color:#34d399;border-color:#059669;background:#081a19;}
+#bds-layout-rows .bds-layout-preview-btn[data-key="leaderboard"]{color:#fbbf24;border-color:#a87917;background:#081525;}
+#bds-layout-rows .bds-layout-preview-btn[data-key="lenders"]{color:#38bdf8;border-color:#1685e9;background:#071e32;}
+#bds-layout-rows .bds-layout-preview-btn[data-key="leads"]{color:#34d399;border-color:#11686c;background:#062334;}
+#bds-layout-rows .bds-layout-preview-btn[data-key="dispo"]{color:#34d399;border-color:#086e56;}
+#bds-layout-rows .bds-layout-preview-btn[data-key="sunday"]{color:#c084fc;border-color:#73508e;}
+@media(max-width:800px){#bds-layout-rows .bds-layout-preview-strip{--bds-cols:2!important;}}
+@media(max-width:480px){#bds-layout-rows .bds-layout-preview-strip{--bds-cols:1!important;}#bds-layout-rows.bds-layout-stage.top-tabs{padding:8px!important;} .bds-layout-row-options .bds-layout-row-controls{min-width:240px;max-width:calc(100vw - 44px);flex-wrap:wrap;}}
 </style>
 </head>
 <body>
@@ -2921,28 +2986,14 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
   <div class="tab-page" id="page-access-chat">
     <div class="access-chat-page">
       <div class="access-chat-shell">
-        <div class="access-chat-head">
-          <div class="access-chat-brand">
-            <div class="access-chat-logo">🔐</div>
-            <div>
-            <div class="access-chat-kicker">Team support channel</div>
-            <div class="access-chat-title">Access Needed</div>
-          <div class="access-chat-sub">Messages are shared only with enabled teams and administrators in the dashboard.</div>
-            </div>
-          </div>
-          <div class="access-chat-tools">
-            <div class="access-live-pill connecting" id="access-live-pill" role="status" aria-live="polite">● CONNECTING</div>
-            <div class="access-open-pill">LIVE CHAT</div>
-            <button class="access-voice-pill" id="access-voice-pill" type="button" onpointerdown="event.stopPropagation()" onclick="accessEnableVoiceAlerts(true)">🔊 ENABLE VOICE</button>
-          </div>
-        </div>
         <div class="access-chat-body">
           <div class="access-chat-conversation">
             <div class="access-stream-card">
               <div class="access-stream-head">
-                <div class="access-stream-kicker">Conversation</div>
-                <div class="access-stream-title">Live message feed</div>
-                <div class="access-stream-sub">Messages appear in conversation order with your replies on the right.</div>
+                <div class="access-stream-heading">
+                  <div class="access-stream-title">Live message feed</div>
+                </div>
+                <div class="access-live-pill connecting" id="access-live-pill" role="status" aria-live="polite">● CONNECTING</div>
               </div>
               <div class="access-chat-filterbar" aria-label="Filter chat messages">
                 <label class="access-chat-search-wrap" for="access-chat-search"><span aria-hidden="true">⌕</span>
@@ -2965,9 +3016,12 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
           <div class="access-chat-compose-pane">
             <div class="access-compose">
               <div class="access-compose-head">
-                <div class="access-compose-label">Send a message</div>
-                <div class="access-compose-title">Reply panel</div>
-                <div class="access-compose-user">Sending as <strong id="access-compose-user">Signed-in agent</strong></div>
+                <div class="access-compose-heading">
+                  <div class="access-compose-title">Reply panel</div>
+                  <div class="access-compose-user">Sending as <strong id="access-compose-user">Signed-in agent</strong></div>
+                </div>
+                <button class="access-voice-pill" id="access-voice-pill" type="button"
+                  onpointerdown="event.stopPropagation()" onclick="accessEnableVoiceAlerts(true)">🔊 ENABLE VOICE</button>
               </div>
               <div class="access-compose-body">
                 <div id="access-admin-quick-replies" class="access-quick-replies" style="display:none;">
@@ -3100,7 +3154,7 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
       <section class="ru-user-view" id="ru-view-layouts" hidden>
         <div class="bds-layout-panel">
           <h3>🧩 Navigation Tab Layout Manager</h3>
-          <p class="bds-layout-help">Arrange the buttons for Agents, Administrators and Rose independently. Drag buttons into a different row, or use Move to row and ▲ ▼ for keyboard or touchscreen control. Choose 1, 2 or 3 columns per row. Hidden tabs do not leave blank spaces. Tab visibility is still managed separately through administrator permissions and team settings.</p>
+          <p class="bds-layout-help">This is your actual dashboard arrangement. <strong>Drag a tab to the exact position you want</strong>, including between rows, or tap a tab to select it and use the Move controls. The three layouts save separately, and hidden tabs automatically close up the space.</p>
           <div class="bds-layout-role-tabs" role="tablist" aria-label="Layout audience">
             <button id="bds-layout-role-agent" type="button" onclick="bdsLayoutChooseRole('agent')" class="active" aria-selected="true">👤 AGENTS</button>
             <button id="bds-layout-role-admin" type="button" onclick="bdsLayoutChooseRole('admin')" aria-selected="false">⚙️ ADMINS</button>
@@ -3112,10 +3166,12 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
             <button type="button" onclick="bdsLayoutResetToSaved()">↶ DISCARD CHANGES</button>
             <button type="button" onclick="bdsLayoutResetToDefault()">RESET DEFAULT</button>
           </div>
-          <div id="bds-layout-rows" aria-live="polite"></div>
+          <div class="bds-layout-preview-intro"><span>LIVE DASHBOARD PREVIEW</span><span>Drag tabs into place, then select Save to publish</span></div>
+          <div id="bds-layout-rows" class="bds-layout-stage top-tabs" aria-label="Editable dashboard button layout"></div>
+          <div id="bds-layout-selection-panel" class="bds-layout-selection-panel" hidden aria-live="polite"></div>
           <div id="bds-layout-subsection" class="bds-layout-panel" hidden>
             <h3>⚙️ Admin Panel sub-tab order</h3>
-            <p class="bds-layout-help">These are the buttons inside Admin Panel. Choose a different order for regular administrators and Rose. Rose-only sub-tabs remain restricted regardless of their position.</p>
+            <p class="bds-layout-help">Drag the sub-tab buttons into your preferred order. Rose-only sub-tabs remain restricted even if you rearrange them.</p>
             <div class="bds-layout-subcards" id="bds-layout-subtabs"></div>
           </div>
           <div class="bds-layout-toolbar"><button type="button" class="bds-layout-save" id="bds-layout-save" onclick="bdsLayoutSave()">SAVE THIS LAYOUT TO FIRESTORE</button><span class="bds-layout-status" id="bds-layout-status" role="status" aria-live="polite"></span></div>
@@ -15161,6 +15217,7 @@ async function roseToggleAdmin(username,enabled){if(!isRoseAdmin()||username==='
 let bdsUsersActiveView='accounts';
 let bdsLayoutUnsub=null, bdsLayoutSettings={}, bdsLayoutLiveReady=false, bdsLayoutLiveError='';
 let bdsLayoutRole='agent', bdsLayoutDraft=null, bdsLayoutDirty=false, bdsLayoutDragKey=null, bdsLayoutDragSub=false;
+let bdsLayoutSelected=null,bdsLayoutSubSelected=null;
 const BDS_LAYOUT_ROLES=['agent','admin','rose'];
 const BDS_DEFAULT_ROWS=[
  {columns:3,items:['script','objections','tips','dbs','spanish','asep']},
@@ -15301,7 +15358,7 @@ function roseChooseUsersView(view){
 function bdsLayoutChooseRole(role){
  if(!isRoseAdmin()||!BDS_LAYOUT_ROLES.includes(role)||role===bdsLayoutRole)return;
  if(bdsLayoutDirty&&!window.confirm('Discard unsaved changes to the '+bdsLayoutRole+' layout?'))return;
- bdsLayoutRole=role;bdsLayoutResetToSaved(true);
+ bdsLayoutRole=role;bdsLayoutSelected=null;bdsLayoutSubSelected=null;bdsLayoutResetToSaved(true);
 }
 function bdsLayoutMessage(message,isError=false){
  const el=document.getElementById('bds-layout-status');if(!el)return;
@@ -15330,50 +15387,191 @@ function bdsLayoutRender(){
  list.replaceChildren();
  const rows=bdsLayoutDraft.rows;
  rows.forEach((row,index)=>{
-  const box=document.createElement('div');box.className='bds-layout-row';box.dataset.rowIndex=String(index);
-  box.addEventListener('dragover',event=>bdsLayoutOnDragOver(event,box));
-  box.addEventListener('dragleave',event=>{if(!box.contains(event.relatedTarget))box.classList.remove('is-drop-target');});
-  box.addEventListener('drop',event=>bdsLayoutDrop(event,index,null));
-  const heading=document.createElement('div');heading.className='bds-layout-row-header';
-  const title=document.createElement('div');title.className='bds-layout-row-title';title.textContent='ROW '+(index+1)+' · '+row.items.length+' tabs';
-  const actions=document.createElement('div');actions.className='bds-layout-row-controls';
-  const label=document.createElement('label');label.textContent='Columns: ';
+  const section=document.createElement('section');section.className='bds-layout-preview-group';section.dataset.rowIndex=String(index);
+  const tools=document.createElement('div');tools.className='bds-layout-row-tools';
+  const caption=document.createElement('span');caption.className='bds-layout-row-caption';caption.textContent='ROW '+(index+1);
+  const settings=document.createElement('details');settings.className='bds-layout-row-options';
+  const summary=document.createElement('summary');summary.textContent='⚙ '+row.columns+' across';settings.appendChild(summary);
+  const controls=document.createElement('div');controls.className='bds-layout-row-controls';
+  const label=document.createElement('label');label.textContent='Columns ';
   const select=document.createElement('select');select.setAttribute('aria-label','Columns for row '+(index+1));
   for(let i=1;i<=3;i++){const option=document.createElement('option');option.value=String(i);option.textContent=String(i);option.selected=row.columns===i;select.appendChild(option);}
-  select.addEventListener('change',()=>{row.columns=Number(select.value);bdsLayoutMarkDirty();});label.appendChild(select);actions.appendChild(label);
-  const up=document.createElement('button');up.type='button';up.textContent='↑ ROW';up.title='Move this row up';up.disabled=index===0;up.onclick=()=>bdsLayoutMoveRow(index,-1);
-  const down=document.createElement('button');down.type='button';down.textContent='↓ ROW';down.title='Move this row down';down.disabled=index===rows.length-1;down.onclick=()=>bdsLayoutMoveRow(index,1);
-  const del=document.createElement('button');del.type='button';del.textContent='✕';del.title='Remove empty row';del.disabled=rows.length<2||row.items.length>0;del.onclick=()=>bdsLayoutDeleteRow(index);
-  actions.append(up,down,del);heading.append(title,actions);
-  const cards=document.createElement('div');cards.className='bds-layout-cards';cards.style.setProperty('--preview-cols',String(row.columns));
-  if(!row.items.length){const empty=document.createElement('div');empty.className='bds-layout-empty';empty.textContent='Drop a tab here, or choose this row from a tab’s Move to row menu.';cards.appendChild(empty);}
+  select.addEventListener('change',()=>{row.columns=Number(select.value);bdsLayoutMarkDirty();});label.appendChild(select);controls.appendChild(label);
+  const up=document.createElement('button');up.type='button';up.textContent='↑ Row';up.title='Move this row up';up.disabled=index===0;up.onclick=()=>bdsLayoutMoveRow(index,-1);
+  const down=document.createElement('button');down.type='button';down.textContent='↓ Row';down.title='Move this row down';down.disabled=index===rows.length-1;down.onclick=()=>bdsLayoutMoveRow(index,1);
+  const del=document.createElement('button');del.type='button';del.textContent='Remove empty row';del.title='Remove empty row';del.disabled=rows.length<2||row.items.length>0;del.onclick=()=>bdsLayoutDeleteRow(index);
+  controls.append(up,down,del);settings.appendChild(controls);tools.append(caption,settings);
+  const strip=document.createElement('div');strip.className='nav-row nav-row-layout bds-layout-preview-strip';strip.style.setProperty('--bds-cols',String(row.columns));strip.dataset.rowIndex=String(index);
+  strip.addEventListener('dragover',event=>bdsLayoutOnDragOver(event,strip));
+  strip.addEventListener('dragleave',event=>{if(!strip.contains(event.relatedTarget))strip.classList.remove('is-drop-target');});
+  strip.addEventListener('drop',event=>bdsLayoutDrop(event,index,null));
   row.items.forEach(key=>{
-   const card=document.createElement('div');card.className='bds-layout-card';card.draggable=true;card.dataset.key=key;
-   card.addEventListener('dragstart',event=>bdsLayoutStartDrag(event,key,false));
-   card.addEventListener('dragover',event=>{event.stopPropagation();bdsLayoutOnDragOver(event,card);});
-   card.addEventListener('drop',event=>{event.stopPropagation();bdsLayoutDrop(event,index,key);});
-   card.addEventListener('dragend',bdsLayoutClearDrag);
-   const name=document.createElement('div');name.className='bds-layout-card-title';name.textContent='⠿ '+bdsLayoutLabel(key);
-   const controls=document.createElement('div');controls.className='bds-layout-card-actions';
-   const to=document.createElement('select');to.setAttribute('aria-label','Move '+bdsLayoutLabel(key)+' to another row');
-   rows.forEach((target,i)=>{const option=document.createElement('option');option.value=String(i);option.textContent='Row '+(i+1);option.selected=i===index;to.appendChild(option);});
-   to.addEventListener('change',()=>bdsLayoutMoveToRow(key,Number(to.value)));
-   const back=document.createElement('button');back.type='button';back.title='Move '+bdsLayoutLabel(key)+' earlier';back.setAttribute('aria-label',back.title);back.textContent='▲';back.onclick=()=>bdsLayoutMoveItem(key,-1);
-   const forward=document.createElement('button');forward.type='button';forward.title='Move '+bdsLayoutLabel(key)+' later';forward.setAttribute('aria-label',forward.title);forward.textContent='▼';forward.onclick=()=>bdsLayoutMoveItem(key,1);
-   controls.append(to,back,forward);card.append(name,controls);cards.appendChild(card);
+   const original=document.getElementById('tab-'+key);
+   if(!original)return;
+   const button=document.createElement('button');button.type='button';
+   const cleanClasses=[...original.classList].filter(c=>!['active','rose-dashboard-hidden','access-tab-new-message','sunday-glow'].includes(c)&&!c.startsWith('tab-span-'));
+   button.className=cleanClasses.join(' ')+' bds-layout-preview-btn';
+   button.dataset.key=key;button.dataset.rowIndex=String(index);
+   button.textContent=key==='access-chat'?'🔐 ACCESS NEEDED':bdsLayoutLabel(key);
+   button.title='Drag '+bdsLayoutLabel(key)+' to reposition; click to select for move controls';
+   button.draggable=true;
+   button.setAttribute('aria-label','Move '+bdsLayoutLabel(key));
+   button.addEventListener('dragstart',event=>bdsLayoutStartDrag(event,key,false));
+   button.addEventListener('dragover',event=>{event.stopPropagation();bdsLayoutPreviewDragOver(event,button);});
+   button.addEventListener('dragleave',()=>button.classList.remove('is-drop-before','is-drop-after'));
+   button.addEventListener('drop',event=>{event.stopPropagation();bdsLayoutDropAtButton(event,index,key,button);});
+   button.addEventListener('dragend',bdsLayoutClearDrag);
+   button.addEventListener('pointerdown',event=>bdsLayoutTouchStart(event,key,button));
+   button.onclick=()=>bdsLayoutSelectTab(key);
+   button.classList.toggle('is-selected',bdsLayoutSelected===key);
+   strip.appendChild(button);
   });
-  box.append(heading,cards);list.appendChild(box);
+  if(!row.items.length){const empty=document.createElement('div');empty.className='bds-layout-empty';empty.textContent='Drop a tab here';strip.appendChild(empty);}
+  section.append(tools,strip);list.appendChild(section);
  });
+ if(rows.length<40){
+  const fresh=document.createElement('div');fresh.className='bds-layout-newrow-target';fresh.textContent='＋ Drag a tab here to create a new row';
+  fresh.addEventListener('dragover',event=>{if(bdsLayoutDragKey){event.preventDefault();fresh.classList.add('is-drop-target');}});
+  fresh.addEventListener('dragleave',()=>fresh.classList.remove('is-drop-target'));
+  fresh.addEventListener('drop',event=>{event.preventDefault();const key=bdsLayoutDragKey;bdsLayoutClearDrag();bdsLayoutDropIntoNewRow(key);});
+  list.appendChild(fresh);
+ }
+ bdsLayoutRenderSelection();
  const subPanel=document.getElementById('bds-layout-subsection'),subList=document.getElementById('bds-layout-subtabs');
  if(subPanel)subPanel.hidden=role==='agent';
  if(subList){subList.replaceChildren();if(role!=='agent')bdsLayoutDraft.subtabs.forEach((key,i)=>{
-  const card=document.createElement('div');card.className='bds-layout-subcard';
-  const title=document.createElement('strong');title.textContent=bdsLayoutLabel(key)+(key==='users'||key==='unused'?' · Rose-only':'');
-  const actions=document.createElement('span');actions.style.display='flex';actions.style.gap='5px';
-  const up=document.createElement('button');up.textContent='▲';up.title='Move earlier';up.disabled=i===0;up.onclick=()=>bdsLayoutMoveSubtab(key,-1);
-  const down=document.createElement('button');down.textContent='▼';down.title='Move later';down.disabled=i===bdsLayoutDraft.subtabs.length-1;down.onclick=()=>bdsLayoutMoveSubtab(key,1);
-  actions.append(up,down);card.append(title,actions);subList.appendChild(card);
+  const button=document.createElement('button');button.type='button';button.className='adm-tab bds-layout-preview-subtab';
+  button.textContent=bdsLayoutLabel(key);button.dataset.key=key;button.draggable=true;
+  button.title='Drag to reorder this Admin Panel sub-tab';
+  button.addEventListener('dragstart',event=>bdsLayoutStartDrag(event,key,true));
+  button.addEventListener('dragover',event=>{if(bdsLayoutDragSub){event.preventDefault();button.classList.add('is-drop-target');}});
+  button.addEventListener('dragleave',()=>button.classList.remove('is-drop-target'));
+  button.addEventListener('drop',event=>{event.preventDefault();const dragging=bdsLayoutDragKey;bdsLayoutClearDrag();bdsLayoutPlaceSubtab(dragging,key);});
+  button.addEventListener('dragend',bdsLayoutClearDrag);
+  button.addEventListener('pointerdown',event=>bdsLayoutTouchStart(event,key,button,true));
+  button.onclick=()=>bdsLayoutSelectSubtab(key);
+  button.classList.toggle('is-selected',bdsLayoutSubSelected===key);
+  subList.appendChild(button);
  });}
+}
+function bdsLayoutRenderSelection(){
+ const panel=document.getElementById('bds-layout-selection-panel');if(!panel)return;
+ const key=bdsLayoutSelected,found=key&&bdsLayoutFind(key);
+ if(!found){panel.hidden=true;panel.replaceChildren();return;}
+ panel.hidden=false;panel.replaceChildren();
+ const caption=document.createElement('strong');caption.textContent='Selected: '+bdsLayoutLabel(key);panel.appendChild(caption);
+ const previous=document.createElement('button');previous.type='button';previous.textContent='← Earlier';previous.onclick=()=>bdsLayoutMoveItem(key,-1);
+ const next=document.createElement('button');next.type='button';next.textContent='Later →';next.onclick=()=>bdsLayoutMoveItem(key,1);
+ const rowSelect=document.createElement('select');rowSelect.setAttribute('aria-label','Move selected tab to row');
+ bdsLayoutDraft.rows.forEach((row,i)=>{const option=document.createElement('option');option.value=String(i);option.textContent='Row '+(i+1);option.selected=i===found[0];rowSelect.appendChild(option);});
+ rowSelect.addEventListener('change',()=>bdsLayoutMoveToRow(key,Number(rowSelect.value)));
+ const done=document.createElement('button');done.type='button';done.textContent='✕ Deselect';done.onclick=()=>{bdsLayoutSelected=null;bdsLayoutRender();};
+ panel.append(previous,next,rowSelect,done);
+}
+function bdsLayoutSelectTab(key){
+ if(!bdsLayoutFind(key))return;
+ bdsLayoutSelected=bdsLayoutSelected===key?null:key;
+ document.querySelectorAll('.bds-layout-preview-btn').forEach(el=>el.classList.toggle('is-selected',el.dataset.key===bdsLayoutSelected));
+ bdsLayoutRenderSelection();
+}
+function bdsLayoutSelectSubtab(key){
+ bdsLayoutSubSelected=bdsLayoutSubSelected===key?null:key;
+ document.querySelectorAll('.bds-layout-preview-subtab').forEach(el=>el.classList.toggle('is-selected',el.dataset.key===bdsLayoutSubSelected));
+}
+function bdsLayoutDropIntoNewRow(key){
+ if(!key||!bdsLayoutFind(key)||bdsLayoutDraft.rows.length>=40)return;
+ bdsLayoutDraft.rows.push({columns:1,items:[]});
+ bdsLayoutMoveToRow(key,bdsLayoutDraft.rows.length-1);
+}
+function bdsLayoutMoveToPosition(key,targetRow,targetIndex){
+ if(!isRoseAdmin()||!bdsLayoutDraft?.rows[targetRow])return;
+ const origin=bdsLayoutFind(key);if(!origin)return;
+ const [fromRow,fromIndex]=origin;
+ const items=bdsLayoutDraft.rows[targetRow].items;
+ let index=Math.max(0,Math.min(Number(targetIndex)||0,items.length));
+ if(fromRow===targetRow && fromIndex<index)index--;
+ if(fromRow===targetRow && fromIndex===index)return;
+ bdsLayoutDraft.rows[fromRow].items.splice(fromIndex,1);
+ bdsLayoutDraft.rows[targetRow].items.splice(index,0,key);
+ bdsLayoutMarkDirty();
+}
+function bdsLayoutPreviewDragOver(event,button){
+ if(!bdsLayoutDragKey||bdsLayoutDragSub)return;
+ event.preventDefault();event.dataTransfer&&(event.dataTransfer.dropEffect='move');
+ bdsLayoutClearDropStyles();
+ button.classList.add(event.clientX>=button.getBoundingClientRect().left+button.getBoundingClientRect().width/2?'is-drop-after':'is-drop-before');
+}
+function bdsLayoutDropAtButton(event,row,key,button){
+ event.preventDefault();const dragging=bdsLayoutDragKey;
+ const after=event.clientX>=button.getBoundingClientRect().left+button.getBoundingClientRect().width/2;
+ bdsLayoutClearDrag();if(!dragging||dragging===key)return;
+ const position=bdsLayoutDraft.rows[row].items.indexOf(key)+(after?1:0);
+ bdsLayoutMoveToPosition(dragging,row,position);
+}
+function bdsLayoutPlaceSubtab(key,target){
+ if(!isRoseAdmin()||!key||key===target)return;
+ const arr=bdsLayoutDraft?.subtabs||[];const origin=arr.indexOf(key);const dest=arr.indexOf(target);
+ if(origin<0||dest<0)return;
+ arr.splice(origin,1);arr.splice(dest,0,key);bdsLayoutMarkDirty();
+}
+function bdsLayoutClearDropStyles(){
+ document.querySelectorAll('.bds-layout-preview-btn.is-drop-before,.bds-layout-preview-btn.is-drop-after,.bds-layout-preview-strip.is-drop-target,.bds-layout-newrow-target.is-drop-target,.bds-layout-preview-subtab.is-drop-target').forEach(el=>el.classList.remove('is-drop-before','is-drop-after','is-drop-target'));
+}
+// Native drag-and-drop handles desktop. Pointer handling below adds direct dragging on touchscreens.
+let bdsLayoutTouch=null;
+function bdsLayoutTouchStart(event,key,button,isSub=false){
+ if(event.pointerType==='mouse'||event.button!==0||!isRoseAdmin())return;
+ const startX=event.clientX,startY=event.clientY;
+ bdsLayoutTouch={key,isSub,button,pointerId:event.pointerId,startX,startY,dragging:false,ghost:null};
+ try{button.setPointerCapture(event.pointerId);}catch(e){}
+ button.addEventListener('pointermove',bdsLayoutTouchMove);
+ button.addEventListener('pointerup',bdsLayoutTouchEnd,{once:true});
+ button.addEventListener('pointercancel',bdsLayoutTouchCancel,{once:true});
+}
+function bdsLayoutTouchMove(event){
+ const d=bdsLayoutTouch;if(!d||event.pointerId!==d.pointerId)return;
+ if(!d.dragging){
+  if(Math.hypot(event.clientX-d.startX,event.clientY-d.startY)<9)return;
+  d.dragging=true;bdsLayoutDragKey=d.key;bdsLayoutDragSub=d.isSub;
+  d.ghost=d.button.cloneNode(true);d.ghost.classList.add('bds-layout-touch-ghost');d.ghost.setAttribute('aria-hidden','true');
+  document.body.appendChild(d.ghost);d.button.classList.add('is-dragging');
+ }
+ event.preventDefault();
+ d.ghost.style.left=(event.clientX+10)+'px';d.ghost.style.top=(event.clientY+10)+'px';
+ bdsLayoutClearDropStyles();
+ const over=document.elementFromPoint(event.clientX,event.clientY);
+ if(!over)return;
+ const target=over.closest(d.isSub?'.bds-layout-preview-subtab':'.bds-layout-preview-btn');
+ if(target&&target!==d.button){
+  if(!d.isSub){const rect=target.getBoundingClientRect();target.classList.add(event.clientX<rect.left+rect.width/2?'is-drop-before':'is-drop-after');}
+  else target.classList.add('is-drop-target');
+ }else if(!d.isSub){
+  const row=over.closest('.bds-layout-preview-strip,.bds-layout-newrow-target');if(row)row.classList.add('is-drop-target');
+ }
+}
+function bdsLayoutTouchEnd(event){
+ const d=bdsLayoutTouch;if(!d||event.pointerId!==d.pointerId)return;
+ const over=document.elementFromPoint(event.clientX,event.clientY);
+ const target=over?.closest(d.isSub?'.bds-layout-preview-subtab':'.bds-layout-preview-btn');
+ const row=over?.closest('.bds-layout-preview-strip');
+ const fresh=over?.closest('.bds-layout-newrow-target');
+ const wasDragging=d.dragging,key=d.key;
+ bdsLayoutTouchCleanup();
+ if(!wasDragging)return;
+ event.preventDefault();
+ if(d.isSub){if(target)bdsLayoutPlaceSubtab(key,target.dataset.key);return;}
+ if(target&&target.dataset.key!==key){
+  const index=Number(target.dataset.rowIndex),rowItems=bdsLayoutDraft.rows[index].items;
+  const rect=target.getBoundingClientRect();bdsLayoutMoveToPosition(key,index,rowItems.indexOf(target.dataset.key)+(event.clientX>=rect.left+rect.width/2?1:0));
+ }else if(row)bdsLayoutMoveToRow(key,Number(row.dataset.rowIndex));
+ else if(fresh)bdsLayoutDropIntoNewRow(key);
+}
+function bdsLayoutTouchCancel(){bdsLayoutTouchCleanup();}
+function bdsLayoutTouchCleanup(){
+ const d=bdsLayoutTouch;if(!d)return;
+ d.button.removeEventListener('pointermove',bdsLayoutTouchMove);
+ d.button.classList.remove('is-dragging');if(d.ghost)d.ghost.remove();
+ bdsLayoutTouch=null;bdsLayoutDragKey=null;bdsLayoutDragSub=false;bdsLayoutClearDropStyles();
 }
 function bdsLayoutAddRow(){
  if(!isRoseAdmin()||!bdsLayoutDraft||bdsLayoutDraft.rows.length>=40)return;
@@ -15395,13 +15593,9 @@ function bdsLayoutFind(key){
  return null;
 }
 function bdsLayoutMoveToRow(key,targetRow,insertBefore=null){
- if(!isRoseAdmin()||!bdsLayoutDraft||!bdsLayoutDraft.rows[targetRow])return;
- const from=bdsLayoutFind(key);if(!from)return;
- bdsLayoutDraft.rows[from[0]].items.splice(from[1],1);
+ if(!bdsLayoutDraft?.rows[targetRow])return;
  const target=bdsLayoutDraft.rows[targetRow].items;
- const pos=insertBefore===null?-1:target.indexOf(insertBefore);
- if(pos<0)target.push(key);else target.splice(pos,0,key);
- bdsLayoutMarkDirty();
+ bdsLayoutMoveToPosition(key,targetRow,insertBefore===null?target.length:Math.max(0,target.indexOf(insertBefore)));
 }
 function bdsLayoutMoveItem(key,direction){
  const found=bdsLayoutFind(key);if(!found)return;
@@ -15425,7 +15619,7 @@ function bdsLayoutOnDragOver(event,el){
  event.preventDefault();if(event.dataTransfer)event.dataTransfer.dropEffect='move';
  el.classList.add('is-drop-target');
 }
-function bdsLayoutClearDrag(){bdsLayoutDragKey=null;bdsLayoutDragSub=false;document.querySelectorAll('.bds-layout-card.is-drop-target,.bds-layout-row.is-drop-target').forEach(el=>el.classList.remove('is-drop-target'));}
+function bdsLayoutClearDrag(){bdsLayoutDragKey=null;bdsLayoutDragSub=false;bdsLayoutClearDropStyles();}
 function bdsLayoutDrop(event,row,before){
  event.preventDefault();
  const key=bdsLayoutDragKey;
