@@ -874,7 +874,7 @@ body.is-admin #page-admin.admin-page-active{display:flex !important;flex-directi
 .access-chat-brand{display:flex;align-items:center;gap:12px;}
 .access-chat-logo{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(145deg,#2563eb,#06b6d4);box-shadow:0 6px 20px rgba(14,165,233,.22);font-size:1.25rem;}
 .access-chat-kicker{font-size:.56rem;letter-spacing:2px;font-weight:900;color:#38bdf8;text-transform:uppercase;}
-.access-chat-title{font-family:'Barlow Condensed',sans-serif;font-size:1.55rem;font-weight:900;letter-spacing:1px;margin-top:2px;}
+.access-chat-title{font-family:'Barlow Condensed',sans-serif;font-size:1.08rem;font-weight:900;letter-spacing:.8px;margin-top:2px;line-height:1.1;}
 .access-chat-sub{font-size:.7rem;color:var(--muted);margin-top:4px;}
 .access-chat-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .access-live-pill,.access-open-pill{font-size:.6rem;border-radius:20px;padding:7px 10px;font-weight:900;white-space:nowrap;letter-spacing:.4px;}
@@ -6328,6 +6328,14 @@ function accessQuickReply(text){
   if(textEl) textEl.value=text;
   accessSendRequest(text);
 }
+function accessScrollToLatest(){
+  const el=document.getElementById('access-chat-messages');
+  if(!el) return;
+  const apply=function(){el.scrollTop=el.scrollHeight;};
+  requestAnimationFrame(apply);
+  setTimeout(apply,40);
+  setTimeout(apply,120);
+}
 function accessRenderMessages(){
   const el=document.getElementById('access-chat-messages');if(!el)return;
   accessUpdateChatIdentity();
@@ -6374,7 +6382,8 @@ function accessRenderMessages(){
       '<div class="access-msg-content"><div class="access-msg-header"><div class="access-msg-meta"><span class="access-msg-name">'+accessEscape(label)+'</span><span class="access-msg-team">'+accessEscape(teamLabel)+'</span>'+(unread?'<span class="access-msg-unread-dot" title="Unread">●</span>':'')+'</div><time class="access-msg-time"'+(timestamp!==null?' datetime="'+new Date(timestamp).toISOString()+'"':'')+'>'+accessEscape(time)+'</time></div>'+
       '<div class="access-msg-text">'+accessEscape(m.text||'')+'</div>'+(m.status==='resolved'?'<div class="access-resolved-label">✓ Resolved</div>':'')+actions+'</div></div></div>';
   }).join('');
-  if(nearBottom&&!accessChatSearchQuery&&!accessChatUnreadOnly&&accessChatTeamFilter==='ALL')el.scrollTop=el.scrollHeight;
+  if(!accessChatSearchQuery&&!accessChatUnreadOnly&&accessChatTeamFilter==='ALL') accessScrollToLatest();
+  else if(nearBottom) accessScrollToLatest();
   else el.scrollTop=previousTop;
 }
 async function accessDeleteMessage(button){
@@ -8867,7 +8876,7 @@ function switchTab(tab){
   const btn=document.getElementById('tab-'+tab);
   if(page) page.classList.add('active');
   if(btn) btn.classList.add('active');
-  if(tab==='access-chat'){accessRenderMessages();accessClearNewMessageTab();}
+  if(tab==='access-chat'){accessRenderMessages();accessClearNewMessageTab();setTimeout(accessScrollToLatest,20);}
   if(tab==='timeoff')toOpenPortal();
   toRenderReminders();
   accessUpdateChatBubbleVisibility();
