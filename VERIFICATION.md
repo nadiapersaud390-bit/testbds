@@ -1,27 +1,26 @@
-# Verification · 15 October 2026
+# Verification · 15 October 2026 · r4
 
-## Current popup update: passed
+## Chatroom Team Access update: passed in isolated Chromium
 
-- HTML contains all 16 Admin Panel sub-tab buttons and their matching permission options.
-- All inline JavaScript parsed successfully with Node.js syntax validation.
-- Isolated Chromium checks used sample administrator objects, with no connection to the live Firebase database.
-- All Firebase admin records appear in a searchable list, with the legacy numeric login labeled separately.
-- An individual administrator opens in a modal with exactly 16 sub-tabs, 14 assignable checkboxes and two permanently Rose-only disabled checkboxes.
-- Existing per-admin selections appear correctly. The list distinguishes active/disabled accounts and shows the number of permitted tabs.
-- Allow All, Hide All, single-checkbox toggling, the allowed-tab count, and access-state labels work.
-- Save Access passed the selected admin's exact `adminTabPermissions` array to a mocked Firestore account update; closing the modal did not save.
-- Permission checks allowed the enabled admin sub-tabs and concealed denied tabs for a simulated non-Rose session.
-- Rose's own popup is read-only and shows all 16 tabs enabled.
-- Search and Escape-to-close worked. Desktop and 390px mobile popup inspections showed no horizontal page overflow.
+- All three inline JavaScript blocks passed Node.js `--check`.
+- Rose's User Management panel displays three independently configurable checkbox options: Berbice, Providence (PR), and Remote.
+- Initial configured mock state gives BB and PR chatroom access, with Remote not allowed.
+- Changing PR in the Rose controls wrote the expected `PR:false` to the mocked Firestore transaction, leaving other team flags unaffected.
+- Disabled PR or Remote users did not see the Access Needed tab or floating Chat button; `switchTab('access-chat')` did not open the chatroom.
+- A currently allowed Berbice agent could enter the chat; a subsequent live team disable hid the controls, changed back to Script, unsubscribed the chat listener, and cleared cached chat messages.
+- Team changes and a subsequent permission enable refreshed visibility without restarting the dashboard.
+- A simulated settings read error prevented agent chat access while retaining administrator access and surfacing an error on Rose's management screen.
+- The real `accessStartChat()` implementation short-circuited before touching Firestore when the account was not allowed to use chat.
+- At a 390px viewport there was no horizontal document overflow.
 
-## Inherited functionality
+## Administrator permissions popup: regression passed
 
-The input package reported 34 isolated workflow integration checks and Chromium tests for time-off requests, reminders, create-admin, password reset, and disabled-admin signout. Those original tests were **not** rerun against this revised UI in the current execution environment. The underlying workflow functions were left in place.
+- Existing administrator search and list, 16-tab popup, 14 selectable permissions, Rose-only protections, Allow All/Hide All, per-admin Save Access update payload, and 390px layout checks passed again.
+- The time-off workflow's earlier integration tests were not rerun as part of this chat access change.
 
-## Not verified against the live service
+## Verification limitations
 
-- Existing Firebase security rules, deployed backend or Firebase Authentication configuration.
-- Actual Firestore permission writes, cross-client access propagation, transaction latency and account lists from production.
-- Hosting deployment and Firebase app-version settings.
-
-The inherited page relies on browser-side role checks and anonymous Firebase sessions; hiding a tab is not server-side access enforcement. The built-in legacy administrator also remains outside the per-account permissions system. The app needs trusted administrator identities and restrictive Firestore rules or server-side enforcement to prevent unauthorized direct database access.
+- Tests used mocked Firestore results, not the user's production database or deployed Security Rules.
+- Inline Firestore permission checks rely on the inherited client-side authentication and are **not server-enforced data access controls**.
+- Real authentication, cross-client synchronization in production, live data access, and write permissions for `app_settings/chatroom_access` still need testing after deployment.
+- No live deployment, Firestore Security Rules changes, or Firebase database mutations were performed.

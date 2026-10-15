@@ -30,7 +30,7 @@ const auth = firebase.auth();
 // Update this string every time you deploy a new version.
 // The Firestore doc settings/app_version { v: "..." } must match.
 // When they differ, a reload banner appears for all logged-in users.
-const APP_VERSION = '2026-10-15-admin-permissions-popup-r3';
+const APP_VERSION = '2026-10-15-chatroom-team-access-r4';
 
 // Dark theme only.
 document.documentElement.setAttribute('data-theme', 'dark');
@@ -1887,7 +1887,24 @@ input, textarea, select { color-scheme: dark; }
 .to-row-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.to-row-actions button{padding:6px 12px;border-radius:7px;cursor:pointer}
 @media(max-width:550px){.to-day{min-height:58px;padding:3px;font-size:.6rem}.to-event{font-size:.55rem}}
 
-/* Responsive full-width final navigation button and Rose permissions */
+ /* Rose-controlled access to the existing Access Needed group chat */
+ .ru-chat-access{margin:22px 0 20px;padding:18px;border:1px solid #2e4866;border-radius:14px;background:linear-gradient(130deg,#101d30,#0a1625);}
+ .ru-chat-access-header{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;flex-wrap:wrap;}
+ .ru-chat-access-header h3{font-family:'Barlow Condensed',sans-serif;letter-spacing:.7px;color:#f0f7ff;font-size:1.25rem;margin:0 0 7px;}
+ .ru-chat-access-header p,.ru-chat-note{font-size:.75rem;line-height:1.6;color:#9fb1cd;margin:0;}
+ .ru-chat-live{font-size:.57rem;font-weight:800;letter-spacing:.9px;border-radius:25px;padding:8px 10px;border:1px solid #28645f;color:#65e2c2;background:#10332f;white-space:nowrap;}
+ .ru-chat-team-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:10px;margin:16px 0 12px;}
+ .ru-chat-team{display:flex;align-items:center;gap:12px;padding:14px;background:#0e1b2c;border:1px solid #2b405b;border-radius:12px;cursor:pointer;min-height:72px;}
+ .ru-chat-team:has(input:checked){border-color:#267d83;background:#102d38;}
+ .ru-chat-team input{width:19px;height:19px;flex:none;accent-color:#22c7ac;cursor:pointer;}
+ .ru-chat-team-info{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0;}
+ .ru-chat-team-name{font-size:.82rem;font-weight:800;color:#f0f7ff;}
+ .ru-chat-team-state{font-size:.65rem;color:#a9bbd0;}
+ .ru-chat-team:has(input:checked) .ru-chat-team-state{color:#6fe4be;}
+ .ru-chat-team input:disabled{opacity:.55;cursor:wait;}
+ .ru-chat-note{margin-top:6px;}
+ @media(max-width:550px){.ru-chat-access{padding:14px}.ru-chat-team-list{grid-template-columns:1fr}}
+ /* Responsive full-width final navigation button and Rose permissions */
 #tab-access-chat{grid-column:1/-1!important;}
 .rose-permission-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin:10px 0 16px;}
 .rose-permission-grid label{display:flex;align-items:center;gap:9px;padding:10px 12px;background:#101b2c;border:1px solid #2b3d55;border-radius:9px;font-size:.78rem;cursor:pointer;}
@@ -2631,7 +2648,7 @@ input, textarea, select { color-scheme: dark; }
             <div>
             <div class="access-chat-kicker">Team support channel</div>
             <div class="access-chat-title">Access Needed</div>
-          <div class="access-chat-sub">Team messages sync live through Firebase. Everyone can see the sender name and team.</div>
+          <div class="access-chat-sub">Messages are shared only with enabled teams and administrators in the dashboard.</div>
             </div>
           </div>
           <div class="access-chat-tools">
@@ -2657,7 +2674,7 @@ input, textarea, select { color-scheme: dark; }
               <textarea class="access-input access-textarea" id="access-request-text" placeholder="Type your message here..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();accessSendRequest();}"></textarea>
               <button class="access-send-btn" id="access-send-btn" onclick="accessSendRequest()">SEND MESSAGE</button>
             </div>
-            <div class="access-compose-note">Your name and team are automatically shown to everyone in the chat. Press Enter to send.</div>
+            <div class="access-compose-note">Your name and team are shown to other chatroom participants. Press Enter to send.</div>
             <div id="access-compose-status" style="font-size:.65rem;color:var(--muted);min-height:18px;margin-top:5px;"></div>
           </div>
         </div>
@@ -2727,6 +2744,13 @@ input, textarea, select { color-scheme: dark; }
       <label><input id="ru-show-password" type="checkbox" onchange="document.getElementById('ru-password').type=this.checked?'text':'password'"> Show password</label>
       </div><h4>Admin Panel tab access</h4><div id="ru-create-permissions" class="rose-permission-grid"></div><button class="btn btn-p" type="submit">CREATE ADMIN</button><span class="to-message" id="ru-status"></span></form>
       </details>
+      <section class="ru-chat-access" aria-labelledby="ru-chat-access-title">
+        <div class="ru-chat-access-header"><div><h3 id="ru-chat-access-title">💬 Chatroom Team Access</h3>
+        <p>Select which teams can see and use <strong>Access Needed / Group Chat</strong>. Disabled teams won't see the chatroom tab or the floating Chat button.</p></div>
+        <span class="ru-chat-live">● LIVE TEAM CONTROL</span></div>
+        <div id="ru-chat-team-list" class="ru-chat-team-list" aria-live="polite">Loading chatroom access…</div>
+        <p class="ru-chat-note">Without saved settings, Berbice and Providence start enabled and Remote starts hidden. Choose each team separately. Administrators retain access to assist agents.</p>
+      </section>
       <h3>Time-off request access</h3><div id="ru-team-list"></div>
     </div></div>
     <!-- ── DAILY OVERVIEW ── -->
@@ -5500,6 +5524,14 @@ let accessTitleBeforeNotify = '';
 let accessNotificationAudioContext = null;
 let accessVoiceAlertsReady = false;
 let accessVoiceUnlockBound = false;
+// Group chat team permissions, independent of the time-off team switches.
+// Missing settings preserve Berbice and Providence access, but exclude Remote.
+let accessChatTeamEnabled = {BB:true, PR:true, REMOTE:false};
+let accessChatSettingsReady = false;
+let accessChatSettingsError = '';
+let accessChatSettingsUnsub = null;
+let accessChatSettingsGeneration = 0;
+let accessChatTeamSavePending = new Set();
 
 function accessEscape(value){
   return String(value == null ? '' : value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
@@ -5681,10 +5713,74 @@ function accessSpeakNotification(senderName){
   const sender=String(senderName||'the agent').replace(/[\r\n<>]/g,' ').trim().slice(0,80)||'the agent';
   accessSpeakText('Access is needed for '+sender+'.');
 }
+function accessCanUseChat(){
+  if(!currentUser) return false;
+  if(currentUser.isAdmin) return true; // Admins supervise the shared group chat.
+  const team=toTeam(currentUser.team);
+  return accessChatSettingsReady && accessChatTeamEnabled[team]===true;
+}
+function accessStopChatSession(){
+  accessChatListenerGeneration++;
+  if(accessChatReconnectTimer){clearTimeout(accessChatReconnectTimer);accessChatReconnectTimer=null;}
+  if(accessChatUnsubscribe){accessChatUnsubscribe();accessChatUnsubscribe=null;}
+  accessChatMessages=[];accessChatKnownMessageIds.clear();
+  accessChatSubscriberKey='';accessChatMessageBaselineReady=false;
+  accessChatAdminBaselineReady=false;accessChatLastAdminRequestCount=0;
+  accessChatConnectionState='offline';
+  accessClearNewMessageTab();
+  if(accessMessageToastTimer){clearTimeout(accessMessageToastTimer);accessMessageToastTimer=null;}
+  const toast=document.getElementById('access-message-toast');if(toast)toast.classList.remove('show');
+  const adminAlert=document.getElementById('access-admin-alert');if(adminAlert)adminAlert.remove();
+  const content=document.getElementById('access-chat-messages');if(content)content.innerHTML='';
+}
+function accessApplyChatTeamAccess(){
+  const allowed=accessCanUseChat();
+  const tab=document.getElementById('tab-access-chat');
+  if(tab){tab.style.display=allowed?'':'none';tab.hidden=!allowed;}
+  accessSetChatBubbleVisible(allowed);
+  const page=document.getElementById('page-access-chat');
+  if(!allowed){
+    if(accessChatUnsubscribe||accessChatReconnectTimer||accessChatMessages.length||accessChatSubscriberKey){accessStopChatSession();}
+    if(page?.classList.contains('active'))switchTab('script');
+  }else if(!accessChatUnsubscribe && currentUser){
+    accessStartChat({reason:'team-access'});
+  }
+  if(isRoseAdmin())roseRenderChatTeams();
+}
+function accessStopChatSettings(){
+  accessChatSettingsGeneration++;
+  if(accessChatSettingsUnsub){accessChatSettingsUnsub();accessChatSettingsUnsub=null;}
+  accessChatSettingsReady=false;accessChatSettingsError='';
+  accessChatTeamEnabled={BB:true,PR:true,REMOTE:false};
+  accessChatTeamSavePending.clear();
+  accessStopChatSession();
+  accessSetChatBubbleVisible(false);
+  const tab=document.getElementById('tab-access-chat');if(tab){tab.hidden=true;tab.style.display='none';}
+  const list=document.getElementById('ru-chat-team-list');if(list)list.textContent='';
+}
+function accessListenChatSettings(){
+  accessStopChatSettings();
+  if(!currentUser) return;
+  const session=accessChatSettingsGeneration;
+  accessApplyChatTeamAccess(); // Admins can moderate; agents remain hidden until settings arrive.
+  accessChatSettingsUnsub=db.collection('app_settings').doc('chatroom_access').onSnapshot({includeMetadataChanges:true},snap=>{
+    if(session!==accessChatSettingsGeneration||!currentUser)return;
+    if(snap.metadata?.fromCache){accessChatSettingsReady=false;accessChatSettingsError='';accessApplyChatTeamAccess();return;}
+    const d=snap.data()||{};
+    accessChatTeamEnabled={BB:d.BB!==false,PR:d.PR!==false,REMOTE:d.REMOTE===true};
+    accessChatSettingsReady=true;accessChatSettingsError='';
+    accessApplyChatTeamAccess();
+  },error=>{
+    if(session!==accessChatSettingsGeneration||!currentUser)return;
+    accessChatSettingsReady=false;
+    accessChatSettingsError=typeof toError==='function'?toError(error):String(error);
+    accessApplyChatTeamAccess(); // Fail closed for agent access on a settings read error.
+  });
+}
 function accessSetChatBubbleVisible(visible){
   const bubble=document.getElementById('access-chat-bubble');
   if(!bubble) return;
-  bubble.classList.toggle('show',!!visible);
+  bubble.classList.toggle('show',!!visible && accessCanUseChat());
   if(!visible) bubble.classList.remove('hidden-for-chat');
   accessUpdateChatBubbleVisibility();
 }
@@ -5692,7 +5788,7 @@ function accessUpdateChatBubbleVisibility(){
   const bubble=document.getElementById('access-chat-bubble');
   if(!bubble) return;
   const page=document.getElementById('page-access-chat');
-  bubble.classList.toggle('hidden-for-chat',!!(page && page.classList.contains('active')));
+  bubble.classList.toggle('hidden-for-chat',!accessCanUseChat() || !!(page && page.classList.contains('active')));
 }
 function accessInitChatBubble(){
   const bubble=document.getElementById('access-chat-bubble');
@@ -5764,6 +5860,7 @@ function accessRenderMessages(){
   el.scrollTop=el.scrollHeight;
 }
 async function accessDeleteMessage(button){
+  if(!accessCanUseChat())return;
   const id=button && button.getAttribute('data-message-id');
   const message=accessChatMessages.find(function(item){return String(item.id)===String(id);});
   if(!id || !message || !currentUser) return;
@@ -5771,7 +5868,7 @@ async function accessDeleteMessage(button){
   if(!allowed) return;
   if(!window.confirm('Delete this chat message?')) return;
   button.disabled=true;button.textContent='DELETING...';
-  try{await ensureFirebaseAuth();await db.collection('access_group_chat').doc(id).delete();}
+  try{await ensureFirebaseAuth();if(!accessCanUseChat())return;await db.collection('access_group_chat').doc(id).delete();}
   catch(e){button.disabled=false;button.textContent='DELETE';window.alert('Could not delete message: '+(e.message||'Firebase error'));}
 }
 function accessShowAdminAlert(requests){
@@ -5814,7 +5911,7 @@ function accessShowNewMessageNotification(message){
 }
 async function accessStartChat(options){
   options=options||{};
-  if(!currentUser) return;
+  if(!accessCanUseChat()) return;
   accessBindChatConnectionRecovery();
   const subscriberKey=(currentUser.isAdmin?'admin:':'agent:')+String(currentUser.id||currentUser.username||'');
   if(accessChatSubscriberKey!==subscriberKey){
@@ -5836,13 +5933,13 @@ async function accessStartChat(options){
     accessScheduleChatReconnect();
     return;
   }
-  if(generation!==accessChatListenerGeneration||!currentUser) return;
+  if(generation!==accessChatListenerGeneration||!accessCanUseChat()) return;
   syncFirebaseClock().catch(function(e){console.warn('Access chat Firebase clock sync failed:',e);});
   if(currentUser.isAdmin && typeof Notification!=='undefined' && Notification.permission==='default'){
     try{Notification.requestPermission().catch(function(){});}catch(e){}
   }
   accessChatUnsubscribe=db.collection('access_group_chat').onSnapshot({includeMetadataChanges:true},function(snap){
-    if(generation!==accessChatListenerGeneration||!currentUser) return;
+    if(generation!==accessChatListenerGeneration||!accessCanUseChat()) return;
     const allMessages=[];
     snap.forEach(function(doc){allMessages.push(Object.assign({id:doc.id},doc.data()));});
     allMessages.sort(accessCompareMessages);
@@ -5881,7 +5978,7 @@ async function accessStartChat(options){
   });
 }
 async function accessSendRequest(prefilledText){
-  if(!currentUser) return;
+  if(!accessCanUseChat()) return;
   const textEl=document.getElementById('access-request-text'), btn=document.getElementById('access-send-btn'), status=document.getElementById('access-compose-status');
   const text=String(prefilledText!=null?prefilledText:(textEl && textEl.value||'')).trim(), accessType='Other';
   const senderName=currentUser.name||currentUser.username||'Admin';
@@ -5889,6 +5986,7 @@ async function accessSendRequest(prefilledText){
   btn.disabled=true;btn.textContent='SENDING...';if(status) status.textContent='';
   try{
     await ensureFirebaseAuth();
+    if(!accessCanUseChat())throw Error('Chatroom access is not enabled for your team.');
     await db.collection('access_group_chat').add({
       text:text,accessType:accessType,isAccessRequest:true,status:'open',
       senderId:String(currentUser.id||''),senderName:senderName,team:currentUser.team||'',
@@ -6230,7 +6328,7 @@ function showDashboard(){
 
   const u = currentUser;
   accessInitChatBubble();
-  accessSetChatBubbleVisible(true);
+  accessListenChatSettings();
   accessPrimeNotificationAudio();
   accessUpdateVoiceControl();
   accessBindVoiceUnlock();
@@ -6568,6 +6666,7 @@ function scheduleMidnightLogout(){
 // ── LOGOUT ──
 function doLogout(auto=false){
   roseClosePermissionModal();
+  accessStopChatSettings();
   toStop();
   if(roseAdminAccountUnsub){roseAdminAccountUnsub();roseAdminAccountUnsub=null;}
   clearTimeout(midnightTimer);
@@ -8236,6 +8335,7 @@ async function roseDeleteArchivedProfiles(keys){
 function roseBulkDeleteArchivedSelected(){ return roseDeleteArchivedProfiles([...roseArchiveSelected]); }
 
 function switchTab(tab){
+  if(tab==='access-chat' && !accessCanUseChat())return;
   document.querySelectorAll('.tab-page').forEach(p=>{
     p.classList.remove('active');
     p.classList.remove('admin-page-active');
@@ -13899,7 +13999,7 @@ function toRefreshRequestAccess(){
 function toListen(){
  if(!currentUser)return;if(toSessionKey===String(currentUser.id)){toRefreshRequestAccess();return;}toStop();toSessionKey=String(currentUser.id);const gen=toGeneration;
  toSettingsUnsub=db.collection('app_settings').doc('time_off_access').onSnapshot(s=>{if(gen!==toGeneration)return;const d=s.data()||{};toTeamEnabled={BB:d.BB!==false,PR:d.PR!==false,REMOTE:d.REMOTE!==false};toSettingsReady=true;toRenderMine();if(isRoseAdmin())roseRenderTeams();},error=>{if(gen!==toGeneration)return;toSettingsReady=false;toRenderMine();document.getElementById('to-sync-status').textContent=toError(error);document.getElementById('ru-team-list').textContent=toError(error);});
- if(!currentUser.isAdmin)toRosterUnsub=db.collection('roster').doc(String(currentUser.id)).onSnapshot(s=>{if(gen!==toGeneration)return;const profile=s.exists?rosterAgentFromDoc(s):null;toRosterReady=!!profile;if(profile)currentUser.team=profile.team;toRenderMine();},e=>{toRosterReady=false;toRenderMine();document.getElementById('to-sync-status').textContent=toError(e);});
+ if(!currentUser.isAdmin)toRosterUnsub=db.collection('roster').doc(String(currentUser.id)).onSnapshot(s=>{if(gen!==toGeneration)return;const profile=s.exists?rosterAgentFromDoc(s):null;toRosterReady=!!profile;if(profile)currentUser.team=profile.team;accessApplyChatTeamAccess();toRenderMine();},e=>{toRosterReady=false;toRenderMine();document.getElementById('to-sync-status').textContent=toError(e);});
  toRefreshRequestAccess();toReminderTimer=setInterval(()=>{document.getElementById('to-date').min=toToday();toRenderReminders();},30000);toRenderMine();
 }
 function toOpenPortal(){if(!currentUser||currentUser.isAdmin)return;document.getElementById('to-date').min=toToday();toTypeChanged();toListen();toRenderMine();}
@@ -14142,7 +14242,7 @@ function roseResetSelectedAdminPassword(){if(roseSelectedAdmin)roseResetAdminPas
 
 // ---- Rose-only administrator management ----
 function roseOpenUsers(){
- if(!isRoseAdmin())return;roseRenderTeams();roseSetupCreatePermissions();
+ if(!isRoseAdmin())return;roseRenderTeams();roseRenderChatTeams();roseSetupCreatePermissions();
  if(toAdminsUnsub)toAdminsUnsub();
  const generation=toGeneration;
  toAdminsUnsub=db.collection('admin_accounts').onSnapshot(s=>{
@@ -14155,6 +14255,29 @@ function roseOpenUsers(){
 function roseRenderTeams(){const el=document.getElementById('ru-team-list');if(!el||!isRoseAdmin())return;
  if(!toSettingsReady){el.textContent='Loading team access…';return;}
  el.innerHTML=toTeams.map(t=>`<div class="to-entry"><label><input type="checkbox" ${toTeamEnabled[t]?'checked':''} onchange="roseSetTeam('${t}',this.checked)"> ${toTeamLabel(t)}: Allow agents to submit new requests</label></div>`).join('');}
+function roseRenderChatTeams(){
+ const el=document.getElementById('ru-chat-team-list');
+ if(!el||!isRoseAdmin())return;
+ if(accessChatSettingsError){el.textContent='Could not read chatroom settings: '+accessChatSettingsError;return;}
+ if(!accessChatSettingsReady){el.textContent='Loading chatroom team settings…';return;}
+ el.innerHTML=toTeams.map(team=>{
+  const enabled=accessChatTeamEnabled[team]===true;
+  const pending=accessChatTeamSavePending.has(team);
+  return '<label class="ru-chat-team"><input type="checkbox" aria-label="Allow '+toTeamLabel(team)+' chatroom" '+(enabled?'checked ':'')+(pending?'disabled ':'')+
+    'onchange="roseSetChatTeam(&#39;'+team+'&#39;,this.checked)"><span class="ru-chat-team-info"><span class="ru-chat-team-name">'+toTeamLabel(team)+'</span><span class="ru-chat-team-state">'+(pending?'Saving…':enabled?'✓ Can view and send messages':'Hidden · No chatroom access')+'</span></span></label>';
+ }).join('');
+}
+async function roseSetChatTeam(team,enabled){
+ if(!isRoseAdmin()||!toTeams.includes(team)||!accessChatSettingsReady||accessChatTeamSavePending.has(team))return;
+ accessChatTeamSavePending.add(team);roseRenderChatTeams();
+ try{
+  await db.runTransaction(async tx=>{
+   await toVerifyAdmin(tx,true);
+   tx.set(db.collection('app_settings').doc('chatroom_access'),{[team]:enabled,updatedBy:'rose',updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+  });
+ }catch(error){alert('Could not update chatroom access: '+toError(error));}
+ finally{accessChatTeamSavePending.delete(team);roseRenderChatTeams();}
+}
 async function roseSetTeam(team,enabled){if(!isRoseAdmin()||!toTeams.includes(team))return;
  try{await db.runTransaction(async tx=>{await toVerifyAdmin(tx,true);tx.set(db.collection('app_settings').doc('time_off_access'),{[team]:enabled,updatedBy:'rose',updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});});}catch(e){alert('Could not update team: '+e.message);roseRenderTeams();}}
 async function roseCreateAdmin(e){e.preventDefault();if(!isRoseAdmin())return;const status=document.getElementById('ru-status'),btn=e.target.querySelector('button[type=submit]');
