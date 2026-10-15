@@ -1,3 +1,15 @@
+# Administrator creation and legacy-login conversion (2026-10-15, r5)
+
+This package preserves the previous User Management popup, time-off workflows, and team Chatroom Access switches. It adds:
+
+- A visible **+ CREATE NEW ADMIN** action that opens a password-and-permissions form. On successful save, Firestore `admin_accounts/{username}` contains a password **hash**, not a readable password.
+- A password generator and **one-time credential window** after successful account creation or password reset. Rose may click SHOW and COPY before closing the window. Previously saved passwords remain unrecoverable.
+- An explicit **Convert @0000 to Managed Admin** action. The built-in `0000` password path has been removed from this HTML. Rose must log in with her own account, create the `admin_accounts/0000` document through the conversion flow, choose its permissions, and set a new password. That account is a regular admin, not a superadmin.
+
+**Important deployment impact:** do not publish r5 until you have verified Rose can log in without `@0000`, or you could lose access to User Management. This build does not deploy to Firebase, and it cannot change deployed Firestore Security Rules. The inherited browser-side password system is not production-grade. Firebase Auth identities and server-enforced authorization are required for real security; an old deployed copy of the website could still accept the legacy password.
+
+---
+
 # BDS Dashboard · Rose administrator permissions and chatroom team access
 
 Updated: 15 October 2026 · Chatroom team access update (r4)
@@ -34,21 +46,21 @@ Reminders require the dashboard to be open and connected. They are not email, pu
 
 Rose has superadmin controls in the dashboard:
 
-- Create an administrator with a username, display name and password.
+- Click the prominent **+ CREATE NEW ADMIN** button to create an administrator with a username, display name and an initial password, then save the account to Firestore. The form also includes a strong-password generator.
 - Select which Admin Panel sub-tabs new administrators can see, including Calendar access.
-- See **all Firebase administrator accounts in a searchable list** under Admin Panel → User Management. The built-in numeric legacy administrator is also listed, clearly marked as not manageable from this screen.
+- See **all Firebase administrator accounts in a searchable list** under Admin Panel → User Management. The former numeric @0000 login is shown with a **Convert @0000 to Managed Admin** button until Rose creates its Firestore record. After conversion it becomes a normal editable admin.
 - Click **Manage Access** on an administrator to open a popup with **all 16 Admin Panel sub-tabs**. Fourteen are individually assignable. **User Management** and **Missing From Stats** are displayed as permanently Rose-only.
 - Check or uncheck tabs to grant or hide them; the popup shows **Allowed / Visible** or **Hidden / No access**, a selected-tab count, **Allow All**, **Hide All**, and **Save Access**. Nothing changes until Save Access succeeds. Each admin's permissions are stored separately in `admin_accounts/{username}.adminTabPermissions`.
 - Rose's own row shows her permanent superadmin access, without editable permissions.
 - Enable or disable an administrator. Disabling signs out an active session when the live update arrives.
 - Set a replacement password. Resetting a password invalidates the administrator's older sessions.
-- Show or hide a password while entering or resetting it, including from the selected administrator's access popup. Saved passwords cannot be displayed because the existing application stores only hashes.
+- Show or hide a password while entering or resetting it. After a successful Firestore create or reset, **Rose can show or copy that newly set password once**. The one-time window clears the readable password when closed. Existing passwords cannot be retrieved from saved hashes.
 - Allow or hide new time-off requests separately for Berbice, Providence and Remote.
 - **New:** Under User Management, configure which agent teams can see and use the **Access Needed / Group Chat** with separate Berbice, Providence (PR), and Remote switches.
 
 Turning a team off blocks new submissions and hides the request form. Agents with earlier requests retain **My Requests**. Existing requests, approvals and administrator reminders remain intact.
 
-Passwords must contain 10–128 characters, with no leading or trailing spaces. Usernames begin with a letter, contain 3–32 characters, and may include letters, numbers, periods, underscores and hyphens. Duplicate usernames are rejected. Rose's account is protected from these enable/disable and reset controls. The pre-existing numeric legacy administrator login is listed for visibility, but it is a built-in login, not a manageable Firestore administrator. To place that login under proper permissions control, replace and migrate that legacy authentication path to trusted administrator authentication; merely rendering it in a list is not an access-control change.
+Passwords must contain 10–128 characters, with no leading or trailing spaces. New user names begin with a letter, contain 3–32 characters, and may include letters, numbers, periods, underscores and hyphens. The former legacy name `0000` is additionally accepted as a dedicated conversion account. Duplicate usernames are rejected. Rose's account is protected from these enable/disable and reset controls. **Migration change in r5:** The previous built-in `@0000` username/password login is no longer accepted **by this version of the dashboard**. An existing session saved under `authSource: legacy` will be rejected on page reload. To restore `@0000` as a usable login, Rose must first sign in with her existing Rose username, then use **Convert @0000 to Managed Admin**, select the sub-tabs allowed, enter a NEW password, and save it. The result is saved as `admin_accounts/0000` and behaves like any other admin, without superadmin rights. Previous @0000 sessions and the old static password are not carried forward. Earlier copies of the website may still contain the old client-side login; removing the static password from this HTML is not server-side revocation.
 
 ## Chatroom team access
 
@@ -67,8 +79,8 @@ Rose can manage **Admin Panel → User Management → Chatroom Team Access**, in
 
 1. Keep your current deployed file as a backup.
 2. Upload this `index.html` in place of the existing dashboard's `index.html`.
-3. In the existing Firebase version document, set `settings/app_version.v` to `2026-10-15-chatroom-team-access-r4` so the dashboard's version check matches the deployed file.
-4. Refresh the dashboard. Log in as Rose, open **Admin Panel → User Management**, then select **Manage Access** next to each admin to set its sub-tabs. In the same User Management screen, select which teams can use **Chatroom Team Access**.
+3. In the existing Firebase version document, set `settings/app_version.v` to `2026-10-15-managed-legacy-admin-create-r5` so the dashboard's version check matches the deployed file.
+4. Refresh the dashboard. Log in as Rose, open **Admin Panel → User Management**, then use **+ CREATE NEW ADMIN** to add admins or **Convert @0000 to Managed Admin** to activate the former numeric login with a NEW password. Select **Manage Access** to set exact sub-tabs, and use the Chatroom Team Access switches to decide which teams see group chat.
 5. Verify one test request and decision against your actual Firebase project. Sign in as a test Berbice or PR agent and verify that disabling their team hides both chatroom entry points. Confirm changes propagate to open dashboard sessions.
 
 No live deployment or production database changes were made while preparing this ZIP.
@@ -78,7 +90,7 @@ No live deployment or production database changes were made while preparing this
 Existing records and settings remain compatible:
 
 - `roster/{agentId}`: agent identity and current team.
-- `admin_accounts/{username}`: existing admin login records, `adminTabPermissions`, and the new `sessionVersion` field. Missing session versions default to 0.
+- `admin_accounts/{username}`: existing admin login records and any new records created by Rose (including `admin_accounts/0000` after explicit conversion), `adminTabPermissions`, and the `sessionVersion` field. Missing session versions default to 0.
 - `app_settings/time_off_access`: Boolean `BB`, `PR`, `REMOTE` switches; existing defaults are enabled.
 - **New:** `app_settings/chatroom_access`: independent Boolean `BB`, `PR`, `REMOTE` chatroom switches, plus `updatedBy` and `updatedAt`. On a missing document, defaults are BB=true, PR=true, REMOTE=false. A settings read failure hides chat from agents; Rose and other admins retain moderation access.
 - `time_off_requests/{requestId}`: requests and decisions.
@@ -86,7 +98,7 @@ Existing records and settings remain compatible:
 
 Agent time-off subscriptions query only their own requests. Admin request subscriptions run only when the account has Calendar access. Settings and roster subscriptions continue independently so access changes update live. Chat messages are subscribed to only while the dashboard allows that account access. No composite index is needed by the added queries.
 
-The upload did not include the project's deployed Firestore rules or a trusted backend. The inherited authentication uses anonymous Firebase sessions, browser-side administrator checks and SHA-256 password hashes. Application checks and hidden tabs are not server-side authorization. The inherited password hashing is not a production-grade password storage design. Firebase Auth identities with trusted roles and restrictive rules/backend validation are required to enforce administrator privileges and agent ownership against direct database requests. Do not open database rules merely to resolve a permission error. These backend controls were not changed or verified in this update.
+The upload did not include the project's deployed Firestore rules or a trusted backend. The inherited authentication uses anonymous Firebase sessions, browser-side administrator checks and SHA-256 password hashes. Application checks and hidden tabs are not server-side authorization. The inherited password hashing is not a production-grade password storage design. **Even after this update, these are not Firebase Authentication administrator accounts:** the current website uses anonymous Firebase Auth and browser-side password verification against Firestore. Firestore writes and access checks must be protected by a trusted backend and real user identities before production-grade administrative authorization can be claimed. Firebase Auth identities with trusted roles and restrictive rules/backend validation are required to enforce administrator privileges and agent ownership against direct database requests. Do not open database rules merely to resolve a permission error. These backend controls were not changed or verified in this update.
 
 ## Verification
 

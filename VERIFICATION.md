@@ -1,3 +1,17 @@
+# r5 User Management verification
+
+- JS syntax: checked with `node --check` after extracting all inline scripts.
+- Browser UI tested in a headless Chromium harness with **mock Firestore** and fake password-hash implementation. Neither production Firebase accounts nor live data were touched.
+- `@0000` unconverted placeholder displays a **Convert @0000 to Managed Admin** button.
+- Conversion form locks the account name to `0000` and records the selected 14 assignable sub-tabs in the mock Firestore document.
+- Successful conversion displays the initial password in a one-time modal and clears its value after closing.
+- An ordinary username can be created using **Create New Admin**. The generator returns a 20-character password, and the saved mock Firestore record does not contain a plaintext password property.
+- Converted `0000` account appears as a normal account after the mock snapshot is refreshed; **Manage Access** opens its 16-sub-tab popup.
+- Password reset shows the newly saved value once; a session-version increment invalidates old managed sessions on the next live update (code path inspected, not proven against a real Firebase server).
+- Real Firebase permission rules, Firebase Auth security, backend password hashing, live transaction authorization, and propagation to live sessions remain unverified and are outside this ZIP.
+
+---
+
 # Verification · 15 October 2026 · r4
 
 ## Chatroom Team Access update: passed in isolated Chromium
