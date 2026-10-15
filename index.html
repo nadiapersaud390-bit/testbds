@@ -2173,6 +2173,51 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
  .access-chat-body{grid-template-rows:minmax(320px,1fr) auto;}
 }
 
+
+/* R13: Rose-controlled role-specific navigation arrangement. */
+.top-tabs .nav-row-layout{gap:8px;min-width:0;}
+.top-tabs .nav-row-layout > .tab-btn,
+.top-tabs .nav-row-layout > .admin-tab-btn{
+  flex:1 1 calc((100% - (var(--bds-cols,3) - 1)*8px)/var(--bds-cols,3)) !important;
+  max-width:100%;min-width:0;grid-column:auto!important;
+}
+@media(max-width:800px){.top-tabs .nav-row-layout{--bds-cols:2!important;}}
+@media(max-width:480px){.top-tabs .nav-row-layout{gap:7px;--bds-cols:1!important;}}
+.ru-view-nav,.bds-layout-role-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:17px 0;padding:7px;border:1px solid #29405e;border-radius:13px;background:#0b1728;}
+.ru-view-nav button,.bds-layout-role-tabs button{flex:1;min-width:130px;min-height:39px;padding:8px 13px;border:1px solid transparent;border-radius:9px;background:transparent;color:#9ab0c9;font:900 .76rem 'Barlow Condensed',sans-serif;letter-spacing:.8px;cursor:pointer;}
+.ru-view-nav button.active,.bds-layout-role-tabs button.active{color:#effbff;border-color:#3281ba;background:#153553;box-shadow:0 5px 14px #0003;}
+.ru-user-view[hidden]{display:none!important;}
+.bds-layout-help{font-size:.77rem;line-height:1.6;color:#a6bad4;margin:6px 0 12px;}
+.bds-layout-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0;}
+.bds-layout-toolbar button,.bds-layout-row button,.bds-layout-card button,.bds-layout-subcard button{background:#14273f;border:1px solid #345270;border-radius:8px;color:#d9ecff;font-weight:800;cursor:pointer;padding:7px 10px;}
+.bds-layout-toolbar button:hover,.bds-layout-row button:hover,.bds-layout-card button:hover,.bds-layout-subcard button:hover{border-color:#6bbcff;background:#1b3859;}
+.bds-layout-toolbar button:disabled,.bds-layout-row button:disabled,.bds-layout-card button:disabled,.bds-layout-subcard button:disabled{opacity:.4;cursor:not-allowed;}
+.bds-layout-toolbar .bds-layout-save{background:#066e66;color:#e3fff7;border-color:#18a59b;padding:10px 17px;}
+.bds-layout-row{margin:10px 0;border:1px solid #2e4868;border-radius:13px;background:#0b192b;padding:12px;transition:border-color .15s,background .15s;}
+.bds-layout-row.is-drop-target,.bds-layout-card.is-drop-target{border-color:#3dd4c4;background:#14334a;}
+.bds-layout-row-header{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:space-between;margin-bottom:11px;}
+.bds-layout-row-title{font-weight:900;font-size:.79rem;color:#f2f8ff;}
+.bds-layout-row-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:.69rem;color:#aec2d7;}
+.bds-layout-row-controls select,.bds-layout-card select{background:#102039;border:1px solid #375274;border-radius:7px;color:#f3f7ff;padding:7px;max-width:135px;}
+.bds-layout-cards{display:grid;grid-template-columns:repeat(var(--preview-cols,3),minmax(0,1fr));gap:9px;min-height:41px;}
+.bds-layout-card{background:linear-gradient(145deg,#132943,#0c1d31);border:1px solid #385572;border-radius:10px;padding:10px;min-width:0;cursor:grab;}
+.bds-layout-card:active{cursor:grabbing;}
+.bds-layout-card-title{color:#e8f5ff;font-size:.76rem;font-weight:800;min-height:22px;overflow-wrap:anywhere;}
+.bds-layout-card-actions{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:9px;}
+.bds-layout-card-actions select{flex:1;font-size:.67rem;min-width:84px;max-width:160px;}
+.bds-layout-card-actions button{padding:6px 8px;}
+.bds-layout-empty{padding:11px 14px;color:#93afca;font-size:.7rem;border:1px dashed #406180;border-radius:9px;}
+.bds-layout-panel{border:1px solid #2d4563;border-radius:14px;background:linear-gradient(145deg,#111f32,#0b1525);padding:15px;margin:14px 0;}
+.bds-layout-panel h3{margin:0 0 7px;color:#eff6ff;}
+.bds-layout-subcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:8px;margin:12px 0;}
+.bds-layout-subcard{display:flex;align-items:center;gap:8px;justify-content:space-between;padding:9px;border:1px solid #2f4a67;border-radius:9px;background:#10243a;min-width:0;}
+.bds-layout-subcard strong{font-size:.72rem;color:#dcecff;overflow-wrap:anywhere;}
+.bds-layout-subcard button{padding:6px 8px;flex-shrink:0;}
+.bds-layout-status{font-size:.72rem;color:#b8e7fc;min-height:18px;}
+.bds-layout-tag{font-size:.61rem;border:1px solid #335573;color:#93bfdf;border-radius:20px;padding:5px 9px;white-space:nowrap;}
+@media(max-width:730px){.bds-layout-cards{grid-template-columns:repeat(min(2,var(--preview-cols,3)),minmax(0,1fr));}.bds-layout-panel{padding:11px;}.bds-layout-role-tabs button{min-width:90px;}}
+@media(max-width:480px){.bds-layout-cards{grid-template-columns:1fr;}.bds-layout-row-header{align-items:flex-start;}.bds-layout-card-actions select{max-width:100%;}}
+
 </style>
 </head>
 <body>
@@ -3022,7 +3067,13 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
       <h3>🎂 Saved Birthdays</h3><div id="cal-birthday-list" class="cal-birthday-list" aria-live="polite">Loading birthdays…</div>
     </div></div>
     <div id="admin-users" class="admin-section" style="display:none"><div class="admin-card">
-      <h2>🌹 User Management</h2><p>Rose-only administration. Create administrators, set tab permissions, reset credentials, and manage team access.</p>
+      <h2>🌹 User Management</h2><p>Rose-only administration. Manage accounts, teams, and separately arrange Agent, Admin and Rose dashboard tabs.</p>
+      <div class="ru-view-nav" role="tablist" aria-label="User Management sections">
+        <button type="button" id="ru-view-btn-accounts" class="active" role="tab" aria-selected="true" onclick="roseChooseUsersView('accounts')">👤 ADMIN ACCOUNTS</button>
+        <button type="button" id="ru-view-btn-teams" role="tab" aria-selected="false" onclick="roseChooseUsersView('teams')">👥 TEAM ACCESS</button>
+        <button type="button" id="ru-view-btn-layouts" role="tab" aria-selected="false" onclick="roseChooseUsersView('layouts')">🧩 TAB LAYOUT MANAGER</button>
+      </div>
+      <section class="ru-user-view" id="ru-view-accounts">
       <div class="ru-roster-title"><div><h3>All administrators</h3><p style="font-size:.79rem;color:var(--muted);margin:5px 0 0">Select <strong>Manage Access</strong> to choose each admin's main dashboard tabs, Admin Panel sub-tabs, and reset their login password.</p></div><button type="button" class="ru-create-action" id="ru-create-action" onclick="roseOpenCreateAdmin()">＋ CREATE NEW ADMIN</button></div>
       <div class="ru-toolbar"><input id="ru-admin-search" class="ru-search" type="search" placeholder="Search administrator by name or username" aria-label="Search administrators" oninput="roseFilterAdminList()"><span class="ru-count" id="ru-admin-count" aria-live="polite">Loading administrators…</span></div>
       <div id="ru-admin-list" aria-live="polite">Loading administrators…</div>
@@ -3035,6 +3086,8 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
       <div class="ru-password-tools"><label><input id="ru-show-password" type="checkbox" onchange="document.getElementById('ru-password').type=this.checked?'text':'password'"> Show password</label><button class="ru-btn" type="button" onclick="roseGenerateAdminPassword()">GENERATE STRONG PASSWORD</button></div>
       </div><h4>🏠 Main Dashboard Tabs</h4><p class="ru-create-help-text">Select which main buttons this administrator will see after login. Access Needed and Admin Panel can be controlled here too.</p><div id="ru-create-dashboard-permissions" class="rose-permission-grid"></div><h4>⚙️ Admin Panel Sub-tabs</h4><p class="ru-create-help-text">Choose the sections this administrator can open inside Admin Panel.</p><div id="ru-create-permissions" class="rose-permission-grid"></div><div class="ru-create-footer"><button class="btn btn-p" id="ru-create-save" type="submit">SAVE NEW ADMIN TO FIRESTORE</button><span class="to-message" id="ru-status" role="status" aria-live="polite"></span></div></form>
       </section>
+      </section>
+      <section class="ru-user-view" id="ru-view-teams" hidden>
       <section class="ru-chat-access" aria-labelledby="ru-chat-access-title">
         <div class="ru-chat-access-header"><div><h3 id="ru-chat-access-title">💬 Chatroom Team Access</h3>
         <p>Select which teams can see and use <strong>Access Needed / Group Chat</strong>. Disabled teams won't see the chatroom tab or the floating Chat button.</p></div>
@@ -3043,6 +3096,31 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
         <p class="ru-chat-note">Without saved settings, Berbice and Providence start enabled and Remote starts hidden. Choose each team separately. Administrators retain access to assist agents.</p>
       </section>
       <h3>Time-off request access</h3><div id="ru-team-list"></div>
+      </section>
+      <section class="ru-user-view" id="ru-view-layouts" hidden>
+        <div class="bds-layout-panel">
+          <h3>🧩 Navigation Tab Layout Manager</h3>
+          <p class="bds-layout-help">Arrange the buttons for Agents, Administrators and Rose independently. Drag buttons into a different row, or use Move to row and ▲ ▼ for keyboard or touchscreen control. Choose 1, 2 or 3 columns per row. Hidden tabs do not leave blank spaces. Tab visibility is still managed separately through administrator permissions and team settings.</p>
+          <div class="bds-layout-role-tabs" role="tablist" aria-label="Layout audience">
+            <button id="bds-layout-role-agent" type="button" onclick="bdsLayoutChooseRole('agent')" class="active" aria-selected="true">👤 AGENTS</button>
+            <button id="bds-layout-role-admin" type="button" onclick="bdsLayoutChooseRole('admin')" aria-selected="false">⚙️ ADMINS</button>
+            <button id="bds-layout-role-rose" type="button" onclick="bdsLayoutChooseRole('rose')" aria-selected="false">🌹 ROSE</button>
+          </div>
+          <div class="bds-layout-toolbar">
+            <span class="bds-layout-tag" id="bds-layout-current-role">Agent layout</span>
+            <button type="button" onclick="bdsLayoutAddRow()">＋ ADD ROW</button>
+            <button type="button" onclick="bdsLayoutResetToSaved()">↶ DISCARD CHANGES</button>
+            <button type="button" onclick="bdsLayoutResetToDefault()">RESET DEFAULT</button>
+          </div>
+          <div id="bds-layout-rows" aria-live="polite"></div>
+          <div id="bds-layout-subsection" class="bds-layout-panel" hidden>
+            <h3>⚙️ Admin Panel sub-tab order</h3>
+            <p class="bds-layout-help">These are the buttons inside Admin Panel. Choose a different order for regular administrators and Rose. Rose-only sub-tabs remain restricted regardless of their position.</p>
+            <div class="bds-layout-subcards" id="bds-layout-subtabs"></div>
+          </div>
+          <div class="bds-layout-toolbar"><button type="button" class="bds-layout-save" id="bds-layout-save" onclick="bdsLayoutSave()">SAVE THIS LAYOUT TO FIRESTORE</button><span class="bds-layout-status" id="bds-layout-status" role="status" aria-live="polite"></span></div>
+        </div>
+      </section>
     </div></div>
     <!-- ── DAILY OVERVIEW ── -->
     <div id="admin-overview" class="admin-section" style="display:none;">
@@ -6853,6 +6931,7 @@ function showDashboard(){
   init();
   loadCompanyName(); // always load latest name on dashboard show
   toListen();
+  bdsLayoutStartWatch();
 }
 
 // ══════════════════════════════════════════════
@@ -7094,6 +7173,7 @@ function scheduleMidnightLogout(){
 
 // ── LOGOUT ──
 function doLogout(auto=false){
+  bdsLayoutStopWatch();
   roseCloseSavedCredentials();
   roseCloseCreateAdmin();
   roseClosePermissionModal();
@@ -15017,6 +15097,7 @@ function roseResetSelectedAdminPassword(){if(roseSelectedAdmin)roseResetAdminPas
 // ---- Rose-only administrator management ----
 function roseOpenUsers(){
  if(!isRoseAdmin())return;roseRenderTeams();roseRenderChatTeams();roseSetupCreatePermissions();
+ roseChooseUsersView(bdsUsersActiveView);
  if(toAdminsUnsub)toAdminsUnsub();
  const generation=toGeneration;
  toAdminsUnsub=db.collection('admin_accounts').onSnapshot(s=>{
@@ -15064,6 +15145,310 @@ async function roseCreateAdmin(e){e.preventDefault();if(!isRoseAdmin())return;co
  }catch(err){status.textContent='Could not create admin: '+err.message;}finally{btn.disabled=false;}}
 async function roseToggleAdmin(username,enabled){if(!isRoseAdmin()||username==='rose')return;if(!confirm((enabled?'Enable ':'Disable ')+username+'?'))return;
  try{await roseUpdateAccount(username,{active:enabled});}catch(e){alert(e.message);}}
+
+
+// R13: Rose-managed, role-specific navigation layouts (Firestore live sync).
+// Layout only determines order and rows; all access decisions remain with existing permission checks.
+let bdsUsersActiveView='accounts';
+let bdsLayoutUnsub=null, bdsLayoutSettings={}, bdsLayoutLiveReady=false, bdsLayoutLiveError='';
+let bdsLayoutRole='agent', bdsLayoutDraft=null, bdsLayoutDirty=false, bdsLayoutDragKey=null, bdsLayoutDragSub=false;
+const BDS_LAYOUT_ROLES=['agent','admin','rose'];
+const BDS_DEFAULT_ROWS=[
+ {columns:3,items:['script','objections','tips','dbs','spanish','asep']},
+ {columns:2,items:['sunday','dispo']},
+ {columns:3,items:['lenders','leaderboard','leads']},
+ {columns:1,items:['timeoff']},
+ {columns:1,items:['access-chat']},
+ {columns:1,items:['admin']}
+];
+function bdsLayoutRoleOfUser(){return !currentUser?.isAdmin?'agent':isRoseAdmin()?'rose':'admin';}
+function bdsLayoutCatalog(role){
+ const map=new Map();
+ document.querySelectorAll('.top-tabs button[id^="tab-"]').forEach(el=>{
+  const key=el.id.slice(4);
+  if(role==='agent'&&key==='admin')return;
+  map.set(key,el);
+ });
+ return map;
+}
+function bdsLayoutSubCatalog(role){
+ const map=new Map();
+ if(role==='agent')return map;
+ document.querySelectorAll('#page-admin .adm-tab[id^="atab-"]').forEach(el=>{
+  const key=el.id.slice(5);
+  if(role!=='rose'&&(key==='users'||key==='unused'))return;
+  map.set(key,el);
+ });
+ return map;
+}
+function bdsLayoutDefaults(role){
+ const keys=bdsLayoutCatalog(role),sub=bdsLayoutSubCatalog(role);
+ return {
+  rows:BDS_DEFAULT_ROWS.map(row=>({columns:row.columns,items:row.items.filter(key=>keys.has(key))})).filter(row=>row.items.length),
+  subtabs:[...sub.keys()]
+ };
+}
+function bdsLayoutNormalize(raw,role){
+ const defaults=bdsLayoutDefaults(role),allowed=bdsLayoutCatalog(role),subAllowed=bdsLayoutSubCatalog(role),seen=new Set();
+ const validRows=Array.isArray(raw?.rows)?raw.rows:defaults.rows;
+ const rows=[];
+ validRows.slice(0,40).forEach(row=>{
+  if(!row||!Array.isArray(row.items))return;
+  const items=[];
+  row.items.forEach(key=>{if(typeof key==='string'&&allowed.has(key)&&!seen.has(key)){seen.add(key);items.push(key);}});
+  const c=Number(row.columns);
+  rows.push({columns:Number.isInteger(c)&&c>=1&&c<=3?c:3,items});
+ });
+ if(!rows.length)rows.push({columns:3,items:[]});
+ // New navigation buttons that are added in later releases are never lost.
+ for(const key of allowed.keys())if(!seen.has(key)){
+  const defaultRow=defaults.rows.find(row=>row.items.includes(key));
+  if(defaultRow){
+   const target=rows.find(row=>row.columns===defaultRow.columns&&row.items.some(item=>defaultRow.items.includes(item)));
+   if(target){target.items.push(key);continue;}
+  }
+  rows.push({columns:1,items:[key]});
+ }
+ const subsSeen=new Set(),subtabs=[];
+ const rawSubs=Array.isArray(raw?.subtabs)?raw.subtabs:defaults.subtabs;
+ [...rawSubs,...subAllowed.keys()].forEach(k=>{if(typeof k==='string'&&subAllowed.has(k)&&!subsSeen.has(k)){subsSeen.add(k);subtabs.push(k);}});
+ return {rows,subtabs};
+}
+function bdsLayoutForRole(role){return bdsLayoutNormalize(bdsLayoutSettings[role],role);}
+function bdsLayoutLabel(key){
+ const el=document.getElementById('tab-'+key)||document.getElementById('atab-'+key);
+ return (el?.textContent||key).replace(/\s+/g,' ').trim();
+}
+function bdsLayoutApply(){
+ const role=bdsLayoutRoleOfUser(),layout=bdsLayoutForRole(role),nav=document.querySelector('.top-tabs');
+ if(!nav)return;
+ const buttons=new Map();
+ nav.querySelectorAll('button[id^="tab-"]').forEach(button=>buttons.set(button.id.slice(4),button));
+ const fragment=document.createDocumentFragment();
+ layout.rows.forEach((row,index)=>{
+  const wrapper=document.createElement('div');wrapper.className='nav-row nav-row-layout';
+  wrapper.style.setProperty('--bds-cols',String(row.columns));
+  wrapper.setAttribute('role','group');wrapper.setAttribute('aria-label','Dashboard navigation row '+(index+1));
+  row.items.forEach(key=>{const button=buttons.get(key);if(button){wrapper.appendChild(button);buttons.delete(key);}});
+  if(wrapper.children.length)fragment.appendChild(wrapper);
+ });
+ if(buttons.size){
+  // The Admin Panel control stays in the DOM for future administrator sign-ins,
+  // but must not create a stray empty row on the Agent dashboard.
+  const adminOnly=buttons.get('admin');
+  if(role==='agent'&&adminOnly){buttons.delete('admin');const adminRow=document.createElement('div');adminRow.className='nav-row nav-row-admin';adminRow.appendChild(adminOnly);fragment.appendChild(adminRow);}
+  if(buttons.size){const wrapper=document.createElement('div');wrapper.className='nav-row nav-row-layout';wrapper.style.setProperty('--bds-cols','3');buttons.forEach(button=>wrapper.appendChild(button));fragment.appendChild(wrapper);}
+ }
+ nav.replaceChildren(fragment);
+ if(role!=='agent'){
+  const subtabs=bdsLayoutSubCatalog(role),parent=document.getElementById('atab-profiles')?.parentElement;
+  if(parent){
+   layout.subtabs.forEach(key=>{const el=subtabs.get(key);if(el)parent.appendChild(el);});
+   // Non-admin/never-assignable Rose-only controls stay in their original view permissions.
+   if(role==='admin')for(const key of ['users','unused']){const el=document.getElementById('atab-'+key);if(el)parent.appendChild(el);}
+  }
+ }
+ // Do not change hidden class, hidden attribute or inline display: permissions remain authoritative.
+}
+function bdsLayoutStartWatch(){
+ bdsLayoutStopWatch(false);
+ if(!currentUser)return;
+ bdsLayoutLiveReady=false;bdsLayoutLiveError='';
+ bdsLayoutApply();
+ try{
+  bdsLayoutUnsub=db.collection('app_settings').doc('dashboard_layouts').onSnapshot(snap=>{
+   if(!currentUser)return;
+   const data=snap.exists?(snap.data()||{}):{};
+   bdsLayoutSettings={agent:data.agent,admin:data.admin,rose:data.rose};
+   bdsLayoutLiveReady=true;bdsLayoutLiveError='';
+   bdsLayoutApply();
+   if(isRoseAdmin()&&bdsUsersActiveView==='layouts'){
+    if(!bdsLayoutDirty)bdsLayoutResetToSaved(true);
+    else bdsLayoutMessage('Layout settings changed in Firestore. Your unsaved edits are still here; save only if you want to overwrite this role.');
+   }
+  },err=>{
+   bdsLayoutLiveReady=false;bdsLayoutLiveError=err.message||String(err);
+   bdsLayoutSettings={};bdsLayoutApply();
+   if(isRoseAdmin()&&bdsUsersActiveView==='layouts')bdsLayoutMessage('Could not load the saved layouts: '+bdsLayoutLiveError+'. Check Firestore rules.',true);
+  });
+ }catch(err){bdsLayoutLiveError=err.message||String(err);bdsLayoutSettings={};bdsLayoutApply();}
+}
+function bdsLayoutStopWatch(restore=true){
+ if(bdsLayoutUnsub){bdsLayoutUnsub();bdsLayoutUnsub=null;}
+ bdsLayoutSettings={};bdsLayoutLiveReady=false;bdsLayoutLiveError='';
+ bdsLayoutDirty=false;bdsLayoutDraft=null;bdsLayoutDragKey=null;
+ if(restore)bdsLayoutApply();
+}
+function roseChooseUsersView(view){
+ if(!isRoseAdmin()||!['accounts','teams','layouts'].includes(view))return;
+ bdsUsersActiveView=view;
+ ['accounts','teams','layouts'].forEach(key=>{
+  const panel=document.getElementById('ru-view-'+key),button=document.getElementById('ru-view-btn-'+key);
+  if(panel)panel.hidden=key!==view;
+  if(button){button.classList.toggle('active',key===view);button.setAttribute('aria-selected',String(key===view));}
+ });
+ if(view==='layouts'&&!bdsLayoutDraft)bdsLayoutResetToSaved(true);
+}
+function bdsLayoutChooseRole(role){
+ if(!isRoseAdmin()||!BDS_LAYOUT_ROLES.includes(role)||role===bdsLayoutRole)return;
+ if(bdsLayoutDirty&&!window.confirm('Discard unsaved changes to the '+bdsLayoutRole+' layout?'))return;
+ bdsLayoutRole=role;bdsLayoutResetToSaved(true);
+}
+function bdsLayoutMessage(message,isError=false){
+ const el=document.getElementById('bds-layout-status');if(!el)return;
+ el.textContent=message;el.style.color=isError?'#ff9c9c':'#b8e7fc';
+}
+function bdsLayoutResetToSaved(silent=false){
+ if(!isRoseAdmin())return;
+ if(bdsLayoutDirty&&!silent&&!window.confirm('Discard your unsaved layout changes?'))return;
+ bdsLayoutDraft=bdsLayoutForRole(bdsLayoutRole);bdsLayoutDirty=false;
+ bdsLayoutRender();
+ bdsLayoutMessage(bdsLayoutLiveError?'Layout settings cannot be loaded: '+bdsLayoutLiveError:bdsLayoutLiveReady?'Showing saved layout.':'Waiting for saved layout settings…',!!bdsLayoutLiveError);
+}
+function bdsLayoutResetToDefault(){
+ if(!isRoseAdmin())return;
+ if(!window.confirm('Restore the default '+bdsLayoutRole+' arrangement in the editor? Click Save to apply it to the dashboard.'))return;
+ bdsLayoutDraft=bdsLayoutDefaults(bdsLayoutRole);bdsLayoutDirty=true;bdsLayoutRender();bdsLayoutMessage('Default arrangement loaded into the editor. Click Save to publish.');
+}
+function bdsLayoutMarkDirty(){bdsLayoutDirty=true;bdsLayoutRender();bdsLayoutMessage('Unsaved layout changes. Click Save to publish to this role.');}
+function bdsLayoutRender(){
+ if(!isRoseAdmin())return;
+ if(!bdsLayoutDraft)bdsLayoutDraft=bdsLayoutForRole(bdsLayoutRole);
+ const role=bdsLayoutRole;
+ ['agent','admin','rose'].forEach(k=>{const btn=document.getElementById('bds-layout-role-'+k);if(btn){btn.classList.toggle('active',k===role);btn.setAttribute('aria-selected',String(k===role));}});
+ const roleText=document.getElementById('bds-layout-current-role');if(roleText)roleText.textContent=role==='agent'?'Agent layout':role==='admin'?'Administrator layout':'Rose layout';
+ const list=document.getElementById('bds-layout-rows');if(!list)return;
+ list.replaceChildren();
+ const rows=bdsLayoutDraft.rows;
+ rows.forEach((row,index)=>{
+  const box=document.createElement('div');box.className='bds-layout-row';box.dataset.rowIndex=String(index);
+  box.addEventListener('dragover',event=>bdsLayoutOnDragOver(event,box));
+  box.addEventListener('dragleave',event=>{if(!box.contains(event.relatedTarget))box.classList.remove('is-drop-target');});
+  box.addEventListener('drop',event=>bdsLayoutDrop(event,index,null));
+  const heading=document.createElement('div');heading.className='bds-layout-row-header';
+  const title=document.createElement('div');title.className='bds-layout-row-title';title.textContent='ROW '+(index+1)+' · '+row.items.length+' tabs';
+  const actions=document.createElement('div');actions.className='bds-layout-row-controls';
+  const label=document.createElement('label');label.textContent='Columns: ';
+  const select=document.createElement('select');select.setAttribute('aria-label','Columns for row '+(index+1));
+  for(let i=1;i<=3;i++){const option=document.createElement('option');option.value=String(i);option.textContent=String(i);option.selected=row.columns===i;select.appendChild(option);}
+  select.addEventListener('change',()=>{row.columns=Number(select.value);bdsLayoutMarkDirty();});label.appendChild(select);actions.appendChild(label);
+  const up=document.createElement('button');up.type='button';up.textContent='↑ ROW';up.title='Move this row up';up.disabled=index===0;up.onclick=()=>bdsLayoutMoveRow(index,-1);
+  const down=document.createElement('button');down.type='button';down.textContent='↓ ROW';down.title='Move this row down';down.disabled=index===rows.length-1;down.onclick=()=>bdsLayoutMoveRow(index,1);
+  const del=document.createElement('button');del.type='button';del.textContent='✕';del.title='Remove empty row';del.disabled=rows.length<2||row.items.length>0;del.onclick=()=>bdsLayoutDeleteRow(index);
+  actions.append(up,down,del);heading.append(title,actions);
+  const cards=document.createElement('div');cards.className='bds-layout-cards';cards.style.setProperty('--preview-cols',String(row.columns));
+  if(!row.items.length){const empty=document.createElement('div');empty.className='bds-layout-empty';empty.textContent='Drop a tab here, or choose this row from a tab’s Move to row menu.';cards.appendChild(empty);}
+  row.items.forEach(key=>{
+   const card=document.createElement('div');card.className='bds-layout-card';card.draggable=true;card.dataset.key=key;
+   card.addEventListener('dragstart',event=>bdsLayoutStartDrag(event,key,false));
+   card.addEventListener('dragover',event=>{event.stopPropagation();bdsLayoutOnDragOver(event,card);});
+   card.addEventListener('drop',event=>{event.stopPropagation();bdsLayoutDrop(event,index,key);});
+   card.addEventListener('dragend',bdsLayoutClearDrag);
+   const name=document.createElement('div');name.className='bds-layout-card-title';name.textContent='⠿ '+bdsLayoutLabel(key);
+   const controls=document.createElement('div');controls.className='bds-layout-card-actions';
+   const to=document.createElement('select');to.setAttribute('aria-label','Move '+bdsLayoutLabel(key)+' to another row');
+   rows.forEach((target,i)=>{const option=document.createElement('option');option.value=String(i);option.textContent='Row '+(i+1);option.selected=i===index;to.appendChild(option);});
+   to.addEventListener('change',()=>bdsLayoutMoveToRow(key,Number(to.value)));
+   const back=document.createElement('button');back.type='button';back.title='Move '+bdsLayoutLabel(key)+' earlier';back.setAttribute('aria-label',back.title);back.textContent='▲';back.onclick=()=>bdsLayoutMoveItem(key,-1);
+   const forward=document.createElement('button');forward.type='button';forward.title='Move '+bdsLayoutLabel(key)+' later';forward.setAttribute('aria-label',forward.title);forward.textContent='▼';forward.onclick=()=>bdsLayoutMoveItem(key,1);
+   controls.append(to,back,forward);card.append(name,controls);cards.appendChild(card);
+  });
+  box.append(heading,cards);list.appendChild(box);
+ });
+ const subPanel=document.getElementById('bds-layout-subsection'),subList=document.getElementById('bds-layout-subtabs');
+ if(subPanel)subPanel.hidden=role==='agent';
+ if(subList){subList.replaceChildren();if(role!=='agent')bdsLayoutDraft.subtabs.forEach((key,i)=>{
+  const card=document.createElement('div');card.className='bds-layout-subcard';
+  const title=document.createElement('strong');title.textContent=bdsLayoutLabel(key)+(key==='users'||key==='unused'?' · Rose-only':'');
+  const actions=document.createElement('span');actions.style.display='flex';actions.style.gap='5px';
+  const up=document.createElement('button');up.textContent='▲';up.title='Move earlier';up.disabled=i===0;up.onclick=()=>bdsLayoutMoveSubtab(key,-1);
+  const down=document.createElement('button');down.textContent='▼';down.title='Move later';down.disabled=i===bdsLayoutDraft.subtabs.length-1;down.onclick=()=>bdsLayoutMoveSubtab(key,1);
+  actions.append(up,down);card.append(title,actions);subList.appendChild(card);
+ });}
+}
+function bdsLayoutAddRow(){
+ if(!isRoseAdmin()||!bdsLayoutDraft||bdsLayoutDraft.rows.length>=40)return;
+ bdsLayoutDraft.rows.push({columns:3,items:[]});bdsLayoutMarkDirty();
+}
+function bdsLayoutDeleteRow(index){
+ if(!isRoseAdmin()||!bdsLayoutDraft||bdsLayoutDraft.rows.length<2||bdsLayoutDraft.rows[index]?.items.length)return;
+ bdsLayoutDraft.rows.splice(index,1);bdsLayoutMarkDirty();
+}
+function bdsLayoutMoveRow(index,direction){
+ if(!isRoseAdmin()||!bdsLayoutDraft)return;
+ const rows=bdsLayoutDraft.rows,j=index+direction;if(index<0||j<0||j>=rows.length)return;
+ [rows[index],rows[j]]=[rows[j],rows[index]];bdsLayoutMarkDirty();
+}
+function bdsLayoutFind(key){
+ for(let r=0;r<(bdsLayoutDraft?.rows.length||0);r++){
+  const i=bdsLayoutDraft.rows[r].items.indexOf(key);if(i>=0)return [r,i];
+ }
+ return null;
+}
+function bdsLayoutMoveToRow(key,targetRow,insertBefore=null){
+ if(!isRoseAdmin()||!bdsLayoutDraft||!bdsLayoutDraft.rows[targetRow])return;
+ const from=bdsLayoutFind(key);if(!from)return;
+ bdsLayoutDraft.rows[from[0]].items.splice(from[1],1);
+ const target=bdsLayoutDraft.rows[targetRow].items;
+ const pos=insertBefore===null?-1:target.indexOf(insertBefore);
+ if(pos<0)target.push(key);else target.splice(pos,0,key);
+ bdsLayoutMarkDirty();
+}
+function bdsLayoutMoveItem(key,direction){
+ const found=bdsLayoutFind(key);if(!found)return;
+ const [row,index]=found,items=bdsLayoutDraft.rows[row].items,target=index+direction;
+ if(target>=0&&target<items.length){[items[index],items[target]]=[items[target],items[index]];bdsLayoutMarkDirty();return;}
+ const next=row+direction;if(next>=0&&next<bdsLayoutDraft.rows.length){items.splice(index,1);if(direction<0)bdsLayoutDraft.rows[next].items.push(key);else bdsLayoutDraft.rows[next].items.unshift(key);bdsLayoutMarkDirty();}
+}
+function bdsLayoutMoveSubtab(key,direction){
+ if(!isRoseAdmin()||!bdsLayoutDraft)return;
+ const list=bdsLayoutDraft.subtabs,i=list.indexOf(key),j=i+direction;
+ if(i<0||j<0||j>=list.length)return;
+ [list[i],list[j]]=[list[j],list[i]];bdsLayoutMarkDirty();
+}
+function bdsLayoutStartDrag(event,key,isSub){
+ if(!isRoseAdmin())return;
+ bdsLayoutDragKey=key;bdsLayoutDragSub=isSub;
+ if(event.dataTransfer){event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',key);}
+}
+function bdsLayoutOnDragOver(event,el){
+ if(!bdsLayoutDragKey||bdsLayoutDragSub)return;
+ event.preventDefault();if(event.dataTransfer)event.dataTransfer.dropEffect='move';
+ el.classList.add('is-drop-target');
+}
+function bdsLayoutClearDrag(){bdsLayoutDragKey=null;bdsLayoutDragSub=false;document.querySelectorAll('.bds-layout-card.is-drop-target,.bds-layout-row.is-drop-target').forEach(el=>el.classList.remove('is-drop-target'));}
+function bdsLayoutDrop(event,row,before){
+ event.preventDefault();
+ const key=bdsLayoutDragKey;
+ bdsLayoutClearDrag();
+ if(!key||!bdsLayoutFind(key))return;
+ if(before===key)return;
+ bdsLayoutMoveToRow(key,row,before);
+}
+async function bdsLayoutSave(){
+ if(!isRoseAdmin()||!bdsLayoutDraft)return;
+ const button=document.getElementById('bds-layout-save'),role=bdsLayoutRole;
+ if(button)button.disabled=true;
+ try{
+  if(!bdsLayoutLiveReady)throw Error('Saved layouts have not loaded. Check your Firestore connection and rules.');
+  await ensureFirebaseAuth();
+  const value=bdsLayoutNormalize(bdsLayoutDraft,role);
+  // Remove unused empty rows on save and keep at least one row for future buttons.
+  value.rows=value.rows.filter(row=>row.items.length);
+  if(!value.rows.length)value.rows=[{columns:3,items:[]}];
+  const currentId=currentUser.id;
+  await db.runTransaction(async tx=>{
+   await toVerifyAdmin(tx,true);
+   if(!isRoseAdmin()||currentUser.id!==currentId)throw Error('Administrator session changed.');
+   tx.set(db.collection('app_settings').doc('dashboard_layouts'),{
+    [role]:value,updatedBy:'rose',updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+   },{merge:true});
+  });
+  bdsLayoutSettings[role]=value;bdsLayoutDraft=bdsLayoutNormalize(value,role);bdsLayoutDirty=false;
+  bdsLayoutApply();bdsLayoutRender();bdsLayoutMessage('Saved. '+(role==='agent'?'Agents':role==='admin'?'Regular administrators':'Rose')+' will receive this layout through Firestore in real time.');
+ }catch(err){bdsLayoutMessage('Could not save layout: '+(err?.message||err)+'. Ensure Rose can write app_settings/dashboard_layouts.',true);}
+ finally{if(button)button.disabled=false;}
+}
 
 </script>
 </body>
