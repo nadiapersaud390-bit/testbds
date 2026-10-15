@@ -30,7 +30,7 @@ const auth = firebase.auth();
 // Update this string every time you deploy a new version.
 // The Firestore doc settings/app_version { v: "..." } must match.
 // When they differ, a reload banner appears for all logged-in users.
-const APP_VERSION = '2026-10-15-managed-legacy-admin-create-r5';
+const APP_VERSION = '2026-10-15-custom-admin-passwords-r6';
 
 // Dark theme only.
 document.documentElement.setAttribute('data-theme', 'dark');
@@ -1961,7 +1961,7 @@ input, textarea, select { color-scheme: dark; }
 .ru-create-details{border:1px solid #31445e;border-radius:11px;padding:12px 15px;margin-top:19px;}
 .ru-create-details>summary{cursor:pointer;font-weight:800;color:#fbbf24;}
 .ru-roster-title{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin:12px 0 16px}.ru-roster-title h3{margin:0}.ru-create-action{background:linear-gradient(115deg,#2563eb,#3672bc);border:1px solid #5d9eff;color:white;border-radius:10px;font:800 .77rem 'Nunito',sans-serif;letter-spacing:.4px;padding:14px 17px;cursor:pointer;box-shadow:0 6px 22px #163f782a}.ru-create-action:hover{filter:brightness(1.12)}
-.ru-create-details{margin-top:20px;background:#0a1529}.ru-create-details[hidden],.ru-editor-backdrop[hidden]{display:none!important}.ru-create-heading{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;margin-bottom:14px}.ru-create-heading h3{margin:0 0 6px}.ru-create-heading p{font-size:.76rem;color:var(--muted);margin:0}.ru-create-footer{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:15px}.ru-create-footer .to-message{flex:1}.ru-password-tools{display:flex;align-items:center;flex-wrap:wrap;gap:10px;align-self:center}.ru-password-tools label{font-size:.78rem;display:flex;align-items:center;gap:6px}.ru-credentials-dialog{max-width:600px}.ru-credentials-warning{font-size:.79rem;color:var(--gold);margin:0 0 18px}.ru-credentials-field{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:13px 0}.ru-credentials-field label{flex:0 0 110px;font-size:.75rem;color:var(--muted)}.ru-credentials-field strong{flex:1;overflow-wrap:anywhere}.ru-credentials-field input{flex:1;min-width:0;background:#0e1b2d;border:1px solid #465775;color:#fff;padding:11px;border-radius:8px;box-sizing:border-box;font-size:.85rem}.ru-legacy-panel{border:1px solid #745935;border-radius:11px;background:#281d112e}.ru-legacy-panel .ru-admin-summary{max-width:650px}.ru-password-chip{font-size:.68rem;color:var(--muted)}
+.ru-create-details{margin-top:20px;background:#0a1529}.ru-create-details[hidden],.ru-editor-backdrop[hidden]{display:none!important}.ru-create-heading{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;margin-bottom:14px}.ru-create-heading h3{margin:0 0 6px}.ru-create-heading p{font-size:.76rem;color:var(--muted);margin:0}.ru-create-footer{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:15px}.ru-create-footer .to-message{flex:1}.ru-password-tools{display:flex;align-items:center;flex-wrap:wrap;gap:10px;align-self:center}.ru-password-tools label{font-size:.78rem;display:flex;align-items:center;gap:6px}.ru-credentials-dialog{max-width:600px}.ru-credentials-warning{font-size:.79rem;color:var(--gold);margin:0 0 18px}.ru-credentials-field{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:13px 0}.ru-credentials-field label{flex:0 0 110px;font-size:.75rem;color:var(--muted)}.ru-credentials-field strong{flex:1;overflow-wrap:anywhere}.ru-credentials-field input{flex:1;min-width:0;background:#0e1b2d;border:1px solid #465775;color:#fff;padding:11px;border-radius:8px;box-sizing:border-box;font-size:.85rem}.ru-legacy-panel{border:1px solid #745935;border-radius:11px;background:#281d112e}.ru-legacy-panel .ru-admin-summary{max-width:650px}.ru-password-chip{font-size:.68rem;color:var(--muted)}.ru-password-hint{display:block;font-size:.72rem;line-height:1.4;color:var(--muted);margin:5px 0 0}.ru-password-hint.weak{color:#fbbf24}
 @media(max-width:650px){.ru-roster-title{align-items:stretch}.ru-create-action{width:100%}.ru-create-heading{flex-direction:column}.ru-credentials-field label{flex-basis:100%}.ru-credentials-field input{min-width:140px}}
 @media(max-width:630px){.ru-admin-row{align-items:stretch;flex-direction:column;}.ru-row-actions .ru-btn{flex:1;}.ru-modal-grid{grid-template-columns:1fr;}.ru-editor-head,.ru-editor-body,.ru-editor-footer{padding-left:15px;padding-right:15px;}.ru-editor-backdrop{padding:9px;}.ru-perm-option{padding:10px 12px;}}
 @media(max-width:650px){.top-tabs{padding:10px!important;}.rose-permission-grid{grid-template-columns:1fr 1fr;}}
@@ -1987,7 +1987,7 @@ input, textarea, select { color-scheme: dark; }
    <div class="ru-modal-grid" id="ru-modal-permissions" aria-label="Admin Panel sub-tabs"></div>
    <div class="ru-credential-group" id="ru-modal-credentials">
     <strong style="font-size:.81rem">Reset administrator password</strong><p style="font-size:.72rem;color:var(--muted);margin:7px 0">Existing passwords cannot be viewed. Set a new one and Rose can view or copy that new password once after saving.</p>
-    <div class="ru-credential-controls"><input id="ru-modal-new-password" type="password" minlength="10" maxlength="128" autocomplete="new-password" placeholder="New password (10+ characters)" aria-label="Replacement password"><label><input id="ru-modal-show-password" type="checkbox" onchange="document.getElementById('ru-modal-new-password').type=this.checked?'text':'password'"> Show</label><button class="ru-btn" type="button" id="ru-modal-reset-password" onclick="roseResetSelectedAdminPassword()">RESET PASSWORD</button></div>
+    <div class="ru-credential-controls"><input id="ru-modal-new-password" type="password" minlength="1" maxlength="128" autocomplete="new-password" placeholder="Enter any password" oninput="roseUpdatePasswordNote('ru-modal-new-password','ru-reset-password-note')" aria-label="Replacement password"><label><input id="ru-modal-show-password" type="checkbox" onchange="document.getElementById('ru-modal-new-password').type=this.checked?'text':'password'"> Show</label><button class="ru-btn" type="button" id="ru-modal-reset-password" onclick="roseResetSelectedAdminPassword()">RESET PASSWORD</button></div><p class="ru-password-hint" id="ru-reset-password-note">Any non-empty password is accepted (1–128 characters). Short passwords are easier to guess.</p>
    </div>
   </div>
   <div class="ru-editor-footer"><span id="ru-modal-message" role="status" aria-live="polite"></span><button class="ru-btn" type="button" onclick="roseClosePermissionModal()">CANCEL</button><button class="ru-btn primary" id="ru-modal-save" type="button" onclick="roseSaveSelectedAdminPermissions()">SAVE ACCESS</button></div>
@@ -2752,7 +2752,7 @@ input, textarea, select { color-scheme: dark; }
       <form id="ru-create-form" onsubmit="roseCreateAdmin(event)"><div class="to-grid">
       <label>Username<input class="rose-control" id="ru-username" required pattern="(?:[A-Za-z][A-Za-z0-9._-]{2,31}|0000)" autocomplete="off" placeholder="e.g. jsmith"></label>
       <label>Display name<input class="rose-control" id="ru-display" required maxlength="80" placeholder="Administrator's name"></label>
-      <label>Initial password <input class="rose-control" id="ru-password" type="password" required minlength="10" maxlength="128" autocomplete="new-password" placeholder="10–128 characters"></label>
+      <label>Initial password <input class="rose-control" id="ru-password" type="password" required minlength="1" maxlength="128" autocomplete="new-password" placeholder="Enter any password, e.g. admin" oninput="roseUpdatePasswordNote('ru-password','ru-password-note')"><span class="ru-password-hint" id="ru-password-note">Any non-empty password is accepted (1–128 characters). Short passwords are easier to guess.</span></label>
       <div class="ru-password-tools"><label><input id="ru-show-password" type="checkbox" onchange="document.getElementById('ru-password').type=this.checked?'text':'password'"> Show password</label><button class="ru-btn" type="button" onclick="roseGenerateAdminPassword()">GENERATE STRONG PASSWORD</button></div>
       </div><h4>Admin Panel tab access</h4><div id="ru-create-permissions" class="rose-permission-grid"></div><div class="ru-create-footer"><button class="btn btn-p" id="ru-create-save" type="submit">SAVE NEW ADMIN TO FIRESTORE</button><span class="to-message" id="ru-status" role="status" aria-live="polite"></span></div></form>
       </section>
@@ -6131,7 +6131,7 @@ function onIdInput(val){
 // ── LOGIN ──
 async function doLogin(){
   const id = document.getElementById('login-id').value.trim();
-  const pw = document.getElementById('login-pw') ? document.getElementById('login-pw').value.trim() : '';
+  const pw = document.getElementById('login-pw') ? document.getElementById('login-pw').value : ''; // Preserve admin passwords exactly as entered, including spaces.
   const errEl = document.getElementById('login-err');
   errEl.textContent = '';
 
@@ -14209,6 +14209,15 @@ async function roseCopySavedCredential(key){
  try{await navigator.clipboard.writeText(value);document.getElementById('ru-credentials-copy-status').textContent=(key==='password'?'Password':'Username')+' copied. Keep it private.';}
  catch(e){document.getElementById('ru-credentials-copy-status').textContent='Clipboard unavailable. Use SHOW to copy it manually.';}
 }
+function roseUpdatePasswordNote(inputId,noteId){
+ const input=document.getElementById(inputId),note=document.getElementById(noteId);
+ if(!input||!note)return;
+ const length=input.value.length,weak=length>0&&length<10;
+ note.classList.toggle('weak',weak);
+ note.textContent=weak?'⚠ Short password. You can still save it, but it will be easier to guess.':
+  length>=10?'This password can be saved. Only a password hash is stored in Firestore.':
+  'Any non-empty password is accepted (1–128 characters). Short passwords are easier to guess.';
+}
 function roseOpenCreateAdmin(convertLegacy=false){
  if(!isRoseAdmin())return;
  if(convertLegacy&&roseAdminRecords.has(LEGACY_ADMIN_USERNAME)){roseOpenPermissionModal(LEGACY_ADMIN_USERNAME);return;}
@@ -14221,6 +14230,7 @@ function roseOpenCreateAdmin(convertLegacy=false){
  name.value=convertLegacy?LEGACY_ADMIN_USERNAME:'';name.readOnly=!!convertLegacy;
  document.getElementById('ru-create-save').textContent=convertLegacy?'CONVERT @0000 AND SAVE TO FIRESTORE':'SAVE NEW ADMIN TO FIRESTORE';
  document.getElementById('ru-status').textContent='';
+ roseUpdatePasswordNote('ru-password','ru-password-note');
  roseSetupCreatePermissions();
  panel.scrollIntoView({behavior:'smooth',block:'start'});
  (convertLegacy?document.getElementById('ru-display'):name).focus({preventScroll:true});
@@ -14230,6 +14240,7 @@ function roseCloseCreateAdmin(){
  const form=document.getElementById('ru-create-form');form.reset();
  document.getElementById('ru-username').readOnly=false;
  document.getElementById('ru-password').type='password';
+ roseUpdatePasswordNote('ru-password','ru-password-note');
  document.getElementById('ru-status').textContent='';
 }
 function roseGenerateAdminPassword(){
@@ -14241,6 +14252,7 @@ function roseGenerateAdminPassword(){
  while(output.length<20){const batch=new Uint8Array(32);crypto.getRandomValues(batch);for(const n of batch){if(n<Math.floor(256/alphabet.length)*alphabet.length)output.push(alphabet[n%alphabet.length]);if(output.length>=20)break;}}
  const input=document.getElementById('ru-password');input.value=output.join('');input.type='text';
  document.getElementById('ru-show-password').checked=true;
+ roseUpdatePasswordNote('ru-password','ru-password-note');
  document.getElementById('ru-status').textContent='Strong password generated. It will be shown once again after saving.';
 }
 function roseModalPermissions(){return [...document.querySelectorAll('#ru-modal-permissions input[data-rose-modal]:checked:not(:disabled)')].map(el=>el.value);}
@@ -14271,6 +14283,7 @@ function roseOpenPermissionModal(username){
  document.getElementById('ru-modal-new-password').value='';
  document.getElementById('ru-modal-new-password').type='password';
  document.getElementById('ru-modal-show-password').checked=false;
+ roseUpdatePasswordNote('ru-modal-new-password','ru-reset-password-note');
  document.getElementById('ru-modal-message').textContent=isRose?'Rose’s access cannot be limited.':'';
  roseRenderModalState();
  const modal=document.getElementById('ru-permission-modal');modal.hidden=false;modal.setAttribute('aria-hidden','false');
@@ -14298,10 +14311,10 @@ async function roseSaveSelectedAdminPermissions(){
 async function roseResetAdminPassword(username){
  if(!isRoseAdmin()||username==='rose'||roseSelectedAdmin!==username)return;
  const input=document.getElementById('ru-modal-new-password'),password=input?.value||'';
- if(password.length<10||password.length>128||password!==password.trim()){document.getElementById('ru-modal-message').textContent='Use 10–128 characters without leading or trailing spaces.';return;}
+ if(!password.length||password.length>128){document.getElementById('ru-modal-message').textContent='Enter a password of 1–128 characters.';return;}
  if(!confirm('Replace the login password for '+username+'?'))return;
  const btn=document.getElementById('ru-modal-reset-password');btn.disabled=true;
- try{await roseUpdateAccount(username,{passwordHash:await hashAdminPassword(username,password),passwordVersion:1,hashAlgorithm:'SHA-256'});input.value='';input.type='password';roseShowSavedCredentials(username,password,'Password reset saved');document.getElementById('ru-modal-message').textContent='Password updated. The administrator must sign in again.';}catch(e){document.getElementById('ru-modal-message').textContent='Password reset failed: '+toError(e);}finally{btn.disabled=false;}
+ try{await roseUpdateAccount(username,{passwordHash:await hashAdminPassword(username,password),passwordVersion:1,hashAlgorithm:'SHA-256'});input.value='';input.type='password';roseUpdatePasswordNote('ru-modal-new-password','ru-reset-password-note');roseShowSavedCredentials(username,password,'Password reset saved');document.getElementById('ru-modal-message').textContent='Password updated. The administrator must sign in again.';}catch(e){document.getElementById('ru-modal-message').textContent='Password reset failed: '+toError(e);}finally{btn.disabled=false;}
 }
 function roseResetSelectedAdminPassword(){if(roseSelectedAdmin)roseResetAdminPassword(roseSelectedAdmin);}
 
@@ -14347,7 +14360,7 @@ async function roseSetTeam(team,enabled){if(!isRoseAdmin()||!toTeams.includes(te
  try{await db.runTransaction(async tx=>{await toVerifyAdmin(tx,true);tx.set(db.collection('app_settings').doc('time_off_access'),{[team]:enabled,updatedBy:'rose',updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});});}catch(e){alert('Could not update team: '+e.message);roseRenderTeams();}}
 async function roseCreateAdmin(e){e.preventDefault();if(!isRoseAdmin())return;const status=document.getElementById('ru-status'),btn=e.target.querySelector('button[type=submit]');
  const username=normalizeAdminUsername(document.getElementById('ru-username').value),displayName=document.getElementById('ru-display').value.trim(),password=document.getElementById('ru-password').value;
- if(!isFirebaseAdminUsername(username)||!displayName||(password.length<10||password.length>128||password!==password.trim())){status.textContent='Provide a valid username, display name and password of at least 10 characters.';return;}
+ if(!isFirebaseAdminUsername(username)||!displayName||!password.length||password.length>128){status.textContent='Provide a valid username, display name and a non-empty password (1–128 characters).';return;}
  btn.disabled=true;
  try{const hash=await hashAdminPassword(username,password),ref=db.collection('admin_accounts').doc(username);
  await db.runTransaction(async tx=>{await toVerifyAdmin(tx,true);const snap=await tx.get(ref);if(snap.exists)throw new Error('That username is already taken.');tx.set(ref,{username,displayName,role:'admin',active:true,passwordHash:hash,passwordVersion:1,hashAlgorithm:'SHA-256',sessionVersion:0,adminTabPermissions:roseSelectedPermissions('create'),createdBy:'rose',createdAt:firebase.firestore.FieldValue.serverTimestamp(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()});});

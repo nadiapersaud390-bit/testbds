@@ -1,3 +1,13 @@
+# Custom administrator passwords (15 October 2026, r6)
+
+**Change requested:** Rose can now create a new administrator, convert `@0000`, or reset an admin password with **any non-empty password from 1 to 128 characters**, including `admin`, `1234`, or a password that contains spaces. Previously the browser blocked passwords shorter than 10 characters. Passwords are matched exactly as typed (including spaces) at sign-in. The create-admin and password-reset fields show a **non-blocking warning** for passwords shorter than 10 characters, but allow saving them.
+
+This does **not** store readable passwords in Firestore. The existing implementation stores a SHA-256 digest and displays the selected password **once after the Firestore write succeeds**. Current passwords cannot be recovered from their hashes; reset them to assign a new one. Passwords such as `admin` are easily guessed and should only be used at the account owner's discretion. **The inherited browser-side hash and anonymous Firebase Auth are not production-grade admin security; strong server-side authentication and authorization remain necessary.**
+
+To deploy: back up your currently deployed `index.html`, replace it with the included version, and set Firestore `settings/app_version.v` to `2026-10-15-custom-admin-passwords-r6`. This package is a continuation of r5, including team-chatroom access, admin roster and tab-permission popup, and the `@0000` conversion flow. No live deployment or production Firestore changes have been made.
+
+---
+
 # Administrator creation and legacy-login conversion (2026-10-15, r5)
 
 This package preserves the previous User Management popup, time-off workflows, and team Chatroom Access switches. It adds:
@@ -60,7 +70,7 @@ Rose has superadmin controls in the dashboard:
 
 Turning a team off blocks new submissions and hides the request form. Agents with earlier requests retain **My Requests**. Existing requests, approvals and administrator reminders remain intact.
 
-Passwords must contain 10–128 characters, with no leading or trailing spaces. New user names begin with a letter, contain 3–32 characters, and may include letters, numbers, periods, underscores and hyphens. The former legacy name `0000` is additionally accepted as a dedicated conversion account. Duplicate usernames are rejected. Rose's account is protected from these enable/disable and reset controls. **Migration change in r5:** The previous built-in `@0000` username/password login is no longer accepted **by this version of the dashboard**. An existing session saved under `authSource: legacy` will be rejected on page reload. To restore `@0000` as a usable login, Rose must first sign in with her existing Rose username, then use **Convert @0000 to Managed Admin**, select the sub-tabs allowed, enter a NEW password, and save it. The result is saved as `admin_accounts/0000` and behaves like any other admin, without superadmin rights. Previous @0000 sessions and the old static password are not carried forward. Earlier copies of the website may still contain the old client-side login; removing the static password from this HTML is not server-side revocation.
+Passwords may contain any 1–128 characters (including leading or trailing spaces) and are case-sensitive. Very short passwords are allowed but insecure. New user names begin with a letter, contain 3–32 characters, and may include letters, numbers, periods, underscores and hyphens. The former legacy name `0000` is additionally accepted as a dedicated conversion account. Duplicate usernames are rejected. Rose's account is protected from these enable/disable and reset controls. **Migration change in r5:** The previous built-in `@0000` username/password login is no longer accepted **by this version of the dashboard**. An existing session saved under `authSource: legacy` will be rejected on page reload. To restore `@0000` as a usable login, Rose must first sign in with her existing Rose username, then use **Convert @0000 to Managed Admin**, select the sub-tabs allowed, enter a NEW password, and save it. The result is saved as `admin_accounts/0000` and behaves like any other admin, without superadmin rights. Previous @0000 sessions and the old static password are not carried forward. Earlier copies of the website may still contain the old client-side login; removing the static password from this HTML is not server-side revocation.
 
 ## Chatroom team access
 
@@ -79,7 +89,7 @@ Rose can manage **Admin Panel → User Management → Chatroom Team Access**, in
 
 1. Keep your current deployed file as a backup.
 2. Upload this `index.html` in place of the existing dashboard's `index.html`.
-3. In the existing Firebase version document, set `settings/app_version.v` to `2026-10-15-managed-legacy-admin-create-r5` so the dashboard's version check matches the deployed file.
+3. In the existing Firebase version document, set `settings/app_version.v` to `2026-10-15-custom-admin-passwords-r6` so the dashboard's version check matches the deployed file.
 4. Refresh the dashboard. Log in as Rose, open **Admin Panel → User Management**, then use **+ CREATE NEW ADMIN** to add admins or **Convert @0000 to Managed Admin** to activate the former numeric login with a NEW password. Select **Manage Access** to set exact sub-tabs, and use the Chatroom Team Access switches to decide which teams see group chat.
 5. Verify one test request and decision against your actual Firebase project. Sign in as a test Berbice or PR agent and verify that disabling their team hides both chatroom entry points. Confirm changes propagate to open dashboard sessions.
 

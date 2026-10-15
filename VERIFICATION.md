@@ -1,3 +1,18 @@
+# r6 test notes: custom administrator passwords
+
+Browser tests passed using mocked Firestore and isolated Chromium:
+
+- A new admin was successfully created with `admin` (5 characters), confirming that the browser field accepted it and the Firestore admin record contained the expected password hash and no plaintext password.
+- The existing Manage Access popup reset an administrator password to `x` (1 character), saved the hash, and showed the new password once.
+- The `@0000` conversion accepted the password `1234` and saved the managed admin record.
+- A password containing leading/trailing spaces was saved and shown unchanged. The login function passed it to the verifier unchanged.
+- The password generator still generated 20-character passwords and the existing administrator popup still showed the full 16 sub-tabs.
+- Node syntax checks passed for all inline JavaScript blocks, and the browser reported no unexpected page errors beyond known mock-context errors.
+
+**Scope:** These are local browser tests with a Firestore mock. No writes were made to the user's production database or deployment. Actual server-side Firebase Security Rules, live authentication, and production behavior still require verification.
+
+---
+
 # r5 User Management verification
 
 - JS syntax: checked with `node --check` after extracting all inline scripts.
