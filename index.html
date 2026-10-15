@@ -2283,6 +2283,25 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
 #bds-layout-rows .bds-layout-preview-btn[data-key="sunday"]{color:#c084fc;border-color:#73508e;}
 @media(max-width:800px){#bds-layout-rows .bds-layout-preview-strip{--bds-cols:2!important;}}
 @media(max-width:480px){#bds-layout-rows .bds-layout-preview-strip{--bds-cols:1!important;}#bds-layout-rows.bds-layout-stage.top-tabs{padding:8px!important;} .bds-layout-row-options .bds-layout-row-controls{min-width:240px;max-width:calc(100vw - 44px);flex-wrap:wrap;}}
+
+/* R17: No three-column ceiling. Auto lets a row contain all of its tabs side by side. */
+#bds-layout-rows .bds-layout-preview-strip,
+.top-tabs .nav-row-layout{flex-wrap:wrap;}
+#bds-layout-rows .bds-layout-row-tools .bds-layout-fit-all{
+  margin-left:auto;padding:4px 9px;min-height:25px;border-radius:6px;
+  border:1px solid #267e82;background:#0b2c35;color:#9af7ee;
+  font:800 .62rem 'Barlow Condensed',sans-serif;letter-spacing:.45px;cursor:pointer;
+}
+#bds-layout-rows .bds-layout-row-tools .bds-layout-fit-all:disabled{opacity:.55;cursor:default;}
+#bds-layout-rows .bds-layout-row-controls label{display:flex;align-items:center;gap:7px;}
+#bds-layout-rows .bds-layout-row-controls select{max-width:210px;}
+#bds-layout-rows .bds-layout-newrow-target{padding:7px;margin:0 4px 4px;opacity:.72;font-size:.65rem;}
+#bds-layout-rows .bds-layout-newrow-target:hover{opacity:1;border-color:#2dd4bf;color:#abfff2;}
+#bds-layout-rows.bds-layout-stage.top-tabs{max-width:1100px!important;margin:0 auto!important;}
+@media(max-width:600px){
+ #bds-layout-rows .bds-layout-row-tools .bds-layout-fit-all{margin-left:0;}
+ #bds-layout-rows .bds-layout-newrow-target{padding:10px 5px;}
+}
 </style>
 </head>
 <body>
@@ -3154,7 +3173,7 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
       <section class="ru-user-view" id="ru-view-layouts" hidden>
         <div class="bds-layout-panel">
           <h3>🧩 Navigation Tab Layout Manager</h3>
-          <p class="bds-layout-help">This is your actual dashboard arrangement. <strong>Drag a tab to the exact position you want</strong>, including between rows, or tap a tab to select it and use the Move controls. The three layouts save separately, and hidden tabs automatically close up the space.</p>
+          <p class="bds-layout-help">This is your actual dashboard arrangement. <strong>Drag a tab to the exact position you want</strong>, including between rows, or tap a tab to select it and use the Move controls. Choose <strong>Auto: all in one row</strong> for as many buttons as you put across, or set how many buttons fit per line. Drag into a drop zone below any row to place a button underneath. The three layouts save separately, and hidden tabs automatically close up the space.</p>
           <div class="bds-layout-role-tabs" role="tablist" aria-label="Layout audience">
             <button id="bds-layout-role-agent" type="button" onclick="bdsLayoutChooseRole('agent')" class="active" aria-selected="true">👤 AGENTS</button>
             <button id="bds-layout-role-admin" type="button" onclick="bdsLayoutChooseRole('admin')" aria-selected="false">⚙️ ADMINS</button>
@@ -15263,9 +15282,9 @@ function bdsLayoutNormalize(raw,role){
   const items=[];
   row.items.forEach(key=>{if(typeof key==='string'&&allowed.has(key)&&!seen.has(key)){seen.add(key);items.push(key);}});
   const c=Number(row.columns);
-  rows.push({columns:Number.isInteger(c)&&c>=1&&c<=3?c:3,items});
+  rows.push({columns:Number.isSafeInteger(c)&&c>=0?c:0,items});
  });
- if(!rows.length)rows.push({columns:3,items:[]});
+ if(!rows.length)rows.push({columns:0,items:[]});
  // New navigation buttons that are added in later releases are never lost.
  for(const key of allowed.keys())if(!seen.has(key)){
   const defaultRow=defaults.rows.find(row=>row.items.includes(key));
@@ -15273,7 +15292,7 @@ function bdsLayoutNormalize(raw,role){
    const target=rows.find(row=>row.columns===defaultRow.columns&&row.items.some(item=>defaultRow.items.includes(item)));
    if(target){target.items.push(key);continue;}
   }
-  rows.push({columns:1,items:[key]});
+  rows.push({columns:0,items:[key]});
  }
  const subsSeen=new Set(),subtabs=[];
  const rawSubs=Array.isArray(raw?.subtabs)?raw.subtabs:defaults.subtabs;
@@ -15293,7 +15312,7 @@ function bdsLayoutApply(){
  const fragment=document.createDocumentFragment();
  layout.rows.forEach((row,index)=>{
   const wrapper=document.createElement('div');wrapper.className='nav-row nav-row-layout';
-  wrapper.style.setProperty('--bds-cols',String(row.columns));
+  wrapper.style.setProperty('--bds-cols',String(row.columns||Math.max(1,row.items.filter(key=>buttons.has(key)).length)));
   wrapper.setAttribute('role','group');wrapper.setAttribute('aria-label','Dashboard navigation row '+(index+1));
   row.items.forEach(key=>{const button=buttons.get(key);if(button){wrapper.appendChild(button);buttons.delete(key);}});
   if(wrapper.children.length)fragment.appendChild(wrapper);
@@ -15303,7 +15322,7 @@ function bdsLayoutApply(){
   // but must not create a stray empty row on the Agent dashboard.
   const adminOnly=buttons.get('admin');
   if(role==='agent'&&adminOnly){buttons.delete('admin');const adminRow=document.createElement('div');adminRow.className='nav-row nav-row-admin';adminRow.appendChild(adminOnly);fragment.appendChild(adminRow);}
-  if(buttons.size){const wrapper=document.createElement('div');wrapper.className='nav-row nav-row-layout';wrapper.style.setProperty('--bds-cols','3');buttons.forEach(button=>wrapper.appendChild(button));fragment.appendChild(wrapper);}
+  if(buttons.size){const wrapper=document.createElement('div');wrapper.className='nav-row nav-row-layout';wrapper.style.setProperty('--bds-cols',String(buttons.size));buttons.forEach(button=>wrapper.appendChild(button));fragment.appendChild(wrapper);}
  }
  nav.replaceChildren(fragment);
  if(role!=='agent'){
@@ -15391,17 +15410,26 @@ function bdsLayoutRender(){
   const tools=document.createElement('div');tools.className='bds-layout-row-tools';
   const caption=document.createElement('span');caption.className='bds-layout-row-caption';caption.textContent='ROW '+(index+1);
   const settings=document.createElement('details');settings.className='bds-layout-row-options';
-  const summary=document.createElement('summary');summary.textContent='⚙ '+row.columns+' across';settings.appendChild(summary);
+  const summary=document.createElement('summary');summary.textContent=row.columns===0?'⚙ Auto · all across':'⚙ '+row.columns+' across';settings.appendChild(summary);
   const controls=document.createElement('div');controls.className='bds-layout-row-controls';
-  const label=document.createElement('label');label.textContent='Columns ';
-  const select=document.createElement('select');select.setAttribute('aria-label','Columns for row '+(index+1));
-  for(let i=1;i<=3;i++){const option=document.createElement('option');option.value=String(i);option.textContent=String(i);option.selected=row.columns===i;select.appendChild(option);}
+  const label=document.createElement('label');label.textContent='Buttons across ';
+  const select=document.createElement('select');select.setAttribute('aria-label','Buttons across in row '+(index+1));
+  const auto=document.createElement('option');auto.value='0';auto.textContent='Auto: all in one row';auto.selected=row.columns===0;select.appendChild(auto);
+  // Offer every possible button count, not just one, two or three.
+  const maxColumns=Math.max(12,bdsLayoutCatalog(role).size,row.items.length,row.columns);
+  for(let i=1;i<=maxColumns;i++){const option=document.createElement('option');option.value=String(i);option.textContent=i+' across';option.selected=row.columns===i;select.appendChild(option);}
   select.addEventListener('change',()=>{row.columns=Number(select.value);bdsLayoutMarkDirty();});label.appendChild(select);controls.appendChild(label);
   const up=document.createElement('button');up.type='button';up.textContent='↑ Row';up.title='Move this row up';up.disabled=index===0;up.onclick=()=>bdsLayoutMoveRow(index,-1);
   const down=document.createElement('button');down.type='button';down.textContent='↓ Row';down.title='Move this row down';down.disabled=index===rows.length-1;down.onclick=()=>bdsLayoutMoveRow(index,1);
   const del=document.createElement('button');del.type='button';del.textContent='Remove empty row';del.title='Remove empty row';del.disabled=rows.length<2||row.items.length>0;del.onclick=()=>bdsLayoutDeleteRow(index);
-  controls.append(up,down,del);settings.appendChild(controls);tools.append(caption,settings);
-  const strip=document.createElement('div');strip.className='nav-row nav-row-layout bds-layout-preview-strip';strip.style.setProperty('--bds-cols',String(row.columns));strip.dataset.rowIndex=String(index);
+  controls.append(up,down,del);settings.appendChild(controls);
+  const quickFit=document.createElement('button');quickFit.type='button';quickFit.className='bds-layout-fit-all';
+  quickFit.textContent=row.columns===0?'✓ All across':'⇄ Fit all across';
+  quickFit.title='Show every button on one horizontal line at desktop width; narrow screens still adapt';
+  quickFit.disabled=row.columns===0;
+  quickFit.onclick=()=>{row.columns=0;bdsLayoutMarkDirty();};
+  tools.append(caption,quickFit,settings);
+  const strip=document.createElement('div');strip.className='nav-row nav-row-layout bds-layout-preview-strip';strip.style.setProperty('--bds-cols',String(row.columns||Math.max(row.items.length,1)));strip.dataset.rowIndex=String(index);
   strip.addEventListener('dragover',event=>bdsLayoutOnDragOver(event,strip));
   strip.addEventListener('dragleave',event=>{if(!strip.contains(event.relatedTarget))strip.classList.remove('is-drop-target');});
   strip.addEventListener('drop',event=>bdsLayoutDrop(event,index,null));
@@ -15428,14 +15456,17 @@ function bdsLayoutRender(){
   });
   if(!row.items.length){const empty=document.createElement('div');empty.className='bds-layout-empty';empty.textContent='Drop a tab here';strip.appendChild(empty);}
   section.append(tools,strip);list.appendChild(section);
+  if(rows.length<40){
+   const fresh=document.createElement('div');fresh.className='bds-layout-newrow-target';
+   fresh.textContent='＋ Drop here to place a tab in a new row below';
+   fresh.title='Drag a tab here to create a new row after row '+(index+1);
+   fresh.addEventListener('dragover',event=>{if(bdsLayoutDragKey&&!bdsLayoutDragSub){event.preventDefault();fresh.classList.add('is-drop-target');}});
+   fresh.addEventListener('dragleave',()=>fresh.classList.remove('is-drop-target'));
+   fresh.addEventListener('drop',event=>{event.preventDefault();const key=bdsLayoutDragKey;bdsLayoutClearDrag();bdsLayoutInsertNewRow(index+1,key);});
+   fresh.dataset.insertIndex=String(index+1);
+   list.appendChild(fresh);
+  }
  });
- if(rows.length<40){
-  const fresh=document.createElement('div');fresh.className='bds-layout-newrow-target';fresh.textContent='＋ Drag a tab here to create a new row';
-  fresh.addEventListener('dragover',event=>{if(bdsLayoutDragKey){event.preventDefault();fresh.classList.add('is-drop-target');}});
-  fresh.addEventListener('dragleave',()=>fresh.classList.remove('is-drop-target'));
-  fresh.addEventListener('drop',event=>{event.preventDefault();const key=bdsLayoutDragKey;bdsLayoutClearDrag();bdsLayoutDropIntoNewRow(key);});
-  list.appendChild(fresh);
- }
  bdsLayoutRenderSelection();
  const subPanel=document.getElementById('bds-layout-subsection'),subList=document.getElementById('bds-layout-subtabs');
  if(subPanel)subPanel.hidden=role==='agent';
@@ -15478,11 +15509,15 @@ function bdsLayoutSelectSubtab(key){
  bdsLayoutSubSelected=bdsLayoutSubSelected===key?null:key;
  document.querySelectorAll('.bds-layout-preview-subtab').forEach(el=>el.classList.toggle('is-selected',el.dataset.key===bdsLayoutSubSelected));
 }
-function bdsLayoutDropIntoNewRow(key){
- if(!key||!bdsLayoutFind(key)||bdsLayoutDraft.rows.length>=40)return;
- bdsLayoutDraft.rows.push({columns:1,items:[]});
- bdsLayoutMoveToRow(key,bdsLayoutDraft.rows.length-1);
+function bdsLayoutInsertNewRow(insertIndex,key){
+ if(!isRoseAdmin()||!key||!bdsLayoutFind(key)||bdsLayoutDraft.rows.length>=40)return;
+ // Insert after the chosen row; account for the origin row shifting if it lies below.
+ const origin=bdsLayoutFind(key),at=Math.min(bdsLayoutDraft.rows.length,Math.max(0,Number(insertIndex)||0));
+ bdsLayoutDraft.rows[origin[0]].items.splice(origin[1],1);
+ bdsLayoutDraft.rows.splice(at,0,{columns:0,items:[key]});
+ bdsLayoutMarkDirty();
 }
+function bdsLayoutDropIntoNewRow(key){bdsLayoutInsertNewRow(bdsLayoutDraft.rows.length,key);}
 function bdsLayoutMoveToPosition(key,targetRow,targetIndex){
  if(!isRoseAdmin()||!bdsLayoutDraft?.rows[targetRow])return;
  const origin=bdsLayoutFind(key);if(!origin)return;
@@ -15564,7 +15599,7 @@ function bdsLayoutTouchEnd(event){
   const index=Number(target.dataset.rowIndex),rowItems=bdsLayoutDraft.rows[index].items;
   const rect=target.getBoundingClientRect();bdsLayoutMoveToPosition(key,index,rowItems.indexOf(target.dataset.key)+(event.clientX>=rect.left+rect.width/2?1:0));
  }else if(row)bdsLayoutMoveToRow(key,Number(row.dataset.rowIndex));
- else if(fresh)bdsLayoutDropIntoNewRow(key);
+ else if(fresh)bdsLayoutInsertNewRow(Number(fresh.dataset.insertIndex),key);
 }
 function bdsLayoutTouchCancel(){bdsLayoutTouchCleanup();}
 function bdsLayoutTouchCleanup(){
@@ -15575,7 +15610,7 @@ function bdsLayoutTouchCleanup(){
 }
 function bdsLayoutAddRow(){
  if(!isRoseAdmin()||!bdsLayoutDraft||bdsLayoutDraft.rows.length>=40)return;
- bdsLayoutDraft.rows.push({columns:3,items:[]});bdsLayoutMarkDirty();
+ bdsLayoutDraft.rows.push({columns:0,items:[]});bdsLayoutMarkDirty();
 }
 function bdsLayoutDeleteRow(index){
  if(!isRoseAdmin()||!bdsLayoutDraft||bdsLayoutDraft.rows.length<2||bdsLayoutDraft.rows[index]?.items.length)return;
@@ -15638,7 +15673,7 @@ async function bdsLayoutSave(){
   const value=bdsLayoutNormalize(bdsLayoutDraft,role);
   // Remove unused empty rows on save and keep at least one row for future buttons.
   value.rows=value.rows.filter(row=>row.items.length);
-  if(!value.rows.length)value.rows=[{columns:3,items:[]}];
+  if(!value.rows.length)value.rows=[{columns:0,items:[]}];
   const currentId=currentUser.id;
   await db.runTransaction(async tx=>{
    await toVerifyAdmin(tx,true);
