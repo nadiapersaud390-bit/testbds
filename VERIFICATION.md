@@ -1,3 +1,22 @@
+# R7 local verification — main navigation permissions
+
+The following tests passed using headless Chromium and a locally mocked Firebase/Firestore context:
+
+- Rose's Manage Access dialog renders **13** MAIN DASHBOARD tabs with independent selected states.
+- The existing Admin Panel section still renders **16** sub-tabs, **14** assignable and two Rose-only.
+- Changing and saving a non-Rose admin's checkboxes submits independent `dashboardTabPermissions` and `adminTabPermissions` arrays in one account update.
+- The Create New Admin form renders 13 main buttons (all enabled by default) and the existing 14 assignable admin sub-tabs.
+- Rose's own main-tab and Admin Panel permissions are shown as permanently allowed, with disabled checkboxes.
+- For a logged-in managed administrator, disallowed main buttons are hidden and `switchTab` refuses opening those views.
+- Live removal of the currently active tab navigates to an allowed view. No assigned dashboard tabs produces a clear access message with no active page.
+- Admin-specific chat permission controls the chat button independently of agent team settings.
+- Desktop (1200×900) and mobile (390×844) popup layouts were inspected.
+- All inline JavaScript syntax checked with Node.js; no page runtime errors in the isolated Chromium fixture.
+
+**Not tested:** production Firestore permissions, live authentication, real account data propagation, or server-side enforcement. The existing authentication architecture remains client-side; server access controls are a separate security task.
+
+---
+
 # r6 test notes: custom administrator passwords
 
 Browser tests passed using mocked Firestore and isolated Chromium:

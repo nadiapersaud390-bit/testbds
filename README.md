@@ -1,3 +1,38 @@
+# R7 — Per-administrator MAIN DASHBOARD + ADMIN PANEL permissions (15 October 2026)
+
+## What Rose sees
+
+Under **Admin Panel → User Management**, each administrator's row now displays separate counts and examples of their authorized MAIN DASHBOARD buttons and Admin Panel sub-tabs. Select **MANAGE ACCESS** to open a scrollable two-part checklist. It lists all 13 main buttons from the dashboard navigation and all 16 Admin Panel sub-tabs. The two groups have independent Allow All / Hide All controls. Save Access writes both arrays to `admin_accounts/{username}` in Firestore:
+
+- `dashboardTabPermissions`: main dashboard button keys, including `access-chat` and `admin`.
+- `adminTabPermissions`: existing admin sub-tab keys. `users` and `unused` remain reserved for Rose.
+
+The **Create New Admin** / convert `@0000` form also includes these separate permission groups, and saves them on the new account. Prior accounts without `dashboardTabPermissions` keep full main navigation access until Rose sets their access. Rose always retains full access and cannot be restricted from her own management screen.
+
+A disabled MAIN DASHBOARD button is removed from the logged-in admin's navigation. Calling `switchTab` for it is refused, and revoking a currently open tab switches to a permitted tab or shows a no-access message. If `admin` is disabled, `switchAdminTab` cannot be opened through dashboard navigation. If `access-chat` is disabled, the chat button, floating chat, and active chat listener are disabled for that admin. The existing **Chatroom Team Access** (Berbice/PR/Remote agents) stays independent.
+
+## Deployment
+
+Extract the ZIP. Replace the site's `index.html` with `testbds-main/index.html`, and set Firestore document `settings/app_version` field `v` to:
+
+`2026-10-15-admin-main-tab-access-r7`
+
+Back up the current `index.html` first. Do not remove existing Firestore collections or accounts. No production Firebase changes were made while creating this ZIP.
+
+## Important security boundary
+
+Main navigation visibility and client-side tab guards are UX restrictions **only**. This existing version uses anonymous Firebase Authentication, browser-side admin credentials, and browser-side permissions. Firestore Security Rules and server-enforced Firebase Auth/role claims are necessary to protect sensitive data against direct Firestore access or developer-tools bypass. Do not mistake this update for server-side access control.
+
+## Existing features preserved
+
+- Per-admin Admin Panel sub-tab permissions and Rose-only panels
+- Administrator creation, `@0000` conversion and password reset
+- Passwords of 1–128 characters; password hashes are stored in Firestore and plaintext is shown only when created/reset
+- Team chatroom permissions for Berbice/Providence/Remote
+- Time-off and all other dashboard views
+
+---
+
 # Custom administrator passwords (15 October 2026, r6)
 
 **Change requested:** Rose can now create a new administrator, convert `@0000`, or reset an admin password with **any non-empty password from 1 to 128 characters**, including `admin`, `1234`, or a password that contains spaces. Previously the browser blocked passwords shorter than 10 characters. Passwords are matched exactly as typed (including spaces) at sign-in. The create-admin and password-reset fields show a **non-blocking warning** for passwords shorter than 10 characters, but allow saving them.

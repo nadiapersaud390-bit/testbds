@@ -30,7 +30,7 @@ const auth = firebase.auth();
 // Update this string every time you deploy a new version.
 // The Firestore doc settings/app_version { v: "..." } must match.
 // When they differ, a reload banner appears for all logged-in users.
-const APP_VERSION = '2026-10-15-custom-admin-passwords-r6';
+const APP_VERSION = '2026-10-15-admin-main-tab-access-r7';
 
 // Dark theme only.
 document.documentElement.setAttribute('data-theme', 'dark');
@@ -861,6 +861,9 @@ body.lead-alert-open{overflow:hidden;}
 /* ── ADMIN VISIBILITY — controlled purely by body.is-admin class ── */
 .admin-only{display:none !important;}
 #tab-admin{display:none !important;}
+/* Rose-defined tab visibility overrides the admin display rule without changing agent navigation. */
+body.is-admin #tab-admin.rose-dashboard-hidden{display:none!important;}
+.top-tabs .rose-dashboard-hidden{display:none!important;}
 #page-admin{display:none !important;}
 body.is-admin #tab-admin{display:flex !important;}
 body.is-admin #page-admin.admin-page-active{display:flex !important;flex-direction:column;}
@@ -1963,6 +1966,17 @@ input, textarea, select { color-scheme: dark; }
 .ru-roster-title{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin:12px 0 16px}.ru-roster-title h3{margin:0}.ru-create-action{background:linear-gradient(115deg,#2563eb,#3672bc);border:1px solid #5d9eff;color:white;border-radius:10px;font:800 .77rem 'Nunito',sans-serif;letter-spacing:.4px;padding:14px 17px;cursor:pointer;box-shadow:0 6px 22px #163f782a}.ru-create-action:hover{filter:brightness(1.12)}
 .ru-create-details{margin-top:20px;background:#0a1529}.ru-create-details[hidden],.ru-editor-backdrop[hidden]{display:none!important}.ru-create-heading{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;margin-bottom:14px}.ru-create-heading h3{margin:0 0 6px}.ru-create-heading p{font-size:.76rem;color:var(--muted);margin:0}.ru-create-footer{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:15px}.ru-create-footer .to-message{flex:1}.ru-password-tools{display:flex;align-items:center;flex-wrap:wrap;gap:10px;align-self:center}.ru-password-tools label{font-size:.78rem;display:flex;align-items:center;gap:6px}.ru-credentials-dialog{max-width:600px}.ru-credentials-warning{font-size:.79rem;color:var(--gold);margin:0 0 18px}.ru-credentials-field{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:13px 0}.ru-credentials-field label{flex:0 0 110px;font-size:.75rem;color:var(--muted)}.ru-credentials-field strong{flex:1;overflow-wrap:anywhere}.ru-credentials-field input{flex:1;min-width:0;background:#0e1b2d;border:1px solid #465775;color:#fff;padding:11px;border-radius:8px;box-sizing:border-box;font-size:.85rem}.ru-legacy-panel{border:1px solid #745935;border-radius:11px;background:#281d112e}.ru-legacy-panel .ru-admin-summary{max-width:650px}.ru-password-chip{font-size:.68rem;color:var(--muted)}.ru-password-hint{display:block;font-size:.72rem;line-height:1.4;color:var(--muted);margin:5px 0 0}.ru-password-hint.weak{color:#fbbf24}
 @media(max-width:650px){.ru-roster-title{align-items:stretch}.ru-create-action{width:100%}.ru-create-heading{flex-direction:column}.ru-credentials-field label{flex-basis:100%}.ru-credentials-field input{min-width:140px}}
+/* Main navigation and Admin Panel privileges use separate clear permission groups. */
+.ru-access-section{padding:4px 0 18px;margin-bottom:16px;border-bottom:1px solid #34445f;}
+.ru-access-section:last-of-type{border-bottom:0;margin-bottom:0;}
+.ru-access-section h4{margin:0 0 5px;font-size:.93rem;color:#eaf0fc;}
+.ru-access-section .ru-row-actions .ru-btn{white-space:nowrap;min-width:86px;}
+.ru-access-section .ru-permissions-title p,.ru-create-help-text{margin:0 0 7px;font-size:.73rem;line-height:1.45;color:var(--muted);}
+.ru-access-section .ru-permissions-title strong{display:inline-block;font-size:.73rem;color:#6ee7b7;margin-top:2px;}
+.ru-main-count{background:#15283e;color:#dbeafe;border-radius:7px;padding:4px 8px;font-size:.68rem;font-weight:800;}
+.ru-no-main-access{margin:14px 4%;padding:20px;border:1px solid #665530;border-radius:11px;color:#fce5a3;background:#292212;font-size:.9rem;}
+.ru-no-main-access[hidden]{display:none;}
+#ru-create-dashboard-permissions label{background:#12273b;border-color:#355678;}
 @media(max-width:630px){.ru-admin-row{align-items:stretch;flex-direction:column;}.ru-row-actions .ru-btn{flex:1;}.ru-modal-grid{grid-template-columns:1fr;}.ru-editor-head,.ru-editor-body,.ru-editor-footer{padding-left:15px;padding-right:15px;}.ru-editor-backdrop{padding:9px;}.ru-perm-option{padding:10px 12px;}}
 @media(max-width:650px){.top-tabs{padding:10px!important;}.rose-permission-grid{grid-template-columns:1fr 1fr;}}
 
@@ -1979,12 +1993,18 @@ input, textarea, select { color-scheme: dark; }
 <div id="ru-permission-modal" class="ru-editor-backdrop" hidden aria-hidden="true" onclick="if(event.target===this)roseClosePermissionModal()">
  <section class="ru-editor" role="dialog" aria-modal="true" aria-labelledby="ru-modal-title" aria-describedby="ru-modal-description">
   <div class="ru-editor-head">
-   <div><h3 id="ru-modal-title">Administrator access</h3><p id="ru-modal-description">Manage Admin Panel permissions</p></div>
+   <div><h3 id="ru-modal-title">Administrator access</h3><p id="ru-modal-description">Manage main dashboard buttons and Admin Panel permissions</p></div>
    <button class="ru-btn" id="ru-modal-close" type="button" onclick="roseClosePermissionModal()" aria-label="Close permissions popup">✕</button>
   </div>
   <div class="ru-editor-body">
-   <div class="ru-permissions-title"><strong id="ru-modal-count">0 tabs allowed</strong><div class="ru-row-actions"><button class="ru-btn" id="ru-allow-all" type="button" onclick="roseSetAllModalPermissions(true)">Allow all</button><button class="ru-btn" id="ru-hide-all" type="button" onclick="roseSetAllModalPermissions(false)">Hide all</button></div></div>
-   <div class="ru-modal-grid" id="ru-modal-permissions" aria-label="Admin Panel sub-tabs"></div>
+   <section class="ru-access-section" aria-label="Main dashboard navigation permissions">
+    <div class="ru-permissions-title"><div><h4>🏠 Main Dashboard Tabs</h4><p>Choose which of the main dashboard buttons this admin can see.</p><strong id="ru-modal-dashboard-count">0 main tabs allowed</strong></div><div class="ru-row-actions"><button class="ru-btn" id="ru-dashboard-allow-all" type="button" onclick="roseSetAllDashboardPermissions(true)">Allow all</button><button class="ru-btn" id="ru-dashboard-hide-all" type="button" onclick="roseSetAllDashboardPermissions(false)">Hide all</button></div></div>
+    <div class="ru-modal-grid" id="ru-modal-dashboard-permissions" aria-label="Main Dashboard tabs"></div>
+   </section>
+   <section class="ru-access-section" aria-label="Admin Panel sub-tab permissions">
+    <div class="ru-permissions-title"><div><h4>⚙️ Admin Panel Sub-tabs</h4><p>Separate permissions for the tools inside Admin Panel.</p><strong id="ru-modal-count">0 sub-tabs allowed</strong></div><div class="ru-row-actions"><button class="ru-btn" id="ru-allow-all" type="button" onclick="roseSetAllModalPermissions(true)">Allow all</button><button class="ru-btn" id="ru-hide-all" type="button" onclick="roseSetAllModalPermissions(false)">Hide all</button></div></div>
+    <div class="ru-modal-grid" id="ru-modal-permissions" aria-label="Admin Panel sub-tabs"></div>
+   </section>
    <div class="ru-credential-group" id="ru-modal-credentials">
     <strong style="font-size:.81rem">Reset administrator password</strong><p style="font-size:.72rem;color:var(--muted);margin:7px 0">Existing passwords cannot be viewed. Set a new one and Rose can view or copy that new password once after saving.</p>
     <div class="ru-credential-controls"><input id="ru-modal-new-password" type="password" minlength="1" maxlength="128" autocomplete="new-password" placeholder="Enter any password" oninput="roseUpdatePasswordNote('ru-modal-new-password','ru-reset-password-note')" aria-label="Replacement password"><label><input id="ru-modal-show-password" type="checkbox" onchange="document.getElementById('ru-modal-new-password').type=this.checked?'text':'password'"> Show</label><button class="ru-btn" type="button" id="ru-modal-reset-password" onclick="roseResetSelectedAdminPassword()">RESET PASSWORD</button></div><p class="ru-password-hint" id="ru-reset-password-note">Any non-empty password is accepted (1–128 characters). Short passwords are easier to guess.</p>
@@ -2198,6 +2218,7 @@ input, textarea, select { color-scheme: dark; }
   <button class="admin-tab-btn tab-span-6 admin-only" id="tab-admin"      onclick="roseOpenAdminPanel()">&#9889; ADMIN PANEL</button>
 </div>
 </div>
+<div id="ru-no-main-access" class="ru-no-main-access" role="status" hidden>No main dashboard tabs are enabled for this account. Contact Rose to request access.</div>
 
 <button id="access-chat-bubble" class="access-chat-bubble" type="button" aria-label="Open group chat">
   <span class="access-chat-bubble-icon">💬</span>
@@ -2744,17 +2765,17 @@ input, textarea, select { color-scheme: dark; }
     </div></div>
     <div id="admin-users" class="admin-section" style="display:none"><div class="admin-card">
       <h2>🌹 User Management</h2><p>Rose-only administration. Create administrators, set tab permissions, reset credentials, and manage team access.</p>
-      <div class="ru-roster-title"><div><h3>All administrators</h3><p style="font-size:.79rem;color:var(--muted);margin:5px 0 0">Select <strong>Manage Access</strong> to choose each admin's visible Admin Panel sub-tabs and reset their login password.</p></div><button type="button" class="ru-create-action" id="ru-create-action" onclick="roseOpenCreateAdmin()">＋ CREATE NEW ADMIN</button></div>
+      <div class="ru-roster-title"><div><h3>All administrators</h3><p style="font-size:.79rem;color:var(--muted);margin:5px 0 0">Select <strong>Manage Access</strong> to choose each admin's main dashboard tabs, Admin Panel sub-tabs, and reset their login password.</p></div><button type="button" class="ru-create-action" id="ru-create-action" onclick="roseOpenCreateAdmin()">＋ CREATE NEW ADMIN</button></div>
       <div class="ru-toolbar"><input id="ru-admin-search" class="ru-search" type="search" placeholder="Search administrator by name or username" aria-label="Search administrators" oninput="roseFilterAdminList()"><span class="ru-count" id="ru-admin-count" aria-live="polite">Loading administrators…</span></div>
       <div id="ru-admin-list" aria-live="polite">Loading administrators…</div>
       <section class="ru-create-details" id="ru-create-panel" hidden aria-labelledby="ru-create-heading">
-      <div class="ru-create-heading"><div><h3 id="ru-create-heading">Create new administrator</h3><p id="ru-create-help">Create a Firestore administrator account with an initial password and selected Admin Panel access.</p></div><button type="button" class="ru-btn" onclick="roseCloseCreateAdmin()">✕ Close</button></div>
+      <div class="ru-create-heading"><div><h3 id="ru-create-heading">Create new administrator</h3><p id="ru-create-help">Create a Firestore administrator account with an initial password and separate main dashboard and Admin Panel access.</p></div><button type="button" class="ru-btn" onclick="roseCloseCreateAdmin()">✕ Close</button></div>
       <form id="ru-create-form" onsubmit="roseCreateAdmin(event)"><div class="to-grid">
       <label>Username<input class="rose-control" id="ru-username" required pattern="(?:[A-Za-z][A-Za-z0-9._-]{2,31}|0000)" autocomplete="off" placeholder="e.g. jsmith"></label>
       <label>Display name<input class="rose-control" id="ru-display" required maxlength="80" placeholder="Administrator's name"></label>
       <label>Initial password <input class="rose-control" id="ru-password" type="password" required minlength="1" maxlength="128" autocomplete="new-password" placeholder="Enter any password, e.g. admin" oninput="roseUpdatePasswordNote('ru-password','ru-password-note')"><span class="ru-password-hint" id="ru-password-note">Any non-empty password is accepted (1–128 characters). Short passwords are easier to guess.</span></label>
       <div class="ru-password-tools"><label><input id="ru-show-password" type="checkbox" onchange="document.getElementById('ru-password').type=this.checked?'text':'password'"> Show password</label><button class="ru-btn" type="button" onclick="roseGenerateAdminPassword()">GENERATE STRONG PASSWORD</button></div>
-      </div><h4>Admin Panel tab access</h4><div id="ru-create-permissions" class="rose-permission-grid"></div><div class="ru-create-footer"><button class="btn btn-p" id="ru-create-save" type="submit">SAVE NEW ADMIN TO FIRESTORE</button><span class="to-message" id="ru-status" role="status" aria-live="polite"></span></div></form>
+      </div><h4>🏠 Main Dashboard Tabs</h4><p class="ru-create-help-text">Select which main buttons this administrator will see after login. Access Needed and Admin Panel can be controlled here too.</p><div id="ru-create-dashboard-permissions" class="rose-permission-grid"></div><h4>⚙️ Admin Panel Sub-tabs</h4><p class="ru-create-help-text">Choose the sections this administrator can open inside Admin Panel.</p><div id="ru-create-permissions" class="rose-permission-grid"></div><div class="ru-create-footer"><button class="btn btn-p" id="ru-create-save" type="submit">SAVE NEW ADMIN TO FIRESTORE</button><span class="to-message" id="ru-status" role="status" aria-live="polite"></span></div></form>
       </section>
       <section class="ru-chat-access" aria-labelledby="ru-chat-access-title">
         <div class="ru-chat-access-header"><div><h3 id="ru-chat-access-title">💬 Chatroom Team Access</h3>
@@ -5728,7 +5749,7 @@ function accessSpeakNotification(senderName){
 }
 function accessCanUseChat(){
   if(!currentUser) return false;
-  if(currentUser.isAdmin) return true; // Admins supervise the shared group chat.
+  if(currentUser.isAdmin) return roseAllowedDashboardTab('access-chat'); // Rose may hide chat from individual admins.
   const team=toTeam(currentUser.team);
   return accessChatSettingsReady && accessChatTeamEnabled[team]===true;
 }
@@ -5754,7 +5775,9 @@ function accessApplyChatTeamAccess(){
   const page=document.getElementById('page-access-chat');
   if(!allowed){
     if(accessChatUnsubscribe||accessChatReconnectTimer||accessChatMessages.length||accessChatSubscriberKey){accessStopChatSession();}
-    if(page?.classList.contains('active'))switchTab('script');
+    if(page?.classList.contains('active')){
+      if(currentUser?.isAdmin)roseSwitchToFirstDashboardTab();else switchTab('script');
+    }
   }else if(!accessChatUnsubscribe && currentUser){
     accessStartChat({reason:'team-access'});
   }
@@ -6165,7 +6188,8 @@ async function doLogin(){
         team: 'ADMIN',
         authSource: 'firebase',
         sessionVersion: Number(result.account.sessionVersion)||0,
-        adminTabPermissions: Array.isArray(result.account.adminTabPermissions)?result.account.adminTabPermissions:null
+        adminTabPermissions: Array.isArray(result.account.adminTabPermissions)?result.account.adminTabPermissions:null,
+        dashboardTabPermissions: Array.isArray(result.account.dashboardTabPermissions)?result.account.dashboardTabPermissions:null
       };
 
       await recordFirebaseAdminLogin(result);
@@ -6409,6 +6433,7 @@ function showDashboard(){
     document.getElementById('admin-badge-wrap').innerHTML = '<div class="admin-badge">⚡ ADMIN</div>';
     showAdminUI();
     applyRoseOnlyAdminUI();
+    roseApplyDashboardTabPermissions();
     roseStartPermissionWatch();
   }
 
@@ -6683,6 +6708,11 @@ function doLogout(auto=false){
   auth.signOut();
   // Remove admin mode — CSS handles hiding everything
   document.body.classList.remove('is-admin');
+  ROSE_DASHBOARD_TABS.forEach(([key])=>{
+   const btn=document.getElementById(key==='objections'?'tab-objections':'tab-'+key);
+   if(btn){btn.classList.remove('rose-dashboard-hidden');btn.removeAttribute('aria-hidden');}
+  });
+  const noAccess=document.getElementById('ru-no-main-access');if(noAccess)noAccess.hidden=true;
   const adminPage = document.getElementById('page-admin');
   if(adminPage) adminPage.classList.remove('admin-page-active');
   document.getElementById('login-screen').classList.remove('hidden');
@@ -6714,6 +6744,7 @@ async function checkSession(){
         if(!doc.exists||a.active===false||!['admin','superadmin'].includes(a.role)||(Number(a.sessionVersion)||0)!==(Number(currentUser.sessionVersion)||0))throw Error('Administrator session changed.');
         currentUser.role=currentUser.username==='rose'?'superadmin':a.role;
         currentUser.adminTabPermissions=Array.isArray(a.adminTabPermissions)?a.adminTabPermissions:null;
+        currentUser.dashboardTabPermissions=Array.isArray(a.dashboardTabPermissions)?a.dashboardTabPermissions:null;
       }
       // Reload the latest Firebase roster values
       if(!currentUser.isAdmin && currentUser.id){
@@ -8331,6 +8362,7 @@ async function roseDeleteArchivedProfiles(keys){
 function roseBulkDeleteArchivedSelected(){ return roseDeleteArchivedProfiles([...roseArchiveSelected]); }
 
 function switchTab(tab){
+  if(currentUser?.isAdmin && !roseAllowedDashboardTab(tab))return;
   if(tab==='access-chat' && !accessCanUseChat())return;
   document.querySelectorAll('.tab-page').forEach(p=>{
     p.classList.remove('active');
@@ -8511,7 +8543,7 @@ function showAdminUI(){
 
 // ── SWITCH ADMIN SUBTAB ──
 function switchAdminTab(tab, btn){
-  if(!currentUser?.isAdmin)return;
+  if(!currentUser?.isAdmin||!roseAllowedDashboardTab('admin'))return;
   if(currentUser?.isAdmin && !roseAllowedTab(tab)){alert('This Admin Panel tab is not enabled for your account.');return;}
   if(tab==='users' && !isRoseAdmin()){alert('Rose administrator access required.');return;}
   if(tab==='unused' && !isRoseAdmin()){
@@ -14086,9 +14118,51 @@ const ROSE_ADMIN_TABS = [
  ['monitoring','Live Monitoring'],['rebuttal','Rebuttal Intel'],['rebuttals','Rebuttal Manager'],
  ['weekperf','Weekly Performance'],['targetboard','Target Board'],['quotes','Quotes']
 ];
+// All main buttons in the administrator's top navigation (not the admin sub-tabs).
+// Older Firestore accounts without dashboardTabPermissions retain their existing full access.
+const ROSE_DASHBOARD_TABS = [
+ ['script','📋 Script'],['objections','🎯 Rebuttals'],['tips','💡 Tips'],
+ ['dbs','🔒 Access Guide'],['spanish','🇪🇸 Spanish'],['asep','⚙️ A.S.E.P'],
+ ['sunday','📅 Sunday Protocol'],['dispo','✅ Dispo'],['lenders','🤝 Lenders & Benefits'],
+ ['leaderboard','🏆 Leaderboard'],['leads','📄 My Lead Tracker'],
+ ['access-chat','🔐 Access Needed / Chatroom'],['admin','⚡ Admin Panel']
+];
 let roseAdminAccountUnsub=null;
+function roseAllowedDashboardTab(tab){
+ if(!currentUser?.isAdmin)return true; // Agent navigation keeps its existing rules.
+ if(isRoseAdmin())return true; // Rose always retains the entire dashboard.
+ if(!ROSE_DASHBOARD_TABS.some(([key])=>key===tab))return true;
+ return !Array.isArray(currentUser.dashboardTabPermissions)||currentUser.dashboardTabPermissions.includes(tab);
+}
+function roseSwitchToFirstDashboardTab(){
+ // Do not switch into an unavailable tab when Rose removes access live.
+ const first=ROSE_DASHBOARD_TABS.find(([key])=>roseAllowedDashboardTab(key)&&key!=='admin'&&(key!=='access-chat'||accessCanUseChat()));
+ if(first){switchTab(first[0]);return;}
+ if(roseAllowedDashboardTab('admin') && ROSE_ADMIN_TABS.some(([key])=>roseAllowedTab(key))){roseOpenAdminPanel();return;}
+ document.querySelectorAll('.tab-page').forEach(page=>{page.classList.remove('active');page.classList.remove('admin-page-active');});
+ document.querySelectorAll('.tab-btn,.admin-tab-btn').forEach(b=>b.classList.remove('active'));
+}
+function roseApplyDashboardTabPermissions(){
+ if(!currentUser?.isAdmin)return;
+ ROSE_DASHBOARD_TABS.forEach(([key])=>{
+  const id=key==='objections'?'tab-objections':'tab-'+key;
+  const btn=document.getElementById(id);
+  if(btn){const allowed=roseAllowedDashboardTab(key);btn.classList.toggle('rose-dashboard-hidden',!allowed);btn.setAttribute('aria-hidden',String(!allowed));}
+ });
+ const activePage=document.querySelector('.tab-page.active,.tab-page.admin-page-active');
+ if(activePage){const key=activePage.id==='page-admin'?'admin':activePage.id.replace(/^page-/,'');
+  if(!roseAllowedDashboardTab(key)){roseSwitchToFirstDashboardTab();}
+ }else if(!document.getElementById('login-screen').classList.contains('hidden')){
+  // Startup page is not yet visible; no navigation action needed.
+ }else{roseSwitchToFirstDashboardTab();}
+ const any=ROSE_DASHBOARD_TABS.some(([key])=>roseAllowedDashboardTab(key)&&(key!=='admin'||ROSE_ADMIN_TABS.some(([k])=>roseAllowedTab(k)))&&(key!=='access-chat'||accessCanUseChat()));
+ const empty=document.getElementById('ru-no-main-access');if(empty)empty.hidden=any;
+ // This also stops the chat listener and hides the floating chat button when needed.
+ accessApplyChatTeamAccess();
+}
 function roseOpenAdminPanel(){
  if(!currentUser?.isAdmin)return;
+ if(!roseAllowedDashboardTab('admin'))return;
  const first=ROSE_ADMIN_TABS.find(([key])=>roseAllowedTab(key));
  if(first)switchAdminTab(first[0]);else alert('No Admin Panel tabs are enabled for this account. Contact Rose.');
 }
@@ -14107,7 +14181,7 @@ function roseApplyAdminTabPermissions(){
  if(active && active.style.display==='none'){
   const first=ROSE_ADMIN_TABS.find(([key])=>roseAllowedTab(key));
   if(first)switchAdminTab(first[0],document.getElementById('atab-'+first[0]));
-  else switchTab('script');
+  else roseSwitchToFirstDashboardTab();
  }
 }
 function roseStartPermissionWatch(){
@@ -14122,7 +14196,9 @@ function roseStartPermissionWatch(){
   }
   currentUser.role=username==='rose'?'superadmin':a.role;
   currentUser.adminTabPermissions=Array.isArray(a.adminTabPermissions)?a.adminTabPermissions:null;
-  sessionStorage.setItem('bds_user_'+getTodayGY(),JSON.stringify(currentUser));roseApplyAdminTabPermissions();toRefreshRequestAccess();toRenderReminders();
+  currentUser.dashboardTabPermissions=Array.isArray(a.dashboardTabPermissions)?a.dashboardTabPermissions:null;
+  sessionStorage.setItem('bds_user_'+getTodayGY(),JSON.stringify(currentUser));
+  roseApplyAdminTabPermissions();roseApplyDashboardTabPermissions();toRefreshRequestAccess();toRenderReminders();
  },err=>{if(currentUser?.username!==username)return;doLogout();document.getElementById('login-err').textContent='Could not verify administrator access. Reconnect and sign in again.';});
 }
 function rosePermissionMarkup(prefix,selected){
@@ -14131,7 +14207,15 @@ function rosePermissionMarkup(prefix,selected){
  `<label><input type="checkbox" data-rose-perm="${prefix}" value="${key}" ${chosen.includes(key)?'checked':''}> ${roseEscape(label)}</label>`).join('');
 }
 function roseSelectedPermissions(prefix){return [...document.querySelectorAll('input[data-rose-perm="'+prefix+'"]:checked')].map(x=>x.value);}
-function roseSetupCreatePermissions(){const el=document.getElementById('ru-create-permissions');if(el&&!el.children.length)el.innerHTML=rosePermissionMarkup('create');}
+function roseDashboardPermissionMarkup(prefix,selected){
+ const chosen=Array.isArray(selected)?selected:ROSE_DASHBOARD_TABS.map(([key])=>key);
+ return ROSE_DASHBOARD_TABS.map(([key,label])=>`<label><input type="checkbox" data-rose-dashboard-perm="${prefix}" value="${key}" ${chosen.includes(key)?'checked':''}> ${roseEscape(label)}</label>`).join('');
+}
+function roseSelectedDashboardPermissions(prefix){return [...document.querySelectorAll('input[data-rose-dashboard-perm="'+prefix+'"]:checked')].map(el=>el.value);}
+function roseSetupCreatePermissions(){
+ const el=document.getElementById('ru-create-permissions');if(el&&!el.children.length)el.innerHTML=rosePermissionMarkup('create');
+ const main=document.getElementById('ru-create-dashboard-permissions');if(main&&!main.children.length)main.innerHTML=roseDashboardPermissionMarkup('create');
+}
 async function roseUpdateAccount(username,changes){
  if(!isRoseAdmin()||username==='rose')throw Error('Rose administrator access required.');
  const gen=toGeneration;
@@ -14146,6 +14230,7 @@ let roseAdminRecords=new Map();
 let roseSelectedAdmin=null;
 function roseManagedTabKeys(){return ROSE_ADMIN_TABS.filter(([key])=>key!=='users'&&key!=='unused').map(([key])=>key);}
 function roseEffectiveTabPermissions(a){return Array.isArray(a.adminTabPermissions)?[...new Set(a.adminTabPermissions.filter(k=>roseManagedTabKeys().includes(k)))]:roseManagedTabKeys();}
+function roseEffectiveDashboardPermissions(a){return Array.isArray(a.dashboardTabPermissions)?[...new Set(a.dashboardTabPermissions.filter(k=>ROSE_DASHBOARD_TABS.some(([key])=>key===k)))]:ROSE_DASHBOARD_TABS.map(([key])=>key);}
 function roseFilterAdminList(){
  const search=String(document.getElementById('ru-admin-search')?.value||'').trim().toLowerCase();
  let visible=0;
@@ -14159,10 +14244,13 @@ function roseRenderAdminRows(){
  const rows=entries.map(([username,a])=>{
   const isRose=username==='rose',allowed=isRose?ROSE_ADMIN_TABS.length:roseEffectiveTabPermissions(a).length;
   const total=isRose?ROSE_ADMIN_TABS.length:roseManagedTabKeys().length;
-  const summary=isRose?'Permanent access to every Admin Panel sub-tab':(allowed===0?'No Admin Panel sub-tabs allowed':allowed===total?'All assignable Admin Panel sub-tabs allowed':roseEffectiveTabPermissions(a).slice(0,3).map(k=>ROSE_ADMIN_TABS.find(([t])=>t===k)?.[1]||k).join(', ')+(allowed>3?' and '+(allowed-3)+' more':''));
+  const allowedDashboard=isRose?ROSE_DASHBOARD_TABS.length:roseEffectiveDashboardPermissions(a).length;
+  const briefMain=isRose?'All main dashboard tabs':allowedDashboard===0?'No main dashboard tabs':allowedDashboard===ROSE_DASHBOARD_TABS.length?'All main dashboard tabs':roseEffectiveDashboardPermissions(a).slice(0,4).map(k=>ROSE_DASHBOARD_TABS.find(([t])=>t===k)?.[1]||k).join(', ')+(allowedDashboard>4?' and '+(allowedDashboard-4)+' more':'');
+  const briefPanel=isRose?'All Admin Panel sub-tabs':allowed===0?'No Admin Panel sub-tabs':allowed===total?'All assignable Admin Panel sub-tabs':roseEffectiveTabPermissions(a).slice(0,3).map(k=>ROSE_ADMIN_TABS.find(([t])=>t===k)?.[1]||k).join(', ')+(allowed>3?' and '+(allowed-3)+' more':'');
+  const summary='Main dashboard: '+briefMain+' · Admin Panel: '+briefPanel;
   return `<div class="ru-admin-row" data-admin-search="${roseEscape((a.displayName||username)+' '+username)}">
    <div class="ru-admin-identity"><div><strong>${roseEscape(a.displayName||username)}</strong><span class="ru-username">@${roseEscape(username)}</span></div>
-   <div class="ru-admin-meta"><span class="ru-status ${a.active===false?'disabled':'enabled'}">${a.active===false?'DISABLED':'ACTIVE'}</span>${isRose?'<span class="ru-status rose">SUPERADMIN</span>':''}<span class="ru-count">${allowed} / ${total} tabs</span></div>
+   <div class="ru-admin-meta"><span class="ru-status ${a.active===false?'disabled':'enabled'}">${a.active===false?'DISABLED':'ACTIVE'}</span>${isRose?'<span class="ru-status rose">SUPERADMIN</span>':''}<span class="ru-main-count">🏠 Main ${allowedDashboard} / ${ROSE_DASHBOARD_TABS.length}</span><span class="ru-count">⚙️ Panel ${allowed} / ${total}</span></div>
    <div class="ru-admin-summary">${roseEscape(summary)}</div></div>
    <div class="ru-row-actions"><button type="button" class="ru-btn primary" onclick="roseOpenPermissionModal('${username}')">${isRose?'VIEW ACCESS':'MANAGE ACCESS'}</button>${isRose?'':`<button type="button" class="ru-btn ${a.active===false?'':'danger'}" onclick="roseToggleAdmin('${username}',${a.active===false})">${a.active===false?'ENABLE':'DISABLE'}</button>`}</div>
   </div>`;
@@ -14226,7 +14314,7 @@ function roseOpenCreateAdmin(convertLegacy=false){
  const name=document.getElementById('ru-username');
  const hint=document.getElementById('ru-create-help');
  heading.textContent=convertLegacy?'Convert @0000 into managed administrator':'Create new administrator';
- hint.textContent=convertLegacy?'The old hard-coded login is no longer accepted. Enter a NEW password to save @0000 in Firestore and choose its permissions.':'Create a Firestore administrator account with an initial password and selected Admin Panel access.';
+ hint.textContent=convertLegacy?'The old hard-coded login is no longer accepted. Enter a NEW password to save @0000 in Firestore and choose its main and sub-tab permissions.':'Create a Firestore administrator account with an initial password and separate main dashboard and Admin Panel access.';
  name.value=convertLegacy?LEGACY_ADMIN_USERNAME:'';name.readOnly=!!convertLegacy;
  document.getElementById('ru-create-save').textContent=convertLegacy?'CONVERT @0000 AND SAVE TO FIRESTORE':'SAVE NEW ADMIN TO FIRESTORE';
  document.getElementById('ru-status').textContent='';
@@ -14256,6 +14344,7 @@ function roseGenerateAdminPassword(){
  document.getElementById('ru-status').textContent='Strong password generated. It will be shown once again after saving.';
 }
 function roseModalPermissions(){return [...document.querySelectorAll('#ru-modal-permissions input[data-rose-modal]:checked:not(:disabled)')].map(el=>el.value);}
+function roseModalDashboardPermissions(){return [...document.querySelectorAll('#ru-modal-dashboard-permissions input[data-rose-dashboard-modal]:checked:not(:disabled)')].map(el=>el.value);}
 function roseRenderModalState(){
  let allowed=0;
  document.querySelectorAll('#ru-modal-permissions input[data-rose-modal]').forEach(input=>{
@@ -14264,14 +14353,27 @@ function roseRenderModalState(){
   else{if(input.checked)allowed++;state.textContent=input.checked?'Allowed · Visible':'Hidden · No access';}
  });
  const counter=document.getElementById('ru-modal-count');if(counter)counter.textContent=roseSelectedAdmin==='rose'?'All '+ROSE_ADMIN_TABS.length+' sub-tabs · permanent access':allowed+' of '+roseManagedTabKeys().length+' sub-tabs allowed';
+ let mainCount=0;
+ document.querySelectorAll('#ru-modal-dashboard-permissions input[data-rose-dashboard-modal]').forEach(input=>{
+  const state=input.closest('.ru-perm-option')?.querySelector('.ru-perm-state');if(!state)return;
+  if(input.checked)mainCount++;
+  state.textContent=input.disabled?'Allowed · Superadmin':input.checked?'Allowed · Visible':'Hidden · No access';
+ });
+ const mainCounter=document.getElementById('ru-modal-dashboard-count');if(mainCounter)mainCounter.textContent=roseSelectedAdmin==='rose'?'All '+ROSE_DASHBOARD_TABS.length+' main tabs · permanent access':mainCount+' of '+ROSE_DASHBOARD_TABS.length+' main tabs allowed';
 }
 function roseOpenPermissionModal(username){
  if(!isRoseAdmin())return;
  const record=roseAdminRecords.get(username);if(!record)return;
  roseSelectedAdmin=username;
  const isRose=username==='rose',chosen=isRose?ROSE_ADMIN_TABS.map(([key])=>key):roseEffectiveTabPermissions(record);
+ const chosenDashboard=isRose?ROSE_DASHBOARD_TABS.map(([key])=>key):roseEffectiveDashboardPermissions(record);
   document.getElementById('ru-modal-title').textContent=(isRose?'View Access: ':'Manage Access: ')+(record.displayName||username);
- document.getElementById('ru-modal-description').textContent='@'+username+' · '+(isRose?'Rose superadmin has permanent access to every Admin Panel sub-tab.':'Toggle the exact sub-tabs this administrator can open. Changes are saved only after selecting Save Access.');
+ document.getElementById('ru-modal-description').textContent='@'+username+' · '+(isRose?'Rose has permanent access to all main tabs and Admin Panel sub-tabs.':'Set visible main dashboard buttons and Admin Panel sub-tabs separately. Save Access applies both lists.');
+ document.getElementById('ru-modal-dashboard-permissions').innerHTML=ROSE_DASHBOARD_TABS.map(([key,label])=>
+  `<label class="ru-perm-option"><input data-rose-dashboard-modal type="checkbox" value="${key}" ${chosenDashboard.includes(key)?'checked':''} ${isRose?'disabled':''} onchange="roseRenderModalState()" aria-label="Allow ${roseEscape(label)}"><span><span class="ru-perm-name">${roseEscape(label)}</span><span class="ru-perm-state"></span></span></label>`
+ ).join('');
+ document.getElementById('ru-dashboard-allow-all').hidden=isRose;
+ document.getElementById('ru-dashboard-hide-all').hidden=isRose;
  document.getElementById('ru-modal-permissions').innerHTML=ROSE_ADMIN_TABS.map(([key,label])=>{
   const restricted=!isRose&&(key==='users'||key==='unused');
   return `<label class="ru-perm-option ${restricted?'restricted':''}"><input data-rose-modal type="checkbox" value="${key}" ${chosen.includes(key)?'checked':''} ${restricted||isRose?'disabled':''} onchange="roseRenderModalState()" aria-label="Allow ${roseEscape(label)}"><span><span class="ru-perm-name">${roseEscape(label)}</span><span class="ru-perm-state"></span></span></label>`;
@@ -14287,7 +14389,12 @@ function roseOpenPermissionModal(username){
  document.getElementById('ru-modal-message').textContent=isRose?'Rose’s access cannot be limited.':'';
  roseRenderModalState();
  const modal=document.getElementById('ru-permission-modal');modal.hidden=false;modal.setAttribute('aria-hidden','false');
+ const body=modal.querySelector('.ru-editor-body');if(body)body.scrollTop=0; // Always open at Main Dashboard Tabs.
  document.getElementById('ru-modal-close').focus();
+}
+function roseSetAllDashboardPermissions(allow){
+ if(!isRoseAdmin()||!roseSelectedAdmin||roseSelectedAdmin==='rose')return;
+ document.querySelectorAll('#ru-modal-dashboard-permissions input[data-rose-dashboard-modal]:not(:disabled)').forEach(input=>{input.checked=allow;});roseRenderModalState();
 }
 function roseSetAllModalPermissions(allow){
  if(!isRoseAdmin()||!roseSelectedAdmin||roseSelectedAdmin==='rose')return;
@@ -14304,8 +14411,8 @@ async function roseSaveSelectedAdminPermissions(){
  const status=document.getElementById('ru-modal-message'),btn=document.getElementById('ru-modal-save');
  btn.disabled=true;status.textContent='Saving permissions…';
  try{
-  await roseUpdateAccount(username,{adminTabPermissions:roseModalPermissions()});
-  status.textContent='Access saved successfully.';roseClosePermissionModal();
+  await roseUpdateAccount(username,{adminTabPermissions:roseModalPermissions(),dashboardTabPermissions:roseModalDashboardPermissions()});
+  status.textContent='Main dashboard and Admin Panel access saved successfully.';roseClosePermissionModal();
  }catch(e){status.textContent='Could not save access: '+toError(e);}finally{btn.disabled=false;}
 }
 async function roseResetAdminPassword(username){
@@ -14363,7 +14470,7 @@ async function roseCreateAdmin(e){e.preventDefault();if(!isRoseAdmin())return;co
  if(!isFirebaseAdminUsername(username)||!displayName||!password.length||password.length>128){status.textContent='Provide a valid username, display name and a non-empty password (1–128 characters).';return;}
  btn.disabled=true;
  try{const hash=await hashAdminPassword(username,password),ref=db.collection('admin_accounts').doc(username);
- await db.runTransaction(async tx=>{await toVerifyAdmin(tx,true);const snap=await tx.get(ref);if(snap.exists)throw new Error('That username is already taken.');tx.set(ref,{username,displayName,role:'admin',active:true,passwordHash:hash,passwordVersion:1,hashAlgorithm:'SHA-256',sessionVersion:0,adminTabPermissions:roseSelectedPermissions('create'),createdBy:'rose',createdAt:firebase.firestore.FieldValue.serverTimestamp(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()});});
+ await db.runTransaction(async tx=>{await toVerifyAdmin(tx,true);const snap=await tx.get(ref);if(snap.exists)throw new Error('That username is already taken.');tx.set(ref,{username,displayName,role:'admin',active:true,passwordHash:hash,passwordVersion:1,hashAlgorithm:'SHA-256',sessionVersion:0,adminTabPermissions:roseSelectedPermissions('create'),dashboardTabPermissions:roseSelectedDashboardPermissions('create'),createdBy:'rose',createdAt:firebase.firestore.FieldValue.serverTimestamp(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()});});
  roseCloseCreateAdmin();roseShowSavedCredentials(username,password,username===LEGACY_ADMIN_USERNAME?'@0000 converted successfully':'New administrator created');status.textContent='Administrator saved to Firestore.';
  }catch(err){status.textContent='Could not create admin: '+err.message;}finally{btn.disabled=false;}}
 async function roseToggleAdmin(username,enabled){if(!isRoseAdmin()||username==='rose')return;if(!confirm((enabled?'Enable ':'Disable ')+username+'?'))return;
