@@ -1,6 +1,6 @@
-# BDS Dashboard · Time-off requests and Rose administration
+# BDS Dashboard · Rose administrator roster and access popup
 
-Updated: 15 October 2026
+Updated: 15 October 2026 · Admin permission popup update
 
 This package contains the complete existing dashboard in `index.html`. Its styles and application scripts are included in that file. There is no build step. It uses the existing Firebase project configured in the page.
 
@@ -35,23 +35,26 @@ Reminders require the dashboard to be open and connected. They are not email, pu
 Rose has superadmin controls in the dashboard:
 
 - Create an administrator with a username, display name and password.
-- Select which Admin Panel tabs the administrator can see, including Calendar access.
-- Review existing Firebase administrator accounts and update their tab access.
+- Select which Admin Panel sub-tabs new administrators can see, including Calendar access.
+- See **all Firebase administrator accounts in a searchable list** under Admin Panel → User Management. The built-in numeric legacy administrator is also listed, clearly marked as not manageable from this screen.
+- Click **Manage Access** on an administrator to open a popup with **all 16 Admin Panel sub-tabs**. Fourteen are individually assignable. **User Management** and **Missing From Stats** are displayed as permanently Rose-only.
+- Check or uncheck tabs to grant or hide them; the popup shows **Allowed / Visible** or **Hidden / No access**, a selected-tab count, **Allow All**, **Hide All**, and **Save Access**. Nothing changes until Save Access succeeds. Each admin's permissions are stored separately in `admin_accounts/{username}.adminTabPermissions`.
+- Rose's own row shows her permanent superadmin access, without editable permissions.
 - Enable or disable an administrator. Disabling signs out an active session when the live update arrives.
 - Set a replacement password. Resetting a password invalidates the administrator's older sessions.
-- Show or hide a password while entering or resetting it. Saved passwords cannot be displayed because the existing application stores only hashes.
+- Show or hide a password while entering or resetting it, including from the selected administrator's access popup. Saved passwords cannot be displayed because the existing application stores only hashes.
 - Allow or hide new time-off requests separately for Berbice, Providence and Remote.
 
 Turning a team off blocks new submissions and hides the request form. Agents with earlier requests retain **My Requests**. Existing requests, approvals and administrator reminders remain intact.
 
-Passwords must contain 10–128 characters, with no leading or trailing spaces. Usernames begin with a letter, contain 3–32 characters, and may include letters, numbers, periods, underscores and hyphens. Duplicate usernames are rejected. Rose's account is protected from these enable/disable and reset controls. The pre-existing legacy administrator login is not listed as a Firestore account.
+Passwords must contain 10–128 characters, with no leading or trailing spaces. Usernames begin with a letter, contain 3–32 characters, and may include letters, numbers, periods, underscores and hyphens. Duplicate usernames are rejected. Rose's account is protected from these enable/disable and reset controls. The pre-existing numeric legacy administrator login is listed for visibility, but it is a built-in login, not a manageable Firestore administrator. To place that login under proper permissions control, replace and migrate that legacy authentication path to trusted administrator authentication; merely rendering it in a list is not an access-control change.
 
 ## Uploading this update
 
 1. Keep your current deployed file as a backup.
 2. Upload this `index.html` in place of the existing dashboard's `index.html`.
-3. In the existing Firebase version document, set `settings/app_version.v` to `2026-10-15-timeoff-admin-r2` so the dashboard's version check matches the deployed file.
-4. Refresh the dashboard. Log in as Rose to review administrator access and the team switches.
+3. In the existing Firebase version document, set `settings/app_version.v` to `2026-10-15-admin-permissions-popup-r3` so the dashboard's version check matches the deployed file.
+4. Refresh the dashboard. Log in as Rose, open **Admin Panel → User Management**, then select **Manage Access** next to each admin to set its sub-tabs.
 5. Verify one test request and decision against your actual Firebase project.
 
 No live deployment or production database changes were made while preparing this ZIP.
@@ -73,7 +76,8 @@ The upload did not include the project's deployed Firestore rules or a trusted b
 ## Verification
 
 - All inline JavaScript syntax checked.
-- 34 local integration checks passed using an in-memory Firestore adapter, including overlaps, simultaneous submissions, cancellation, approvals, decline reasons, replies, all teams, access switches, reminder dates and dismissal, historical entries, admin creation, duplicate usernames, password reset session versions and live disablement.
-- Browser validation status is recorded in `VERIFICATION.md`.
+- The previous build's 34 time-off and administrator integration checks are documented in the input package; they were not rerun as part of this user-interface revision.
+- New isolated Chromium checks passed for the administrator list and search, popup containing all 16 sub-tabs, Rose-only restrictions, individual tab toggles, Allow All / Hide All, Save Access payload, independent tab visibility, Rose read-only display, Escape-to-close, and no horizontal overflow on a 390px screen.
+- Browser validation status and limitations are recorded in `VERIFICATION.md`.
 
 Tests used isolated mock data and never connected to the production Firebase project. Live connectivity, real Firestore Security Rules and cross-client server transaction behavior require verification in the deployed environment.
