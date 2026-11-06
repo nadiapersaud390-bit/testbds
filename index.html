@@ -2304,7 +2304,7 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
  #bds-layout-rows .bds-layout-newrow-target{padding:10px 5px;}
 }
 
-/* BDS Logixx encrypted Gmail vault */
+/* BDS Logixx Gmail login manager */
 .logixx-import-card{border:1px solid #245077;border-radius:14px;padding:17px;margin:16px 0;background:linear-gradient(115deg,#0b192e,#090f20)}
 .logixx-topline,.logixx-preview-header,.logixx-profile-actions{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap}
 .logixx-flex{display:flex;gap:9px;align-items:end;flex-wrap:wrap;margin:15px 0 10px}
@@ -3518,18 +3518,15 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
 
         <section class="logixx-import-card">
           <div class="logixx-topline"><div><div class="profile-directory-title">🔐 BDS LOGIXX GMAIL LOGIN MANAGER</div>
-          <div class="logixx-muted">Secure credential vault · Match existing agent names · CSV or Excel bulk upload</div></div>
+          <div class="logixx-muted">Match existing agent names · Upload CSV or Excel · Add agent Gmail logins</div></div>
           <span class="profile-live-pill">Admin only</span></div>
           <div class="logixx-flex">
-            <label class="logixx-master-label">Vault passphrase <input id="logixx-master" class="profile-input" type="password" autocomplete="new-password" placeholder="Private encryption passphrase (12+ characters)" oninput="logixxLockVault()"></label>
-            <button class="profile-top-btn" onclick="logixxUnlockVault()" type="button">🔓 Unlock / Create Vault</button>
-            <button class="profile-top-btn" onclick="logixxLockVault(true)" type="button">🔒 Lock</button>
             <label class="profile-top-btn primary logixx-file-button">📤 Upload CSV / Excel<input id="logixx-import-file" type="file" accept=".csv,.xlsx,.xls" onchange="logixxReadFile(this.files[0])" hidden></label>
             <button class="profile-top-btn" type="button" onclick="logixxDownloadTemplate()">↓ CSV Template</button>
           </div>
-          <div class="logixx-muted">The passphrase encrypts passwords in your browser before Firebase receives them. Store it securely. If lost, existing passwords cannot be recovered. Never use an agent's Gmail password as the vault passphrase.</div>
-          <div id="logixx-vault-message" class="logixx-message" role="status">Vault locked. Unlock it before importing or editing credentials.</div>
-          <div id="logixx-import-preview" style="display:none"><div class="logixx-preview-header"><strong id="logixx-preview-count"></strong><button id="logixx-import-save" type="button" class="profile-save-btn" onclick="logixxSaveImport()">💾 Save Matched Logins to Firebase</button></div><div class="logixx-preview-scroll"><table class="logixx-preview-table"><thead><tr><th>Uploaded name</th><th>Matched agent</th><th>Email</th><th>Result</th></tr></thead><tbody id="logixx-preview-body"></tbody></table></div><div class="logixx-muted">Unmatched or ambiguous rows will be skipped. Passwords are never shown in preview. Import updates login credentials only, not existing agent identity, team, shift or attendance.</div></div>
+          <div class="logixx-muted">Upload a file with agent name, email and password. The system matches each row to the existing Firebase roster by exact agent name or Agent ID. Review the matches, then save them to the agent profiles.</div>
+          <div id="logixx-vault-message" class="logixx-message" role="status">Ready to upload CSV or Excel.</div>
+          <div id="logixx-import-preview" style="display:none"><div class="logixx-preview-header"><strong id="logixx-preview-count"></strong><button id="logixx-import-save" type="button" class="profile-save-btn" onclick="logixxSaveImport()">💾 Save Matched Logins to Firebase</button></div><div class="logixx-preview-scroll"><table class="logixx-preview-table"><thead><tr><th>Uploaded name</th><th>Matched agent</th><th>Email</th><th>Result</th></tr></thead><tbody id="logixx-preview-body"></tbody></table></div><div class="logixx-muted">Unmatched or ambiguous rows are skipped. Passwords are not shown in the preview. This import changes only BDS Logixx Gmail login fields, not identity, team, shift or attendance.</div></div>
         </section>
 
         <div class="profile-workspace">
@@ -3615,13 +3612,13 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
                     </div>
                   </div>
                   <div class="profile-section-card">
-                    <div class="profile-section-head"><div class="profile-section-title">🔐 BDS Logixx Gmail Log In</div><div class="profile-section-caption">Encrypted · Admin vault</div></div>
+                    <div class="profile-section-head"><div class="profile-section-title">🔐 BDS Logixx Gmail Log In</div><div class="profile-section-caption">Admin only · Saved to Firebase</div></div>
                     <div class="profile-section-body">
                       <div class="profile-edit-grid">
                         <div class="profile-field"><label class="profile-label cyan">Agent Gmail / Email</label><input id="pe-logixx-email" class="profile-input" type="email" autocomplete="off" placeholder="agent@example.com"></div>
-                        <div class="profile-field"><label class="profile-label gold">Gmail Password</label><div class="logixx-password-wrap"><input id="pe-logixx-password" class="profile-input" type="password" autocomplete="new-password" placeholder="Password is encrypted"/><button type="button" class="profile-top-btn" onclick="logixxTogglePassword()">👁 Show</button></div></div>
+                        <div class="profile-field"><label class="profile-label gold">Gmail Password</label><div class="logixx-password-wrap"><input id="pe-logixx-password" class="profile-input" type="password" autocomplete="new-password" placeholder="Enter Gmail password"/><button type="button" class="profile-top-btn" onclick="logixxTogglePassword()">👁 Show</button></div></div>
                       </div>
-                      <div class="logixx-profile-actions"><span id="pe-logixx-status" class="logixx-muted">Unlock vault above to access credentials.</span><button type="button" class="profile-save-btn" onclick="logixxSaveSingle()">💾 Save Gmail Login</button></div>
+                      <div class="logixx-profile-actions"><span id="pe-logixx-status" class="logixx-muted">Select an agent to view or update the saved Gmail login.</span><button type="button" class="profile-save-btn" onclick="logixxSaveSingle()">💾 Save Gmail Login</button></div>
                     </div>
                   </div>
                 </div>
@@ -15737,79 +15734,54 @@ async function bdsLayoutSave(){
 }
 
 
-/* ===== BDS Logixx Gmail secure vault =====
- * IMPORTANT DEPLOYMENT REQUIREMENT: Set Firestore rules so only verified admins
- * can read/write agent_logixx_credentials and agent_logixx_meta.
- * Client-side currentUser.isAdmin is UX only, not an authorization boundary.
+/* ===== BDS Logixx Gmail login manager =====
+ * IMPORTANT DEPLOYMENT REQUIREMENT: Firestore rules must restrict
+ * agent_logixx_credentials to verified administrators only.
+ * currentUser.isAdmin is a UI check, not a Firestore security boundary.
  */
-let logixxKey = null;
 let logixxPreview = [];
-let logixxVaultBusy = false;
-const logixxDecoder = new TextDecoder();
-const logixxEncoder = new TextEncoder();
 function logixxAdmin(){return !!(typeof currentUser!=='undefined' && currentUser && currentUser.isAdmin);}
 function logixxRequireAdmin(){if(!logixxAdmin()) throw Error('Administrator access required.');}
 function logixxMsg(text,error=false){const el=document.getElementById('logixx-vault-message');if(el){el.textContent=text;el.style.color=error?'#f87171':'#34d399';}}
-function logixxB64(bytes){let s='';for(const b of bytes)s+=String.fromCharCode(b);return btoa(s);}
-function logixxUnB64(value){return Uint8Array.from(atob(value),c=>c.charCodeAt(0));}
-function logixxClearSingle(){for(const id of ['pe-logixx-email','pe-logixx-password']){const el=document.getElementById(id);if(el)el.value='';}const el=document.getElementById('pe-logixx-status');if(el)el.textContent='Unlock vault above to access credentials.';}
-function logixxLockVault(clearInput=false){logixxKey=null;logixxPreview=[];const p=document.getElementById('logixx-import-preview');if(p)p.style.display='none';if(clearInput){const i=document.getElementById('logixx-master');if(i)i.value='';}logixxClearSingle();logixxMsg('Vault locked. Unlock it before importing or editing credentials.');}
-async function logixxDerive(pass,salt){const material=await crypto.subtle.importKey('raw',logixxEncoder.encode(pass),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:logixxUnB64(salt),iterations:250000,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
-async function logixxEncrypt(str,key){const iv=crypto.getRandomValues(new Uint8Array(12));const encrypted=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,logixxEncoder.encode(str));return {iv:logixxB64(iv),ciphertext:logixxB64(new Uint8Array(encrypted)),version:1};}
-async function logixxDecrypt(obj,key){const plaintext=await crypto.subtle.decrypt({name:'AES-GCM',iv:logixxUnB64(obj.iv)},key,logixxUnB64(obj.ciphertext));return logixxDecoder.decode(plaintext);}
-async function logixxUnlockVault(){
- if(logixxVaultBusy)return;
- try{
-  logixxRequireAdmin();if(!window.crypto?.subtle)throw Error('HTTPS or localhost is required for encrypted storage.');
-  const pass=document.getElementById('logixx-master').value;
-  if(pass.length<12)throw Error('Enter a private vault passphrase of at least 12 characters.');
-  logixxVaultBusy=true;logixxMsg('Checking vault...',false);
-  await ensureFirebaseAuth();
-  const metaRef=db.collection('agent_logixx_meta').doc('vault_v1');
-  let meta=await metaRef.get();
-  if(!meta.exists){
-    const salt=logixxB64(crypto.getRandomValues(new Uint8Array(16)));
-    const candidate=await logixxDerive(pass,salt);
-    const check=await logixxEncrypt('BDS_LOGIXX_VAULT_VALID_V1',candidate);
-    try{await db.runTransaction(async tx=>{const snap=await tx.get(metaRef);if(!snap.exists)tx.set(metaRef,{salt,check,createdAt:firebase.firestore.FieldValue.serverTimestamp()});});}
-    catch(e){throw Error('Cannot initialize vault. Configure admin-only Firestore permissions. '+e.message);}
-    meta=await metaRef.get();
-  }
-  const data=meta.data();const candidate=await logixxDerive(pass,data.salt);
-  try{if(await logixxDecrypt(data.check,candidate)!=='BDS_LOGIXX_VAULT_VALID_V1')throw Error('Invalid key');}
-  catch(_){throw Error('Incorrect vault passphrase. No credentials were changed.');}
-  logixxKey=candidate;logixxMsg('Vault unlocked. You can edit agent Gmail logins or bulk upload a CSV/Excel file.');
-  if(selectedProfileId)await logixxLoadSingle(selectedProfileId);
- }catch(e){logixxKey=null;logixxMsg(e.message||String(e),true);}finally{logixxVaultBusy=false;}
+function logixxClearSingle(){
+ for(const id of ['pe-logixx-email','pe-logixx-password']){const el=document.getElementById(id);if(el)el.value='';}
+ const el=document.getElementById('pe-logixx-status');if(el)el.textContent='Loading saved Gmail login...';
 }
 async function logixxLoadSingle(id){
  logixxClearSingle();const el=document.getElementById('pe-logixx-status');
- if(!logixxKey){if(el)el.textContent='Vault locked. Unlock above to view saved credentials.';return;}
  try{
-   logixxRequireAdmin();const snap=await db.collection('agent_logixx_credentials').doc(String(id)).get();
+   logixxRequireAdmin();
+   await ensureFirebaseAuth();
+   const snap=await db.collection('agent_logixx_credentials').doc(String(id)).get();
    if(selectedProfileId!==String(id))return;
    if(!snap.exists){if(el)el.textContent='No Gmail login saved for this agent.';return;}
-   const doc=snap.data();const payload=JSON.parse(await logixxDecrypt(doc.secret,logixxKey));
-   document.getElementById('pe-logixx-email').value=payload.email||'';
-   document.getElementById('pe-logixx-password').value=payload.password||'';
-   if(el)el.textContent='Encrypted Gmail login loaded from Firebase.';
- }catch(e){if(el)el.textContent='Unable to decrypt agent login: '+(e.message||e);}
+   const doc=snap.data()||{};
+   document.getElementById('pe-logixx-email').value=doc.email||'';
+   document.getElementById('pe-logixx-password').value=doc.password||'';
+   if(el)el.textContent='✓ Gmail login loaded from Firebase.';
+ }catch(e){if(el)el.textContent='Unable to load agent login: '+(e.message||e);}
 }
 function logixxTogglePassword(){const el=document.getElementById('pe-logixx-password');if(el)el.type=el.type==='password'?'text':'password';}
 async function logixxSaveSingle(){
  const el=document.getElementById('pe-logixx-status');
  try{
-   logixxRequireAdmin();if(!logixxKey)throw Error('Unlock vault first.');
+   logixxRequireAdmin();
    if(!selectedProfileId)throw Error('Select an agent.');
    const email=document.getElementById('pe-logixx-email').value.trim();
    const password=document.getElementById('pe-logixx-password').value;
    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw Error('Enter a valid Gmail login email.');
    if(!password)throw Error('Enter a password.');
-   if(el)el.textContent='Encrypting and saving...';
-   const secret=await logixxEncrypt(JSON.stringify({email,password}),logixxKey);
+   if(el)el.textContent='Saving Gmail login...';
    await ensureFirebaseAuth();
-   await db.collection('agent_logixx_credentials').doc(String(selectedProfileId)).set({agentId:String(selectedProfileId),secret,updatedBy:currentUser?.name||'Admin',updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
-   if(el)el.textContent='✓ Encrypted Gmail login saved for this agent.';
+   await db.collection('agent_logixx_credentials').doc(String(selectedProfileId)).set({
+     agentId:String(selectedProfileId),
+     email,
+     password,
+     secret:firebase.firestore.FieldValue.delete(),
+     updatedBy:currentUser?.name||'Admin',
+     updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+   },{merge:true});
+   if(el)el.textContent='✓ Gmail login saved for this agent.';
  }catch(e){if(el)el.textContent='❌ '+(e.message||e);}
 }
 function logixxNormalizeName(value){return String(value||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/^GUY[BP]\s+/i,'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();}
@@ -15834,7 +15806,6 @@ function logixxReadRows(rows){
   const name=String(r[nameIdx]??'').trim(),email=String(r[emailIdx]??'').trim(),password=String(r[passIdx]??''),id=idIdx>=0?String(r[idIdx]??'').trim():'';
   if(!name&&!email&&!password)return null;
   let matches=id?roster.filter(a=>String(a.userId)===id):names.get(logixxNormalizeName(name))||[];
-  // Match only exact normalized name or explicit agent ID. Never auto-assign fuzzy matches.
   let error='';let agent=null;
   if(matches.length!==1)error=matches.length?'Ambiguous agent name':'No exact agent match';
   else{agent=matches[0];if(seenIds.has(String(agent.userId)))error='Duplicate agent in upload';else seenIds.add(String(agent.userId));}
@@ -15852,7 +15823,8 @@ function logixxReadRows(rows){
 async function logixxReadFile(file){
  if(!file)return;
  try{
-  logixxRequireAdmin();if(!logixxKey)throw Error('Unlock vault before uploading.');
+  logixxRequireAdmin();
+  logixxMsg('Reading '+file.name+'...');
   await loadRoster();
   const ext=file.name.toLowerCase().split('.').pop();let rows;
   if(ext==='csv'){rows=logixxCsvParse(await file.text());}
@@ -15869,21 +15841,30 @@ async function logixxSaveImport(){
  const rows=logixxPreview.filter(r=>!r.error);
  const button=document.getElementById('logixx-import-save');
  try{
-  logixxRequireAdmin();if(!logixxKey)throw Error('Unlock vault before saving.');
+  logixxRequireAdmin();
   if(!rows.length)throw Error('No matched records to save.');
-  if(!confirm(`Save ${rows.length} encrypted Gmail logins to matched Firebase agent profiles? Existing saved logins for these agents will be replaced.`))return;
-  button.disabled=true;button.textContent='⏳ Encrypting & Saving...';
+  if(!confirm(`Save ${rows.length} Gmail logins to the matched Firebase agent profiles? Existing saved logins for these agents will be replaced.`))return;
+  button.disabled=true;button.textContent='⏳ Saving Logins...';
   await ensureFirebaseAuth();
-  // Encrypt in browser before preparing any Firestore write.
-  const entries=[];
-  for(const row of rows){entries.push({id:String(row.agent.userId),secret:await logixxEncrypt(JSON.stringify({email:row.email,password:row.password}),logixxKey)});}
-  for(let offset=0;offset<entries.length;offset+=400){
-    const batch=db.batch();for(const entry of entries.slice(offset,offset+400))batch.set(db.collection('agent_logixx_credentials').doc(entry.id),{agentId:entry.id,secret:entry.secret,updatedBy:currentUser?.name||'Admin',updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+  for(let offset=0;offset<rows.length;offset+=400){
+    const batch=db.batch();
+    for(const row of rows.slice(offset,offset+400)){
+      const id=String(row.agent.userId);
+      batch.set(db.collection('agent_logixx_credentials').doc(id),{
+        agentId:id,
+        email:row.email,
+        password:row.password,
+        secret:firebase.firestore.FieldValue.delete(),
+        updatedBy:currentUser?.name||'Admin',
+        updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+      },{merge:true});
+    }
     await batch.commit();
-    logixxMsg(`Saved ${Math.min(offset+400,entries.length)} of ${entries.length} encrypted logins.`);
+    logixxMsg(`Saved ${Math.min(offset+400,rows.length)} of ${rows.length} Gmail logins.`);
   }
+  const savedCount=rows.length;
   logixxPreview=[];document.getElementById('logixx-import-preview').style.display='none';
-  logixxMsg(`✓ Successfully saved ${entries.length} encrypted agent Gmail logins in Firebase.`);
+  logixxMsg(`✓ Successfully saved ${savedCount} agent Gmail logins to Firebase.`);
   if(selectedProfileId)await logixxLoadSingle(selectedProfileId);
  }catch(e){logixxMsg('Import failed: '+(e.message||e),true);}
  finally{button.disabled=false;button.textContent='💾 Save Matched Logins to Firebase';}
