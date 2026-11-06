@@ -13,7 +13,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyBBnvva_YrF3_Cw442dajqvQcracwW5eyE",
@@ -3516,19 +3515,6 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
           </div>
         </div>
 
-        <section class="logixx-import-card">
-          <div class="logixx-topline"><div><div class="profile-directory-title">🔐 BDS LOGIXX GMAIL LOGIN MANAGER</div>
-          <div class="logixx-muted">Match existing agent names · Upload CSV or Excel · Add agent Gmail logins</div></div>
-          <span class="profile-live-pill">Admin only</span></div>
-          <div class="logixx-flex">
-            <label class="profile-top-btn primary logixx-file-button">📤 Upload CSV / Excel<input id="logixx-import-file" type="file" accept=".csv,.xlsx,.xls" onchange="logixxReadFile(this.files[0])" hidden></label>
-            <button class="profile-top-btn" type="button" onclick="logixxDownloadTemplate()">↓ CSV Template</button>
-          </div>
-          <div class="logixx-muted">Upload a file with agent name, email and password. The system matches each row to the existing Firebase roster by exact agent name or Agent ID. Review the matches, then save them to the agent profiles.</div>
-          <div id="logixx-vault-message" class="logixx-message" role="status">Ready to upload CSV or Excel.</div>
-          <div id="logixx-import-preview" style="display:none"><div class="logixx-preview-header"><strong id="logixx-preview-count"></strong><button id="logixx-import-save" type="button" class="profile-save-btn" onclick="logixxSaveImport()">💾 Save Matched Logins to Firebase</button></div><div class="logixx-preview-scroll"><table class="logixx-preview-table"><thead><tr><th>Uploaded name</th><th>Matched agent</th><th>Email</th><th>Result</th></tr></thead><tbody id="logixx-preview-body"></tbody></table></div><div class="logixx-muted">Unmatched or ambiguous rows are skipped. Passwords are not shown in the preview. This import changes only BDS Logixx Gmail login fields, not identity, team, shift or attendance.</div></div>
-        </section>
-
         <div class="profile-workspace">
           <!-- DIRECTORY -->
           <section class="profile-directory-card">
@@ -6812,7 +6798,6 @@ async function doLogin(){
       btn.innerHTML = 'ENTER DASHBOARD';
       btn.disabled = false;
       showDashboard();
-      roseStartPermissionWatch();
       roseApplyAdminTabPermissions();
     }catch(e){
       console.error('Firebase admin login failed:', e);
@@ -7306,6 +7291,7 @@ function doLogout(auto=false){
   accessStopChatSettings();
   toStop();
   if(roseAdminAccountUnsub){roseAdminAccountUnsub();roseAdminAccountUnsub=null;}
+  if(roseAdminAccountRetryTimer){clearTimeout(roseAdminAccountRetryTimer);roseAdminAccountRetryTimer=null;}
   clearTimeout(midnightTimer);
   accessChatListenerGeneration++;
   if(accessChatReconnectTimer){clearTimeout(accessChatReconnectTimer);accessChatReconnectTimer=null;}
@@ -7360,11 +7346,19 @@ async function checkSession(){
       if(currentUser.isAdmin){
         if(currentUser.authSource!=='firebase')throw Error('Legacy administrator sessions are retired.');
         await ensureFirebaseAuth();
-        const doc=await db.collection('admin_accounts').doc(currentUser.username||'').get({source:'server'}),a=doc.data()||{};
-        if(!doc.exists||a.active===false||!['admin','superadmin'].includes(a.role)||(Number(a.sessionVersion)||0)!==(Number(currentUser.sessionVersion)||0))throw Error('Administrator session changed.');
-        currentUser.role=currentUser.username==='rose'?'superadmin':a.role;
-        currentUser.adminTabPermissions=Array.isArray(a.adminTabPermissions)?a.adminTabPermissions:null;
-        currentUser.dashboardTabPermissions=Array.isArray(a.dashboardTabPermissions)?a.dashboardTabPermissions:null;
+        try{
+          const doc=await db.collection('admin_accounts').doc(currentUser.username||'').get({source:'server'}),a=doc.data()||{};
+          if(!doc.exists||a.active===false||!['admin','superadmin'].includes(String(a.role||'').toLowerCase())||(Number(a.sessionVersion)||0)!==(Number(currentUser.sessionVersion)||0))throw Error('ADMIN_SESSION_CHANGED');
+          currentUser.role=currentUser.username==='rose'?'superadmin':a.role;
+          currentUser.adminTabPermissions=Array.isArray(a.adminTabPermissions)?a.adminTabPermissions:null;
+          currentUser.dashboardTabPermissions=Array.isArray(a.dashboardTabPermissions)?a.dashboardTabPermissions:null;
+          sessionStorage.setItem('bds_user_'+today,JSON.stringify(currentUser));
+        }catch(adminCheckErr){
+          if(String(adminCheckErr&&adminCheckErr.message||adminCheckErr)==='ADMIN_SESSION_CHANGED')throw Error('Administrator session changed.');
+          // Network/server verification errors should not erase a valid same-day
+          // admin session. The real-time watcher retries verification after load.
+          console.warn('Admin session server verification temporarily unavailable; retaining saved session.',adminCheckErr);
+        }
       }
       // Reload the latest Firebase roster values
       if(!currentUser.isAdmin && currentUser.id){
@@ -14926,6 +14920,7 @@ const ROSE_DASHBOARD_TABS = [
  ['access-chat','🔐 Access Needed / Chatroom'],['admin','⚡ Admin Panel']
 ];
 let roseAdminAccountUnsub=null;
+let roseAdminAccountRetryTimer=null;
 function roseAllowedDashboardTab(tab){
  if(!currentUser?.isAdmin)return true; // Agent navigation keeps its existing rules.
  if(isRoseAdmin())return true; // Rose always retains the entire dashboard.
@@ -14984,20 +14979,57 @@ function roseApplyAdminTabPermissions(){
 }
 function roseStartPermissionWatch(){
  if(roseAdminAccountUnsub){roseAdminAccountUnsub();roseAdminAccountUnsub=null;}
+ if(roseAdminAccountRetryTimer){clearTimeout(roseAdminAccountRetryTimer);roseAdminAccountRetryTimer=null;}
  if(!currentUser?.isAdmin||currentUser.authSource!=='firebase')return;
  const username=normalizeAdminUsername(currentUser.username);
- roseAdminAccountUnsub=db.collection('admin_accounts').doc(username).onSnapshot(doc=>{
-  if(!currentUser||currentUser.username!==username)return;
-  const a=doc.data()||{};
-  if(!doc.exists||a.active===false||!['admin','superadmin'].includes(a.role)||(Number(a.sessionVersion)||0)!==(Number(currentUser.sessionVersion)||0)){
-    doLogout();document.getElementById('login-err').textContent='Your account or password changed. Please sign in again.';return;
-  }
-  currentUser.role=username==='rose'?'superadmin':a.role;
-  currentUser.adminTabPermissions=Array.isArray(a.adminTabPermissions)?a.adminTabPermissions:null;
-  currentUser.dashboardTabPermissions=Array.isArray(a.dashboardTabPermissions)?a.dashboardTabPermissions:null;
-  sessionStorage.setItem('bds_user_'+getTodayGY(),JSON.stringify(currentUser));
-  roseApplyAdminTabPermissions();roseApplyDashboardTabPermissions();toRefreshRequestAccess();toRenderReminders();
- },err=>{if(currentUser?.username!==username)return;doLogout();document.getElementById('login-err').textContent='Could not verify administrator access. Reconnect and sign in again.';});
+ const watchedSessionVersion=Number(currentUser.sessionVersion)||0;
+
+ const scheduleRetry=()=>{
+  if(roseAdminAccountRetryTimer)clearTimeout(roseAdminAccountRetryTimer);
+  roseAdminAccountRetryTimer=setTimeout(()=>{
+   roseAdminAccountRetryTimer=null;
+   if(currentUser?.isAdmin && currentUser.authSource==='firebase' && normalizeAdminUsername(currentUser.username)===username){
+    roseStartPermissionWatch();
+   }
+  },4000);
+ };
+
+ try{
+  roseAdminAccountUnsub=db.collection('admin_accounts').doc(username).onSnapshot(doc=>{
+   if(!currentUser||normalizeAdminUsername(currentUser.username)!==username)return;
+   const a=doc.data()||{};
+
+   // Only a confirmed account/security change should end the admin session.
+   // Temporary Firestore/network/listener failures are handled by the error
+   // callback below and must never force the administrator back to login.
+   if(!doc.exists||a.active===false||!['admin','superadmin'].includes(String(a.role||'').toLowerCase())||(Number(a.sessionVersion)||0)!==watchedSessionVersion){
+    doLogout();
+    const err=document.getElementById('login-err');
+    if(err)err.textContent='Your administrator account, password, or permissions changed. Please sign in again.';
+    return;
+   }
+
+   currentUser.role=username==='rose'?'superadmin':a.role;
+   currentUser.adminTabPermissions=Array.isArray(a.adminTabPermissions)?a.adminTabPermissions:null;
+   currentUser.dashboardTabPermissions=Array.isArray(a.dashboardTabPermissions)?a.dashboardTabPermissions:null;
+   sessionStorage.setItem('bds_user_'+getTodayGY(),JSON.stringify(currentUser));
+   roseApplyAdminTabPermissions();
+   roseApplyDashboardTabPermissions();
+   toRefreshRequestAccess();
+   toRenderReminders();
+  },async err=>{
+   if(!currentUser||normalizeAdminUsername(currentUser.username)!==username)return;
+   console.warn('Administrator permission listener temporarily unavailable. Session retained:',err);
+
+   // Re-establish anonymous Firebase Auth if it was interrupted, then retry.
+   // IMPORTANT: do not call doLogout() for a listener/network error.
+   try{await ensureFirebaseAuth();}catch(authErr){console.warn('Firebase auth reconnect pending:',authErr);}
+   scheduleRetry();
+  });
+ }catch(err){
+  console.warn('Could not start administrator permission listener. Session retained:',err);
+  scheduleRetry();
+ }
 }
 function rosePermissionMarkup(prefix,selected){
  const chosen=Array.isArray(selected)?selected:ROSE_ADMIN_TABS.filter(([k])=>k!=='unused'&&k!=='users').map(([k])=>k);
@@ -15734,15 +15766,13 @@ async function bdsLayoutSave(){
 }
 
 
-/* ===== BDS Logixx Gmail login manager =====
+/* ===== BDS Logixx Gmail login fields (individual agent profiles only) =====
  * IMPORTANT DEPLOYMENT REQUIREMENT: Firestore rules must restrict
  * agent_logixx_credentials to verified administrators only.
  * currentUser.isAdmin is a UI check, not a Firestore security boundary.
  */
-let logixxPreview = [];
 function logixxAdmin(){return !!(typeof currentUser!=='undefined' && currentUser && currentUser.isAdmin);}
 function logixxRequireAdmin(){if(!logixxAdmin()) throw Error('Administrator access required.');}
-function logixxMsg(text,error=false){const el=document.getElementById('logixx-vault-message');if(el){el.textContent=text;el.style.color=error?'#f87171':'#34d399';}}
 function logixxClearSingle(){
  for(const id of ['pe-logixx-email','pe-logixx-password']){const el=document.getElementById(id);if(el)el.value='';}
  const el=document.getElementById('pe-logixx-status');if(el)el.textContent='Loading saved Gmail login...';
@@ -15784,97 +15814,6 @@ async function logixxSaveSingle(){
    if(el)el.textContent='✓ Gmail login saved for this agent.';
  }catch(e){if(el)el.textContent='❌ '+(e.message||e);}
 }
-function logixxNormalizeName(value){return String(value||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/^GUY[BP]\s+/i,'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();}
-function logixxCsvParse(text){
- const result=[];let row=[],field='',quoted=false;
- for(let i=0;i<text.length;i++){const c=text[i];if(c==='"'){if(quoted&&text[i+1]==='"'){field+='"';i++;}else quoted=!quoted;}else if(c===','&&!quoted){row.push(field);field='';}else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&text[i+1]==='\n')i++;row.push(field);if(row.some(v=>v.trim()))result.push(row);row=[];field='';}else field+=c;}
- row.push(field);if(row.some(v=>v.trim()))result.push(row);return result;
-}
-function logixxReadRows(rows){
- if(!rows.length)throw Error('File is empty.');
- const headers=rows[0].map(x=>String(x||'').replace(/^\uFEFF/,'').trim().toLowerCase().replace(/[^a-z0-9]/g,''));
- const idx=(names)=>headers.findIndex(x=>names.includes(x));
- const nameIdx=idx(['preferredname','agentname','fullname','name']);
- const emailIdx=idx(['newemail','email','gmail','gmailaddress','emailaddress','logixxemail']);
- const passIdx=idx(['password','gmailpassword','logixxpassword','pass']);
- if(nameIdx<0||emailIdx<0||passIdx<0)throw Error('Required headers: Preferred Name (or Agent Name), New Email (or Email), Password.');
- const idIdx=idx(['agentid','userid','id']);
- const roster=Object.values(ROSTER||{}).filter(a=>a&&a.userId&&a.name);
- const names=new Map();for(const a of roster){const n=logixxNormalizeName(a.name);if(!names.has(n))names.set(n,[]);names.get(n).push(a);}
- const seenIds=new Set();
- logixxPreview=rows.slice(1).map((r,i)=>{
-  const name=String(r[nameIdx]??'').trim(),email=String(r[emailIdx]??'').trim(),password=String(r[passIdx]??''),id=idIdx>=0?String(r[idIdx]??'').trim():'';
-  if(!name&&!email&&!password)return null;
-  let matches=id?roster.filter(a=>String(a.userId)===id):names.get(logixxNormalizeName(name))||[];
-  let error='';let agent=null;
-  if(matches.length!==1)error=matches.length?'Ambiguous agent name':'No exact agent match';
-  else{agent=matches[0];if(seenIds.has(String(agent.userId)))error='Duplicate agent in upload';else seenIds.add(String(agent.userId));}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))error=error||'Invalid email';
-  if(!password)error=error||'Missing password';
-  return {row:i+2,name,email,password,agent,error};
- }).filter(Boolean);
- const matchCount=logixxPreview.filter(r=>!r.error).length;
- document.getElementById('logixx-preview-count').textContent=`${logixxPreview.length} rows · ${matchCount} ready · ${logixxPreview.length-matchCount} skipped`;
- document.getElementById('logixx-preview-body').innerHTML=logixxPreview.map(r=>`<tr><td>${profileSafe(r.name)}</td><td>${profileSafe(r.agent?r.agent.name+' (#'+r.agent.userId+')':'—')}</td><td>${profileSafe(r.email)}</td><td class="${r.error?'logixx-error':'logixx-ok'}">${profileSafe(r.error||'✓ Matched')}</td></tr>`).join('');
- document.getElementById('logixx-import-preview').style.display='block';
- document.getElementById('logixx-import-save').disabled=matchCount===0;
- logixxMsg(`${matchCount} rows matched. Review the preview, then click Save Matched Logins.`);
-}
-async function logixxReadFile(file){
- if(!file)return;
- try{
-  logixxRequireAdmin();
-  logixxMsg('Reading '+file.name+'...');
-  await loadRoster();
-  const ext=file.name.toLowerCase().split('.').pop();let rows;
-  if(ext==='csv'){rows=logixxCsvParse(await file.text());}
-  else if(['xlsx','xls'].includes(ext)){
-    if(typeof XLSX==='undefined')throw Error('Excel parser did not load. Try saving the spreadsheet as CSV.');
-    const book=XLSX.read(await file.arrayBuffer(),{type:'array'});
-    const sheet=book.Sheets[book.SheetNames[0]];rows=XLSX.utils.sheet_to_json(sheet,{header:1,defval:'',raw:false});
-  }else throw Error('Upload a .csv, .xlsx or .xls file.');
-  logixxReadRows(rows);
- }catch(e){logixxPreview=[];logixxMsg('Import error: '+(e.message||e),true);document.getElementById('logixx-import-preview').style.display='none';}
- finally{document.getElementById('logixx-import-file').value='';}
-}
-async function logixxSaveImport(){
- const rows=logixxPreview.filter(r=>!r.error);
- const button=document.getElementById('logixx-import-save');
- try{
-  logixxRequireAdmin();
-  if(!rows.length)throw Error('No matched records to save.');
-  if(!confirm(`Save ${rows.length} Gmail logins to the matched Firebase agent profiles? Existing saved logins for these agents will be replaced.`))return;
-  button.disabled=true;button.textContent='⏳ Saving Logins...';
-  await ensureFirebaseAuth();
-  for(let offset=0;offset<rows.length;offset+=400){
-    const batch=db.batch();
-    for(const row of rows.slice(offset,offset+400)){
-      const id=String(row.agent.userId);
-      batch.set(db.collection('agent_logixx_credentials').doc(id),{
-        agentId:id,
-        email:row.email,
-        password:row.password,
-        secret:firebase.firestore.FieldValue.delete(),
-        updatedBy:currentUser?.name||'Admin',
-        updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-      },{merge:true});
-    }
-    await batch.commit();
-    logixxMsg(`Saved ${Math.min(offset+400,rows.length)} of ${rows.length} Gmail logins.`);
-  }
-  const savedCount=rows.length;
-  logixxPreview=[];document.getElementById('logixx-import-preview').style.display='none';
-  logixxMsg(`✓ Successfully saved ${savedCount} agent Gmail logins to Firebase.`);
-  if(selectedProfileId)await logixxLoadSingle(selectedProfileId);
- }catch(e){logixxMsg('Import failed: '+(e.message||e),true);}
- finally{button.disabled=false;button.textContent='💾 Save Matched Logins to Firebase';}
-}
-function logixxDownloadTemplate(){
- const str='Preferred Name,New Email,Password\r\n';
- const url=URL.createObjectURL(new Blob([str],{type:'text/csv;charset=utf-8'}));
- const a=document.createElement('a');a.href=url;a.download='BDS_Logixx_Gmail_Import_Template.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-
 </script>
 </body>
 </html>
