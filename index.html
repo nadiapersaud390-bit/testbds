@@ -1843,6 +1843,44 @@ input, textarea, select { color-scheme: dark; }
 .dispo-pro-reminder-icon{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:rgba(56,189,248,.075);border:1px solid rgba(56,189,248,.18);font-size:.88rem;}
 .dispo-pro-reminder strong{display:block;font-size:.66rem;color:#eef4fb;}.dispo-pro-reminder span{display:block;margin-top:1px;font-size:.58rem;line-height:1.35;color:#73839b;font-weight:650;}
 
+/* Disposition reference library */
+.dispo-library-toolbar{display:grid;gap:12px;}
+.dispo-library-search{display:flex;align-items:center;gap:10px;padding:0 14px;border:1px solid #30415c;border-radius:12px;background:rgba(5,10,21,.72);}
+.dispo-library-search:focus-within{border-color:#34d399;box-shadow:0 0 0 3px rgba(52,211,153,.09);}
+.dispo-library-search span{font-size:1.15rem;color:#75a994;}
+.dispo-library-search input{width:100%;min-width:0;padding:13px 0;border:0;outline:0;background:transparent;color:#e8f0fa;font:700 .88rem 'Barlow',sans-serif;}
+.dispo-library-search input::placeholder{color:#74859d;}
+.dispo-filterbar{display:flex;gap:8px;flex-wrap:wrap;}
+.dispo-filter{padding:8px 11px;border:1px solid #293953;border-radius:999px;background:#0c1423;color:#9bacbf;font:800 .67rem 'Barlow Condensed',sans-serif;letter-spacing:.7px;text-transform:uppercase;cursor:pointer;transition:.15s ease;}
+.dispo-filter:hover{border-color:#52647d;color:#edf4fb;}
+.dispo-filter.active{border-color:rgba(52,211,153,.55);background:rgba(52,211,153,.1);color:#74e3b7;}
+.dispo-library-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;color:#8191a8;font-size:.70rem;font-weight:750;}
+.dispo-library-meta strong{color:#dce7f4;}
+.dispo-entry-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start;}
+.dispo-entry{--entry-tone:96,165,250;overflow:hidden;border:1px solid rgba(var(--entry-tone),.22);border-left:3px solid rgb(var(--entry-tone));border-radius:13px;background:linear-gradient(150deg,rgba(15,25,43,.97),rgba(7,13,24,.98));}
+.dispo-entry[hidden]{display:none!important;}
+.dispo-entry.green{--entry-tone:52,211,153}.dispo-entry.gold{--entry-tone:251,191,36}.dispo-entry.purple{--entry-tone:167,139,250}.dispo-entry.red{--entry-tone:248,113,113}.dispo-entry.gray{--entry-tone:148,163,184}
+.dispo-entry-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:13px 14px 8px;}
+.dispo-entry-code{display:inline-block;margin-bottom:5px;padding:4px 7px;border:1px solid rgba(var(--entry-tone),.3);border-radius:6px;background:rgba(var(--entry-tone),.08);color:rgb(var(--entry-tone));font:900 .69rem 'Barlow Condensed',sans-serif;letter-spacing:1px;}
+.dispo-entry-title{font:900 1.06rem 'Barlow Condensed',sans-serif;letter-spacing:.55px;color:#eff4fa;}
+.dispo-entry-category{flex:0 0 auto;padding:4px 7px;border:1px solid #26364e;border-radius:999px;color:#8798ad;font-size:.58rem;font-weight:850;letter-spacing:.65px;text-transform:uppercase;}
+.dispo-entry-use{padding:0 14px 11px;color:#aab8c9;font-size:.75rem;line-height:1.58;font-weight:650;}
+.dispo-entry-use strong{color:#eef4fb;}
+.dispo-entry details{border-top:1px solid #1c2a40;background:rgba(4,9,18,.28);}
+.dispo-entry details summary{padding:9px 14px;color:#8fe0bf;font-size:.68rem;font-weight:850;cursor:pointer;list-style:none;}
+.dispo-entry details summary::-webkit-details-marker{display:none;}
+.dispo-entry details summary::after{content:'＋';float:right;color:#6fbd9e;}
+.dispo-entry details[open] summary::after{content:'−';}
+.dispo-entry-detail{padding:0 14px 13px;color:#9baabd;font-size:.73rem;line-height:1.62;}
+.dispo-entry-detail p{margin:5px 0;}
+.dispo-entry-detail ul{margin:5px 0 4px;padding-left:18px;}
+.dispo-entry-detail li{margin:4px 0;}
+.dispo-entry-detail strong{color:#eaf1fa;}
+.dispo-empty{display:none;padding:22px;border:1px dashed #33445e;border-radius:12px;text-align:center;color:#95a4b8;font-size:.78rem;}
+.dispo-empty.show{display:block;}
+@media(max-width:760px){.dispo-entry-grid{grid-template-columns:1fr}.dispo-library-meta{align-items:flex-start;flex-direction:column}.dispo-filterbar{gap:6px}.dispo-filter{font-size:.57rem}}
+
+
 /* top navigation treatment */
 .tab-btn.t-dispo{border-color:rgba(52,211,153,.26);color:#79b7a2;background:linear-gradient(145deg,rgba(52,211,153,.045),#0d1424);}
 .tab-btn.t-dispo:hover{border-color:rgba(52,211,153,.48);color:var(--green);}
@@ -4223,53 +4261,199 @@ body:not(.is-admin) .top-tabs .nav-row-admin{display:none!important;}
     <div class="dispo-pro-shell">
       <section class="dispo-pro-hero" aria-labelledby="dispo-pro-title">
         <div>
-          <div class="dispo-pro-eyebrow">● Call Completion Center</div>
-          <h1 class="dispo-pro-title" id="dispo-pro-title">Choose the Correct Disposition</h1>
-          <p class="dispo-pro-subtitle">Finish every call with a clean, accurate outcome. Select the disposition that matches what actually happened, complete the required note or handoff, then move confidently to the next call.</p>
+          <div class="dispo-pro-eyebrow">● QA Reference · Updated November 12, 2026</div>
+          <h1 class="dispo-pro-title" id="dispo-pro-title">Call Dispositions</h1>
+          <p class="dispo-pro-subtitle">Dispositions are the system’s classifications for completed customer interactions. Choose the code that accurately describes what happened on the call. Search by code, name, customer situation, or instruction. Open any card for the full guidance and next step.</p>
         </div>
         <div class="dispo-pro-standard">
-          <div class="dispo-pro-standard-label">Agent Standard</div>
+          <div class="dispo-pro-standard-label">Before you submit</div>
           <div class="dispo-pro-standard-main">Accurate · Clear · Complete</div>
-          <div class="dispo-pro-standard-copy">The disposition should tell the next person exactly where the customer stands.</div>
+          <div class="dispo-pro-standard-copy">The disposition should reflect the actual call outcome and any required follow-up.</div>
         </div>
       </section>
 
-      <section class="dispo-pro-grid" aria-label="Disposition options">
-        <article class="dispo-pro-card green">
-          <div class="dispo-pro-card-head"><div class="dispo-pro-card-id"><div class="dispo-pro-icon">✓</div><div><div class="dispo-pro-label">Transferred</div><div class="dispo-pro-kicker">Successful specialist handoff</div></div></div><div class="dispo-pro-status">Completed</div></div>
-          <div class="dispo-pro-purpose"><strong>Use when</strong>The client has been connected to the specialist and the live transfer is complete.</div>
-          <button class="dispo-pro-btn" onclick="location.reload()">Live Transfer Done</button>
-        </article>
-        <article class="dispo-pro-card gold">
-          <div class="dispo-pro-card-head"><div class="dispo-pro-card-id"><div class="dispo-pro-icon">↻</div><div><div class="dispo-pro-label">Callback</div><div class="dispo-pro-kicker">Customer requested another time</div></div></div><div class="dispo-pro-status">Follow Up</div></div>
-          <div class="dispo-pro-purpose"><strong>Use when</strong>The client requested a call back. Confirm the date or time window before ending the call.</div>
-          <button class="dispo-pro-btn" onclick="location.reload()">Set Callback</button>
-        </article>
-        <article class="dispo-pro-card purple">
-          <div class="dispo-pro-card-head"><div class="dispo-pro-card-id"><div class="dispo-pro-icon">☎</div><div><div class="dispo-pro-label">No Answer</div><div class="dispo-pro-kicker">Attempt made, customer unavailable</div></div></div><div class="dispo-pro-status">Attempted</div></div>
-          <div class="dispo-pro-purpose"><strong>Use when</strong>The call reached voicemail or there was no answer. Log the attempt and continue.</div>
-          <button class="dispo-pro-btn" onclick="location.reload()">Voicemail / No Answer</button>
-        </article>
-        <article class="dispo-pro-card red">
-          <div class="dispo-pro-card-head"><div class="dispo-pro-card-id"><div class="dispo-pro-icon">×</div><div><div class="dispo-pro-label">Not Qualified</div><div class="dispo-pro-kicker">Does not meet required criteria</div></div></div><div class="dispo-pro-status">DQ</div></div>
-          <div class="dispo-pro-purpose"><strong>Use when</strong>The customer does not meet the qualification criteria. End the call clearly and professionally.</div>
-          <button class="dispo-pro-btn" onclick="location.reload()">DQ — End Call</button>
-        </article>
+      <section class="dispo-library-toolbar" aria-label="Search and filter disposition guidance">
+        <label class="dispo-library-search" for="dispo-search"><span aria-hidden="true">⌕</span><input id="dispo-search" type="search" placeholder="Search codes, situations, or instructions…" autocomplete="off" oninput="filterDispoLibrary()" aria-label="Search call dispositions"></label>
+        <div class="dispo-filterbar" role="group" aria-label="Filter disposition categories">
+          <button type="button" class="dispo-filter active" data-filter="all" aria-pressed="true" onclick="setDispoFilter('all',this)">All dispositions</button>
+          <button type="button" class="dispo-filter" data-filter="transfer" aria-pressed="false" onclick="setDispoFilter('transfer',this)">Transfers &amp; credit</button>
+          <button type="button" class="dispo-filter" data-filter="customer" aria-pressed="false" onclick="setDispoFilter('customer',this)">Customer outcomes</button>
+          <button type="button" class="dispo-filter" data-filter="connection" aria-pressed="false" onclick="setDispoFilter('connection',this)">Call connection</button>
+          <button type="button" class="dispo-filter" data-filter="followup" aria-pressed="false" onclick="setDispoFilter('followup',this)">Follow-up &amp; language</button>
+          <button type="button" class="dispo-filter" data-filter="obsolete" aria-pressed="false" onclick="setDispoFilter('obsolete',this)">Obsolete · do not use</button>
+        </div>
+        <div class="dispo-library-meta"><span id="dispo-results-count" aria-live="polite"><strong>22</strong> dispositions</span><span>20 current codes · 2 obsolete codes</span></div>
       </section>
 
-      <section class="dispo-pro-reminders">
-        <header class="dispo-pro-reminder-head"><div class="dispo-pro-reminder-title">Quick Call-Control Reminders</div><div class="dispo-pro-reminder-tag">Before You Submit</div></header>
-        <div class="dispo-pro-reminder-grid">
-          <div class="dispo-pro-reminder"><div class="dispo-pro-reminder-icon">🧘</div><div><strong>Stay calm</strong><span>Your energy carries through the call.</span></div></div>
-          <div class="dispo-pro-reminder"><div class="dispo-pro-reminder-icon">⏸</div><div><strong>Use the pause</strong><span>Pause after punch words and questions.</span></div></div>
-          <div class="dispo-pro-reminder"><div class="dispo-pro-reminder-icon">🎯</div><div><strong>Always pivot</strong><span>Bring the conversation back to the script.</span></div></div>
-          <div class="dispo-pro-reminder"><div class="dispo-pro-reminder-icon">🤫</div><div><strong>Ask &amp; wait</strong><span>Silence gives the customer room to answer.</span></div></div>
-          <div class="dispo-pro-reminder"><div class="dispo-pro-reminder-icon">👤</div><div><strong>Use their name</strong><span>Personal language builds trust and control.</span></div></div>
-          <div class="dispo-pro-reminder"><div class="dispo-pro-reminder-icon">🙂</div><div><strong>Smile while talking</strong><span>A warmer tone is easier to hear than you think.</span></div></div>
-        </div>
-      </section>
+      <div class="dispo-entry-grid" id="dispo-entry-grid" aria-label="Disposition guidance">
+        <article class="dispo-entry green" data-category="transfer" data-search="xfer call transferred transfer approved logixx closer specialist connected both parties 5 15 seconds">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">XFER</span><div class="dispo-entry-title">Call transferred</div></div><span class="dispo-entry-category">Transfer</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> Logixx approves the customer for transfer and the customer is successfully connected to a closer.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>Make sure both parties are connected. Then disposition the call as <strong>XFER within 5 to 15 seconds</strong>.</p></div></details>
+        </article>
+
+        <article class="dispo-entry green" data-category="transfer" data-search="cb-uwa callback with uw approved successfully connected closer transfer dropped drxfer">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">CB-UWA</span><div class="dispo-entry-title">Callback with UW approved</div></div><span class="dispo-entry-category">Transfer</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> The customer is successfully connected to the closer, as described in the QA slides.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>The slide labels this disposition “callback with UW approved.” It does not expand “UW.”</p><p>For a call that drops before you can confirm the customer and closer are communicating, the obsolete <strong>DRXFER</strong> slide directs agents to use <strong>CB-UWA</strong> and try to contact the customer again.</p></div></details>
+        </article>
+
+        <article class="dispo-entry gold" data-category="transfer" data-search="crpull crpul credit pull declined logixx transfer closer 30 days coapplicant soe statement of eligibility disconnected failed transfer unreachable callback">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">CRPULL</span><div class="dispo-entry-title">Credit pull</div></div><span class="dispo-entry-category">Credit / transfer</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> Logixx declines the customer for transfer, or an approved transfer disconnects and the customer cannot be reached for another attempt.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p><strong>Declined for transfer:</strong> The slide says the last credit pull must have been more than 30 days ago, if applicable, and there is no co-applicant to add. Deliver the SOE, then offer a courteous, professional farewell.</p><p><strong>Disconnected after approval:</strong> Call the customer back and try to transfer them to a closer. If you cannot reach them, use CRPULL.</p></div></details>
+          <div class="dispo-entry-note">The contents slide spells this “CRPUL”; the detailed guidance uses “CRPULL.” This tab uses CRPULL.</div>
+        </article>
+
+        <article class="dispo-entry gold" data-category="customer" data-search="ni not available busy callback no time hold never returned owner unavailable busy activity">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">NI</span><div class="dispo-entry-title">Not available</div></div><span class="dispo-entry-category">Availability</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> The customer is unavailable to continue the conversation now.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><ul><li>The customer is busy and asks to be called later but does not give a specific time.</li><li>The customer is occupied with another activity.</li><li>The customer asks to be placed on hold but never returns.</li><li>The owner of the phone line is unavailable.</li></ul></div></details>
+        </article>
+
+        <article class="dispo-entry gold" data-category="connection" data-search="b busy signal constant beeping no human interaction 20 90 seconds">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">B</span><div class="dispo-entry-title">Busy</div></div><span class="dispo-entry-category">Line status</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> The phone line returns a busy signal or constant beeping with no human interaction.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>The QA slide gives a call length of <strong>20 to 90 seconds</strong> for this situation.</p></div></details>
+        </article>
+
+        <article class="dispo-entry purple" data-category="customer" data-search="wrongn wrong number not person listed lead related correct customer information">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">WRONGN</span><div class="dispo-entry-title">Wrong number</div></div><span class="dispo-entry-category">Customer identity</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> The person who answers says they are not the person listed on the lead.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>Politely ask whether they are related to the person on the lead or can provide the correct customer information.</p></div></details>
+        </article>
+
+        <article class="dispo-entry purple" data-category="customer" data-search="prnk pranker prank joke fake answers funny audio songs moaning troll insults false interest unserious">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">PRNK</span><div class="dispo-entry-title">Pranker</div></div><span class="dispo-entry-category">Customer behavior</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> The caller is joking, giving fake answers, or not engaging seriously.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>Examples in the QA slides include funny audio, songs, moaning, trolling, insults, unbelievable responses, or someone pretending to be interested in the program.</p></div></details>
+        </article>
+
+        <article class="dispo-entry red" data-category="customer" data-search="dnq does not qualify language other than english spanish cannot provide information applied credit pull declined within 30 days no coapplicant">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">DNQ</span><div class="dispo-entry-title">Does not qualify</div></div><span class="dispo-entry-category">Eligibility</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> The customer cannot provide information in English or Spanish, or has a recent declined credit pull with no co-applicant.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><ul><li>The customer speaks a language other than English or Spanish and cannot provide information in either language.</li><li>The customer already applied, their credit pull was declined within the last 30 days, and they have no co-applicant to add.</li></ul></div></details>
+        </article>
+
+        <article class="dispo-entry purple" data-category="connection" data-search="n no answer noise no direct contact hello since there is no response disconnect call several attempts 30 60 21 90 seconds">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">N</span><div class="dispo-entry-title">No answer</div></div><span class="dispo-entry-category">Call connection</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> There is noise, but no direct contact with the customer, and the call lasts long enough to make several attempts to get a response.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>Try several times to get the customer’s attention. The comparison slide says agents have time to introduce themselves and ask, “Hello? Anyone there?” As the call approaches 60 seconds, say: <strong>“Since there is no response, I will disconnect the call.”</strong></p><p>The comparison slide describes background noise and a 21 to 90 second call.</p></div></details>
+        </article>
+
+        <article class="dispo-entry purple" data-category="connection" data-search="gc ghost call brief call disconnects on its own caller system 2 20 seconds unable to present">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">GC</span><div class="dispo-entry-title">Ghost call</div></div><span class="dispo-entry-category">Call connection</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> Contact cannot be established because the call is very brief or disconnects by itself through the caller or system.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>The comparison slide says the call disconnects on its own within <strong>2 to 20 seconds</strong>, leaving too little time to introduce yourself or make enough attempts for a response.</p></div></details>
+        </article>
+
+        <article class="dispo-entry purple" data-category="connection" data-search="da dead air inbound connected complete silence no voice background noise input max 30 seconds 20 seconds">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">DA</span><div class="dispo-entry-title">Dead air</div></div><span class="dispo-entry-category">Call connection</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> An inbound call connects, but there is complete silence with no voice, background noise, or customer input.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>The QA slides say not to remain on dead air for more than 30 seconds. The comparison slide also says there is no sound or beep and no background noise or voice on the customer’s side.</p></div></details>
+        </article>
+
+        <article class="dispo-entry red" data-category="customer" data-search="dnc do not call remove number stop calling no more calls dead person remove calling list validate reason farewell offer">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">DNC</span><div class="dispo-entry-title">Do not call</div></div><span class="dispo-entry-category">Contact preference</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> The customer clearly asks to be removed from the calling list and not contacted again.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>If possible, attempt to deliver the offer. Listen carefully and acknowledge the reason for the request. Remain calm and give a courteous farewell.</p><p>Examples: “Remove my number,” “Take me off the list,” “Stop calling me,” “Don’t call me,” “I’m tired of all your calls,” “I don't want to receive any more calls from your company,” or “The person you are trying to reach is dead.”</p></div></details>
+        </article>
+
+        <article class="dispo-entry red" data-category="customer" data-search="nointr not interested reject offer two attempts explain rebuttals clearly states">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">NOINTR</span><div class="dispo-entry-title">Not interested</div></div><span class="dispo-entry-category">Customer response</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> The customer clearly rejects the offer after at least two attempts to explain it.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>Use after you have attempted to present the offer and tried several rebuttals during the call.</p></div></details>
+        </article>
+
+        <article class="dispo-entry red" data-category="customer" data-search="hangup hang up customer ends call suddenly unresponsive middle conversation never hang up on customer">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">HANGUP</span><div class="dispo-entry-title">Hang up / customer unresponsive</div></div><span class="dispo-entry-category">Call ended</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> The customer ends the call suddenly before the conversation is complete or becomes unresponsive mid-call.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p><strong>Agents should never hang up on a customer mid-conversation.</strong> The disposition describes the customer ending the call or becoming unresponsive.</p></div></details>
+        </article>
+
+        <article class="dispo-entry gold" data-category="customer" data-search="arip already in program enrolled similar company validate program ours">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">ARIP</span><div class="dispo-entry-title">Already in a program</div></div><span class="dispo-entry-category">Customer status</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> The customer says they are enrolled in this program or a similar program from another company.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>Listen attentively and validate that the customer is enrolled, even if it is already in your program.</p></div></details>
+        </article>
+
+        <article class="dispo-entry gold" data-category="followup" data-search="callbk callback call back interested cannot talk specific date time validate interest schedule offer proactive">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">CALLBK</span><div class="dispo-entry-title">Call back</div></div><span class="dispo-entry-category">Follow-up</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> The customer is interested but cannot talk now and agrees to a specific date and time for another call.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>Validate the customer’s interest. Schedule a callback when requested, or proactively offer one when appropriate. Confirm the agreed date and time before ending the call.</p></div></details>
+        </article>
+
+        <article class="dispo-entry gold" data-category="followup" data-search="bsgl bad signal poor audio connection reconnect two more attempts 10 20 seconds">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">BSGL</span><div class="dispo-entry-title">Bad signal</div></div><span class="dispo-entry-category">Call quality</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> Poor audio makes it impossible to communicate properly.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>Identify the cause and try to reconnect up to <strong>two more times</strong>. Spend 10 to 20 seconds per attempt. If the issue continues after two retries, choose the disposition that fits what happened.</p></div></details>
+        </article>
+
+        <article class="dispo-entry gold" data-category="followup" data-search="spnsh spanish call only speaks spanish callback spanish speaking representative supervisor phone number mex col phst mpga mbga nga guy">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">Spnsh</span><div class="dispo-entry-title">Spanish call</div></div><span class="dispo-entry-category">Language handoff</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> The customer speaks only Spanish.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>Tell the customer they will receive a callback from a Spanish-speaking representative. Report the phone number to a supervisor so it can be passed to a MEX or COL agent.</p><p><strong>Teams listed in the QA slides:</strong> PHST, MPGA, MBGA, NGA, and GUY.</p></div></details>
+        </article>
+
+        <article class="dispo-entry purple" data-category="connection" data-search="blnk blank lead little no information customer system validate lead use only none other apply">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">BLNK</span><div class="dispo-entry-title">Blank lead</div></div><span class="dispo-entry-category">Lead information</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> The lead contains little or no customer information, and no other disposition fits.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>Listen carefully and validate what can be established about the customer. Use BLNK only if none of the other dispositions apply.</p></div></details>
+        </article>
+
+        <article class="dispo-entry purple" data-category="connection" data-search="a answering machine voicemail automated message greeting live person mute microphone 20 seconds busy signal">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">A</span><div class="dispo-entry-title">Answering machine</div></div><span class="dispo-entry-category">Call connection</span></header>
+          <div class="dispo-entry-use"><strong>Use when:</strong> The call reaches voicemail or an automated message instead of a live person.</div>
+          <details><summary>Full guidance</summary><div class="dispo-entry-detail"><p>Check whether it is a busy signal or an answering machine, then hang up. Keep your microphone muted to avoid unnecessary background noise. The maximum time is <strong>20 seconds</strong>.</p></div></details>
+        </article>
+
+        <article class="dispo-entry gray" data-category="obsolete" data-search="drxfer dropped transfer obsolete old process do not use cb-uwa disconnected closer communication callback retry transfer">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">DRXFER</span><div class="dispo-entry-title">Dropped transfer</div></div><span class="dispo-entry-category">Obsolete · do not use</span></header>
+          <div class="dispo-entry-use"><strong>Current direction:</strong> The QA slides say this old disposition should no longer be used. Use the current code noted below.</div>
+          <details><summary>Old-code replacement guidance</summary><div class="dispo-entry-detail"><p>If the call disconnects before you confirm communication between the customer and closer, use <strong>CB-UWA</strong>. Try to contact the customer again and go over the transfer process.</p></div></details>
+        </article>
+
+        <article class="dispo-entry gray" data-category="obsolete" data-search="uq20k unqualified under 15k obsolete do not use insufficient debt soft credit check crpull dnq declined 30 days">
+          <header class="dispo-entry-head"><div><span class="dispo-entry-code">UQ20K</span><div class="dispo-entry-title">Unqualified under 15k</div></div><span class="dispo-entry-category">Obsolete · do not use</span></header>
+          <div class="dispo-entry-use"><strong>Current direction:</strong> This disposition belongs to the previous process and should no longer be used.</div>
+          <details><summary>Old-code replacement guidance</summary><div class="dispo-entry-detail"><ul><li>If a soft credit check was run and the customer was declined for not enough debt, use <strong>CRPULL</strong>.</li><li>If the soft credit check could not be run because the customer had been declined within the past 30 days, use <strong>DNQ</strong>.</li></ul></div></details>
+        </article>
+      </div>
+      <div class="dispo-empty" id="dispo-empty" role="status">No dispositions match that search and filter. Try a different word or select “All dispositions.”</div>
     </div>
   </div>
+
+  <script>
+  (function(){
+    let activeDispoFilter='all';
+    window.setDispoFilter=function(filter,button){
+      activeDispoFilter=filter;
+      document.querySelectorAll('.dispo-filter').forEach(function(item){
+        const active=item===button;
+        item.classList.toggle('active',active);
+        item.setAttribute('aria-pressed',active?'true':'false');
+      });
+      window.filterDispoLibrary();
+    };
+    window.filterDispoLibrary=function(){
+      const input=document.getElementById('dispo-search');
+      const query=(input?.value||'').trim().toLowerCase();
+      const cards=Array.from(document.querySelectorAll('#dispo-entry-grid .dispo-entry'));
+      let visible=0;
+      cards.forEach(function(card){
+        const categoryMatch=activeDispoFilter==='all'||card.dataset.category===activeDispoFilter;
+        const text=(card.dataset.search+' '+card.textContent).toLowerCase();
+        const searchMatch=!query||text.includes(query);
+        card.hidden=!(categoryMatch&&searchMatch);
+        if(!card.hidden)visible++;
+      });
+      const count=document.getElementById('dispo-results-count');
+      if(count)count.innerHTML='<strong>'+visible+'</strong> of '+cards.length+' dispositions';
+      const empty=document.getElementById('dispo-empty');
+      if(empty)empty.classList.toggle('show',visible===0);
+    };
+  })();
+  </script>
 
   <!-- TIPS -->
   <div class="tab-page" id="page-tips">
